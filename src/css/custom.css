@@ -54,6 +54,20 @@
   justify-content: center;
 }
 
+/* Hero is always on a dark gradient; outline CTAs need light text in light mode */
+.hero--stitch .stitch-home-cta .button--outline {
+  --ifm-button-background-color: transparent;
+  --ifm-button-border-color: rgba(248, 250, 252, 0.75);
+  color: #f8fafc;
+}
+
+.hero--stitch .stitch-home-cta .button--outline:hover {
+  --ifm-button-background-color: rgba(248, 250, 252, 0.12);
+  --ifm-button-border-color: #f8fafc;
+  color: #ffffff;
+  text-decoration: none;
+}
+
 .stitch-feature-card {
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-200);
