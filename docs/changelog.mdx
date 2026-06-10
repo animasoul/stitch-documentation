@@ -1,0 +1,40 @@
+---
+sidebar_position: 4
+title: Changelog
+---
+
+# Changelog
+
+All notable changes to **Stitch Payments for WooCommerce** are documented here.
+
+## 0.1.0 — 2026-06-05
+
+Initial standalone plugin release.
+
+### Added
+
+- WooCommerce payment gateway (`stitch`) with test and production credentials
+- WooCommerce dependency and activation checks
+- HPOS (custom order tables) compatibility declaration
+- WooCommerce Cart & Checkout Blocks compatibility
+- CardPointe API client with sanitized logging paths
+- Custom payment token type `WC_Payment_Token_Stitch` for saved cards
+- Classic checkout payment form with hosted card tokenizer
+- WooCommerce Blocks payment method integration
+- Payment processing and saved-token creation
+- Refund and void handling with admin order transaction details
+- WooCommerce Subscriptions renewal hooks and scheduled renewal processing
+- Surcharge calculation, session disclosure, and order-meta persistence
+- Admin settings UI with branded layout, credential tabs, and live checkout preview
+- Checkout display options: logo, card icons, description, card preview, custom logo URL, field labels
+- Elementor and shortcode checkout context detection for asset loading
+- Developer hooks, filters, and theme template override support
+- Data retention settings and uninstall policy options
+
+### Notes
+
+This version is intended for local and staging verification. Complete manual testing for classic checkout, Blocks checkout, saved cards, refunds, voids, subscriptions, surcharge disclosure, HPOS, and failure paths before production use.
+
+---
+
+Documentation site built by [MindK](https://www.mindk.com/) for [Stitch Payments](https://www.stitchpayments.net/).

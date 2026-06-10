@@ -1,49 +1,48 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
+import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Built for WooCommerce',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Native gateway integration for classic checkout and WooCommerce Blocks, with HPOS
+        compatibility and subscription support.
       </>
     ),
+    link: '/docs/merchants/features',
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Secure by design',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Card numbers are tokenized through CardPointe hosted fields. Sensitive card data never
+        touches your WordPress server.
       </>
     ),
+    link: '/docs/merchants/benefits',
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Customizable checkout',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Merchants control branding from the admin panel. Developers can override templates, filter
+        hooks, and style the payment form.
       </>
     ),
+    link: '/docs/developers/customization',
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({title, description, link}) {
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
+      <div className={clsx('stitch-feature-card', styles.featureCard)}>
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>
+        <Link to={link}>Learn more →</Link>
       </div>
     </div>
   );
@@ -57,6 +56,19 @@ export default function HomepageFeatures() {
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}
+        </div>
+        <div className="stitch-partners">
+          <p>
+            Stitch Payments for WooCommerce connects your store to{' '}
+            <a href="https://www.stitchpayments.net/" target="_blank" rel="noopener noreferrer">
+              Stitch Payments
+            </a>{' '}
+            and CardPointe. Plugin development by{' '}
+            <a href="https://www.mindk.com/" target="_blank" rel="noopener noreferrer">
+              MindK
+            </a>
+            .
+          </p>
         </div>
       </div>
     </section>

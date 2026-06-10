@@ -1,0 +1,104 @@
+---
+sidebar_position: 3
+title: Hooks reference
+---
+
+# Hooks reference
+
+All Stitch-specific filters use the `woocommerce_stitch_*` prefix unless noted. Most filters receive the `Gateway` instance as the second parameter.
+
+## Filters
+
+### `woocommerce_stitch_payment_form_template_args`
+
+Filter arguments passed to the classic `payment-form.php` template.
+
+### `woocommerce_stitch_checkout_field_labels`
+
+Filter field labels (`card_number`, `expiry`, `cvv`, `cardholder_name`).
+
+```php
+add_filter( 'woocommerce_stitch_checkout_field_labels', function ( $labels, $gateway ) {
+	$labels['card_number'] = 'Card #';
+	return $labels;
+}, 10, 2 );
+```
+
+### `woocommerce_stitch_checkout_display_settings`
+
+Filter branding: `show_logo`, `show_card_icons`, `show_description`, `description`, `logo_url`.
+
+### `woocommerce_stitch_payment_form_i18n`
+
+Filter all UI, validation, and surcharge strings for classic checkout, Blocks, and classic JS.
+
+### `woocommerce_stitch_saved_payment_methods`
+
+Filter saved methods (keyed by account ID) before display on classic and Blocks checkout.
+
+### `woocommerce_stitch_accepted_card_brands`
+
+Filter card brand slugs in the payment header. Default: `visa`, `mastercard`, `amex`, `discover`.
+
+### `woocommerce_stitch_payment_header_html`
+
+Filter rendered header HTML (logo, icons, description). Output is sanitized with `Card_Icons::kses_payment_header_html()`.
+
+### `woocommerce_stitch_iframe_css`
+
+Filter minified CSS for the CardPointe tokenizer iframe. See [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+
+### `woocommerce_stitch_gateway_script_params`
+
+Filter `wc_stitch_params` for classic checkout JS.
+
+### `woocommerce_stitch_blocks_payment_method_data`
+
+Filter all data passed to `stitch-blocks.js`.
+
+### `woocommerce_stitch_is_checkout_context`
+
+Filter whether the current request is a checkout/payment-form context (used for asset loading).
+
+### `woocommerce_stitch_should_enqueue_payment_assets`
+
+Filter whether CSS/JS are enqueued. Defaults to `Checkout_Context::is_checkout_context()`.
+
+### WooCommerce admin filters
+
+- `woocommerce_settings_api_form_fields_stitch`
+- `woocommerce_settings_api_sanitized_fields_stitch`
+
+## Actions (classic checkout only)
+
+| Hook | When |
+|------|------|
+| `woocommerce_stitch_before_payment_form` | Before the payment `<fieldset>` |
+| `woocommerce_stitch_after_payment_header` | After logo / icons / description |
+| `woocommerce_stitch_before_new_card_fields` | Before new card inputs |
+| `woocommerce_stitch_after_payment_form` | After the `</fieldset>` |
+
+```php
+add_action( 'woocommerce_stitch_before_payment_form', function ( $gateway, $saved_methods ) {
+	echo '<p class="stitch-checkout-notice">Cards are processed securely.</p>';
+}, 10, 2 );
+```
+
+## Bootstrap
+
+### `stitch_payments_loaded`
+
+Fires after the plugin has loaded core services.
+
+## Blocks vs classic
+
+| Feature | Classic | Blocks |
+|---------|---------|--------|
+| PHP template override | Yes | No |
+| Action hooks | Yes | No |
+| `woocommerce_stitch_payment_form_i18n` | Yes | Yes |
+| `woocommerce_stitch_saved_payment_methods` | Yes | Yes |
+| `woocommerce_stitch_blocks_payment_method_data` | No | Yes |
+| `woocommerce_stitch_gateway_script_params` | Yes | Shared JS dependency |
+
+Prefer `woocommerce_stitch_payment_form_i18n` and `woocommerce_stitch_saved_payment_methods` when you need both checkout types to stay aligned.

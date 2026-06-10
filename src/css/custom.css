@@ -1,30 +1,78 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Stitch Payments documentation theme
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #1e3a5f;
+  --ifm-color-primary-dark: #162e4d;
+  --ifm-color-primary-darker: #122840;
+  --ifm-color-primary-darkest: #0f172a;
+  --ifm-color-primary-light: #2563eb;
+  --ifm-color-primary-lighter: #3b82f6;
+  --ifm-color-primary-lightest: #60a5fa;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(30, 58, 95, 0.08);
+  --stitch-hero-gradient: linear-gradient(135deg, #0f172a 0%, #16213e 52%, #1e3a5f 100%);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+  --docusaurus-highlighted-code-line-bg: rgba(96, 165, 250, 0.12);
+}
+
+.hero--stitch {
+  background: var(--stitch-hero-gradient);
+  color: #e2e8f0;
+}
+
+.hero--stitch .hero__title,
+.hero--stitch .hero__subtitle {
+  color: #f8fafc;
+}
+
+.hero--stitch .hero__subtitle {
+  opacity: 0.92;
+}
+
+.stitch-hero-logo {
+  display: block;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  max-width: 220px;
+}
+
+.stitch-home-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.stitch-feature-card {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.stitch-feature-card h3 {
+  margin-top: 0;
+}
+
+.stitch-partners {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin-top: 2rem;
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.stitch-partners a {
+  font-weight: 600;
 }

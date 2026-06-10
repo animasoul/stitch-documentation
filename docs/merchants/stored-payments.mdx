@@ -1,0 +1,52 @@
+---
+sidebar_position: 5
+title: Stored payment methods
+---
+
+# Stored payment methods
+
+Let returning customers pay faster by saving cards to their account.
+
+## Enable saved cards
+
+In **WooCommerce → Settings → Payments → Stitch**, under **Other settings**:
+
+1. Enable **Enable Stored Payment Methods**.
+2. Save changes.
+
+Customers will see a **Save card for future purchases** checkbox when paying with a new card.
+
+## Customer experience
+
+### At checkout
+
+Logged-in customers with saved cards see a list of cards on the payment form. They can:
+
+- Select a saved card, or
+- Choose **Use a new card** to enter fresh details
+
+### My Account
+
+Customers manage saved methods under **My Account → Payment methods**:
+
+- View saved cards
+- Add a new payment method
+- Remove cards they no longer need
+
+## Subscriptions
+
+WooCommerce Subscriptions renewal orders require a reusable payment method. When subscriptions are enabled, saved tokens are used for scheduled renewals.
+
+## Data and privacy
+
+Saved cards are stored as WooCommerce payment tokens (`WC_Payment_Token_Stitch`) with profile and account identifiers — not full card numbers.
+
+Under **Data Retention** in gateway settings you can control whether plugin data is removed on uninstall. Order and subscription payment records are retained for accounting even when uninstall cleanup is enabled.
+
+## Troubleshooting
+
+| Issue | Check |
+|-------|-------|
+| Save checkbox missing | **Enable Stored Payment Methods** is on and customer is logged in |
+| Saved cards not listed | Customer has tokens for gateway `stitch`; profile/acct IDs must be present |
+| Guest checkout | Gateway currently requires login at checkout for new payments |

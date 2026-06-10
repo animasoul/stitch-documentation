@@ -1,0 +1,49 @@
+---
+sidebar_position: 4
+title: Checkout display
+---
+
+# Checkout display
+
+The **Checkout display** section controls branding on the payment form for both classic and Blocks checkout.
+
+## Live preview
+
+The settings screen includes a **Checkout preview** panel on the right. As you change options, the preview updates immediately — you do not need to save first.
+
+## Branding options
+
+| Setting | Description |
+|---------|-------------|
+| **Show Stitch logo** | Display the Stitch logo on the payment form |
+| **Show accepted card icons** | Visa, Mastercard, Amex, Discover icons |
+| **Show payment description** | Show the gateway description inside the form |
+| **Show card preview** | Animated card graphic while entering details |
+| **Custom checkout logo URL** | Replace the default logo with your own image URL |
+
+## Field labels
+
+Override default labels without code:
+
+- Card number
+- Expiry
+- CVV
+- Cardholder name
+
+Leave fields blank to use plugin defaults.
+
+## Theme override (developers)
+
+Classic checkout can also be customized by copying the template to your theme:
+
+```text
+your-theme/woocommerce/stitch/payment-form.php
+```
+
+See [Customization](/docs/developers/customization) for developer options.
+
+## Tips
+
+- Use a square or horizontal logo (PNG or SVG URL) around 120–180px wide for best results.
+- Disable **Show payment description** if the description already appears in the payment method list above the form.
+- **Show card preview** adds a small amount of visual polish; disable it for the simplest layout.

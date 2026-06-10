@@ -1,0 +1,63 @@
+---
+sidebar_position: 5
+title: Styling
+---
+
+# Styling reference
+
+## Stable CSS selectors
+
+| Selector | Element |
+|----------|---------|
+| `#wc-stitch-form` | Payment form fieldset (classic and Blocks) |
+| `.stitch-payment-header` | Logo, accepted cards, description |
+| `.stitch-payment-description` | In-form payment description |
+| `.wc-stitch-saved-methods` | Saved payment method list |
+| `.wc-stitch-new-method` | New card fields container |
+| `.stitch-card-preview` | Animated card preview |
+| `#stitch-card-number-iframe` | CardPointe tokenizer mount |
+| `#stitch-surcharge-notice` | Surcharge disclosure notice |
+| `.stitch-field-error` | Inline validation message |
+| `.stitch-error-notice` | Form-level error summary |
+
+## Registered stylesheets
+
+| Handle | Purpose |
+|--------|---------|
+| `stitch-payments-gateway` | Main checkout form styles |
+| `stitch-payments-card-preview` | Card preview (when enabled in settings) |
+| `stitch-payments-admin` | Gateway settings screen only |
+
+## Example: theme CSS
+
+```css
+#wc-stitch-form .stitch-payment-header {
+	border-radius: 16px;
+}
+
+#wc-stitch-form .stitch-form-row label {
+	font-weight: 600;
+	color: #0f172a;
+}
+```
+
+## Card number iframe
+
+The card number field lives inside a CardPointe iframe. Style it via the `woocommerce_stitch_iframe_css` filter:
+
+```php
+add_filter( 'woocommerce_stitch_iframe_css', function ( $css ) {
+	return $css . 'input{font-size:16px;}';
+} );
+```
+
+CardPointe only accepts inline CSS through the tokenizer URL parameter. See the [CardPointe hosted iframe tokenizer documentation](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+
+## Validation states
+
+The classic form applies classes on valid/invalid fields:
+
+- `.stitch-input-wrapper.valid` / `.invalid`
+- `#stitch-card-number-iframe.valid` / `.invalid`
+
+Match these in your theme for consistent feedback colors.

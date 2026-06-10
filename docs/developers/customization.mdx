@@ -1,0 +1,79 @@
+---
+sidebar_position: 2
+title: Customization
+---
+
+# Customization
+
+Choose the lightest approach that fits your goal.
+
+| Goal | Approach |
+|------|----------|
+| Restyle the form | CSS on `#wc-stitch-form`, `.stitch-payment-header`, etc. |
+| Change labels or copy | Admin settings or `woocommerce_stitch_checkout_field_labels` / `woocommerce_stitch_payment_form_i18n` |
+| Change logo or branding | Admin settings or `woocommerce_stitch_checkout_display_settings` |
+| Inject HTML (classic) | Action hooks in the payment template |
+| Replace classic markup | Theme template override |
+| Change Blocks data | `woocommerce_stitch_blocks_payment_method_data` |
+| Style card-number iframe | `woocommerce_stitch_iframe_css` |
+| Custom checkout page | `woocommerce_stitch_is_checkout_context` |
+
+## Classic template override
+
+Copy the plugin template to your theme:
+
+```text
+wp-content/themes/your-theme/woocommerce/stitch/payment-form.php
+```
+
+### Template variables
+
+| Variable | Description |
+|----------|-------------|
+| `$gateway` | Gateway instance |
+| `$enable_profiles` | Saved payment methods enabled |
+| `$checkout_display` | Branding options |
+| `$field_labels` | Field label strings |
+| `$i18n` | Payment form strings |
+| `$saved_methods` | Saved cards keyed by account ID |
+| `$default_acct_id` | Pre-selected saved card |
+
+Filter template args with `woocommerce_stitch_payment_form_template_args`.
+
+### Example: filter template args
+
+```php
+add_filter( 'woocommerce_stitch_payment_form_template_args', function ( $args, $gateway ) {
+	$args['i18n']['save_card'] = 'Store this card securely';
+	return $args;
+}, 10, 2 );
+```
+
+## Blocks checkout
+
+Blocks checkout does **not** use the PHP template. Use:
+
+- `woocommerce_stitch_blocks_payment_method_data` for script data
+- `woocommerce_stitch_payment_form_i18n` for shared strings
+
+## Companion plugin bootstrap
+
+```php
+<?php
+/**
+ * Plugin Name: My Stitch Checkout Tweaks
+ */
+
+add_action( 'stitch_payments_loaded', function () {
+	add_filter( 'woocommerce_stitch_payment_form_i18n', function ( $strings, $gateway ) {
+		$strings['save_card'] = 'Securely store this card';
+		return $strings;
+	}, 10, 2 );
+
+	add_action( 'woocommerce_stitch_before_payment_form', function ( $gateway, $saved_methods ) {
+		echo '<p class="my-stitch-notice">We accept Visa and Mastercard.</p>';
+	}, 10, 2 );
+} );
+```
+
+See the full [Hooks reference](/docs/developers/hooks).

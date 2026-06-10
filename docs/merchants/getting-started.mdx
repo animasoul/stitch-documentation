@@ -1,0 +1,71 @@
+---
+sidebar_position: 3
+title: Getting started
+---
+
+# Getting started
+
+Follow these steps to install and configure Stitch Payments on your WooCommerce store.
+
+## 1. Install the plugin
+
+1. Upload `stitch-payments-for-woocommerce` to `wp-content/plugins/`, or install from your distribution package.
+2. Ensure **WooCommerce** is installed and active.
+3. Activate **Stitch Payments for WooCommerce** from the WordPress **Plugins** screen.
+
+Activation checks PHP version and WooCommerce availability. If a dependency is missing, the plugin will not activate.
+
+## 2. Obtain credentials
+
+Contact [Stitch Payments](https://www.stitchpayments.net/) to set up your merchant account and receive:
+
+- Merchant ID
+- API username and password
+- Test (UAT) and production base URLs as applicable
+
+## 3. Configure the gateway
+
+Go to **WooCommerce → Settings → Payments → Stitch**.
+
+### Enable the gateway
+
+1. Check **Enable Stitch Payment Gateway**.
+2. Set the **Title** and **Description** customers see at checkout.
+
+### API credentials
+
+1. Open the **API Credentials** section.
+2. Use the **Test** tab for UAT credentials and **Production** for live credentials.
+3. Enable **Test Mode** while testing — the active tab should match the environment you are using.
+4. Save changes. Credential validation runs on save.
+
+### Checkout display (optional)
+
+Use the **Checkout display** section and the live preview on the right to tune branding. See [Checkout display](/docs/merchants/checkout-display).
+
+### Webhook
+
+Copy the **Webhook URL** from settings into your CardPointe merchant dashboard so transaction notifications reach your store.
+
+## 4. Test checkout
+
+1. Keep **Test Mode** enabled.
+2. Place a test order on classic checkout and, if used, Blocks checkout.
+3. Verify payment completes, order notes/meta appear, and refunds work in test.
+4. Test saved cards if **Enable Stored Payment Methods** is on.
+
+:::note Logged-in checkout
+The gateway currently requires customers to be **logged in** at checkout (except on account payment-method pages). Plan guest-checkout support with your developer if needed.
+:::
+
+## 5. Go live
+
+1. Enter production credentials in the **Production** tab.
+2. Disable **Test Mode**.
+3. Save and place a small live transaction to confirm end-to-end flow.
+
+## Where to get help
+
+- **Stitch Payments** — [stitchpayments.net](https://www.stitchpayments.net/)
+- **Technical customization** — [Developer documentation](/docs/developers/overview) or your agency
+- **Plugin built by** — [MindK](https://www.mindk.com/contacts/)

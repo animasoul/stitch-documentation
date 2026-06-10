@@ -1,0 +1,50 @@
+---
+sidebar_position: 4
+title: Elementor & page builders
+---
+
+# Elementor and page builders
+
+Stitch does not ship Elementor widgets. It works when Elementor provides **layout around standard WooCommerce checkout**, because payment fields still render through WooCommerce gateways.
+
+## Supported setups
+
+| Setup | Support |
+|-------|---------|
+| Elementor layout on the WooCommerce checkout page | Yes |
+| Page with `[woocommerce_checkout]` shortcode | Yes — detected automatically |
+| Elementor Pro WooCommerce checkout widget | Yes — detected automatically |
+| WooCommerce Cart/Checkout blocks | Yes — separate Blocks integration |
+| Custom Elementor forms replacing WC payment fields | No |
+
+## Automatic detection
+
+`Checkout_Context::is_checkout_context()` returns true when:
+
+1. `is_checkout()` is true
+2. Add-payment-method account screens
+3. Singular pages with `[woocommerce_checkout]` in post content
+4. Elementor documents containing `woocommerce-checkout-page`, `wc-checkout-page`, or a shortcode widget with `[woocommerce_checkout]`
+
+When detected, Stitch enqueues `stitch-payments-gateway` CSS and JS on that page.
+
+## Recommended setup
+
+1. Use the official **WooCommerce checkout page** as the checkout endpoint, even if designed in Elementor.
+2. Keep WooCommerce **payment methods** in the layout — do not replace them with custom form widgets.
+3. Test logged-in checkout (gateway currently requires login for new payments at checkout).
+4. Test both classic shortcode checkout and Blocks if your store uses both.
+
+## Custom page slug
+
+If checkout lives on a page that is not auto-detected:
+
+```php
+add_filter( 'woocommerce_stitch_is_checkout_context', function ( $is_context, $gateway ) {
+	return $is_context || is_page( 'elementor-checkout' );
+}, 10, 2 );
+```
+
+## Styling
+
+Elementor global styles may affect checkout spacing. Target Stitch selectors such as `#wc-stitch-form` and `.stitch-payment-header`. See [Styling](/docs/developers/styling).

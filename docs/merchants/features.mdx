@@ -1,0 +1,69 @@
+---
+sidebar_position: 2
+title: Features
+---
+
+# Features
+
+## Payment processing
+
+| Feature | Description |
+|---------|-------------|
+| **Credit card gateway** | Accept cards via Stitch / CardPointe |
+| **Test & production** | Separate credential sets with a test mode toggle |
+| **Hosted tokenizer** | Card number captured in a secure iframe |
+| **Classic checkout** | Full payment form with validation and surcharge notices |
+| **Blocks checkout** | Native WooCommerce Blocks payment method integration |
+
+## Saved payment methods
+
+- Customers can save cards at checkout or from **My Account → Payment methods**
+- Saved cards appear as radio options on return visits
+- Subscription renewals can reuse stored tokens
+- Toggle **Enable Stored Payment Methods** in gateway settings
+
+## Checkout display
+
+Customize how the payment form looks without code:
+
+- Show or hide Stitch logo, accepted card icons, and payment description
+- Upload a **custom checkout logo URL**
+- Override field labels (card number, expiry, CVV, cardholder name)
+- Optional **card preview** animation
+- **Live admin preview** updates as you change settings
+
+## Surcharge disclosure
+
+When enabled, customers see processing-fee information before they pay. The surcharge is **disclosure-only** in the current implementation — it informs customers but does not automatically add a WooCommerce fee line to the cart total.
+
+Configure:
+
+- **Enable Surcharge** toggle
+- **Surcharge rate** (percentage, up to 4%)
+
+## Subscriptions
+
+- WooCommerce Subscriptions renewal processing
+- Scheduled renewal payments via saved payment methods
+- Payment method change support in admin
+
+## Refunds and voids
+
+- Full and partial refunds from the order admin screen
+- Void support for unsettled transactions (settlement window notice shown on recent orders)
+- Refund reference tracking on orders
+
+## Admin experience
+
+- Branded settings page with status pills (enabled/disabled, test/live)
+- Tabbed **Test** and **Production** API credentials
+- Grouped sections: Checkout display, API credentials, Other settings, Webhook, Data retention
+- Order meta box with transaction IDs and refund references
+
+## Compatibility
+
+- WooCommerce HPOS / custom order tables
+- WooCommerce Cart & Checkout Blocks
+- Elementor checkout layouts (when standard WooCommerce payment fields are used)
+
+See [Checkout display](/docs/merchants/checkout-display) for branding options and [Developers → Elementor](/docs/developers/elementor) for page-builder notes.

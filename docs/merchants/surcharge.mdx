@@ -1,0 +1,40 @@
+---
+sidebar_position: 6
+title: Surcharge disclosure
+---
+
+# Surcharge disclosure
+
+Stitch Payments can inform customers about credit card processing fees before they complete payment.
+
+## Enable surcharge disclosure
+
+Under **Other settings** in gateway configuration:
+
+1. Enable **Enable Surcharge**.
+2. Set **Surcharge Rate (%)** — for example `3.00` for 3%.
+3. Save changes.
+
+## What customers see
+
+When a valid card is entered (or a saved card is selected), the checkout form can display:
+
+- A calculating message while the fee is looked up
+- A notice with the estimated processing fee, or
+- A message that no fee applies to the card used
+
+On classic checkout, a disclosure may also appear near the order totals. On Blocks checkout, a note can appear in the order summary sidebar.
+
+## Important: disclosure vs. cart total
+
+The surcharge feature is **disclosure-focused**. The displayed fee informs the customer; it is **not automatically added** as a WooCommerce cart fee in the order total shown at checkout. Confirm your legal and pricing requirements with [Stitch Payments](https://www.stitchpayments.net/) and your compliance team.
+
+## Order records
+
+When applicable, surcharge amounts can be stored on the order for reference in admin, emails, and order details.
+
+## Testing
+
+1. Enable surcharge and set a test rate.
+2. Complete checkout with a test card in **Test Mode**.
+3. Verify the notice appears and updates when switching between saved and new cards.

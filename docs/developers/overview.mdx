@@ -1,0 +1,74 @@
+---
+sidebar_position: 1
+title: Overview
+---
+
+# Developer overview
+
+This guide covers extending **Stitch Payments for WooCommerce** in themes, child themes, and companion plugins.
+
+## Gateway ID
+
+The WooCommerce gateway ID is always **`stitch`**. Do not change it without a data migration plan — existing orders, subscriptions, and payment tokens depend on this ID.
+
+## Architecture
+
+| Component | Location |
+|-----------|----------|
+| Gateway & settings | `includes/Payments/class-gateway.php` |
+| Blocks integration | `includes/Payments/class-blocks-integration.php` |
+| Checkout context detection | `includes/Payments/class-checkout-context.php` |
+| Classic template | `templates/payment-form.php` |
+| Classic JS | `assets/js/stitch-gateway.js` |
+| Blocks JS | `assets/js/stitch-blocks.js` |
+| Styles | `assets/css/stitch-gateway.css` |
+
+## Getting the gateway instance
+
+```php
+use StitchPayments\WooCommerce\Payments\Gateway;
+
+function stitch_get_gateway(): ?Gateway {
+	if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways() ) {
+		return null;
+	}
+
+	$gateways = WC()->payment_gateways()->payment_gateways();
+
+	return isset( $gateways['stitch'] ) && $gateways['stitch'] instanceof Gateway
+		? $gateways['stitch']
+		: null;
+}
+```
+
+Call after WooCommerce has registered gateways (e.g. on `woocommerce_init` or later).
+
+## Bootstrap hook
+
+```php
+add_action( 'stitch_payments_loaded', function () {
+	// Register integrations that depend on Stitch.
+} );
+```
+
+## Public gateway helpers
+
+| Method | Purpose |
+|--------|---------|
+| `get_checkout_field_labels()` | Field labels (classic + Blocks) |
+| `get_checkout_display_settings()` | Logo, icons, description toggles |
+| `get_payment_form_i18n()` | Shared UI and validation strings |
+| `get_saved_payment_methods_for_checkout()` | Saved methods keyed by account ID |
+| `get_saved_payment_methods_for_blocks()` | Blocks-formatted saved methods |
+| `get_default_saved_account_id( $methods )` | Default selected saved card |
+| `get_iframe_css()` | CardPointe tokenizer iframe CSS |
+| `get_checkout_logo_url()` | Resolved logo URL |
+
+`Checkout_Context::is_checkout_context( $gateway )` detects checkout, shortcode pages, and Elementor layouts.
+
+## Next steps
+
+- [Customization approaches](/docs/developers/customization)
+- [Hooks reference](/docs/developers/hooks)
+- [Elementor & page builders](/docs/developers/elementor)
+- [Styling reference](/docs/developers/styling)
