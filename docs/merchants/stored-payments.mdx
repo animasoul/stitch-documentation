@@ -39,9 +39,9 @@ WooCommerce Subscriptions renewal orders require a reusable payment method. When
 
 ## Data and privacy
 
-Saved cards are stored as WooCommerce payment tokens (`WC_Payment_Token_Stitch`) with profile and account identifiers — not full card numbers.
+Saved cards use WooCommerce payment tokens with CardPointe profile and account identifiers — not full card numbers. CVV is never stored.
 
-Under **Data Retention** in gateway settings you can control whether plugin data is removed on uninstall. Order and subscription payment records are retained for accounting even when uninstall cleanup is enabled.
+See [Data and privacy](/docs/merchants/data-and-privacy) for tokenization, order metadata, logging, uninstall options, and privacy-policy guidance.
 
 ## Troubleshooting
 

@@ -14,6 +14,7 @@ const sidebars = {
         'merchants/getting-started',
         'merchants/checkout-display',
         'merchants/stored-payments',
+        'merchants/data-and-privacy',
         'merchants/surcharge',
       ],
     },
