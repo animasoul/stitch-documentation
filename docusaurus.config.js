@@ -24,6 +24,19 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: [
+    [
+      '@cmfcmf/docusaurus-search-local',
+      {
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: true,
+        language: 'en',
+        maxSearchResults: 12,
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',
