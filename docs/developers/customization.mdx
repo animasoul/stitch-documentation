@@ -76,4 +76,8 @@ add_action( 'stitch_payments_loaded', function () {
 } );
 ```
 
+### Payment header HTML
+
+If you filter `woocommerce_stitch_payment_header_html`, return markup you trust. Output is sanitized with `Card_Icons::kses_payment_header_html()` so inline SVG card icons are preserved (unlike `wp_kses_post()`).
+
 See the full [Hooks reference](/docs/developers/hooks).

@@ -61,3 +61,16 @@ The classic form applies classes on valid/invalid fields:
 - `#stitch-card-number-iframe.valid` / `.invalid`
 
 Match these in your theme for consistent feedback colors.
+
+## Checkout field focus (classic)
+
+`stitch-gateway.js` auto-advances focus when fields validate:
+
+| Field | Advance when |
+|-------|----------------|
+| Card number | Tokenizer reports a valid token |
+| Expiry | `MM/YY` format validates |
+| CVV | 3 digits (4 for Amex) |
+| Cardholder name | Manual entry only (no auto-advance after) |
+
+There is no filter to disable this today; customize behavior by dequeuing `stitch-gateway.js` and providing your own script only if you accept maintaining tokenizer integration.

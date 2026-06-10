@@ -7,9 +7,52 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.2.0 — 2026-06-10
+
+### Admin
+
+- Redesigned gateway settings page with branded hero, status pills, and tabbed **Test** / **Production** credentials
+- Live **Checkout preview** panel with AJAX updates before save; sticky sidebar on desktop
+- Reorganized settings: **Checkout display** (including card preview), **Other settings** (stored payments, surcharge, debug logging)
+
+### Checkout display
+
+- Toggle Stitch logo, accepted card icons, in-form description, and card preview
+- Custom checkout logo URL and field label overrides (card number, expiry, CVV, cardholder name)
+- Classic template via `wc_get_template` with theme override at `woocommerce/stitch/payment-form.php`
+- Shared display settings and i18n for classic and Blocks checkout
+
+### Developer API
+
+- Filters: `woocommerce_stitch_payment_form_template_args`, `woocommerce_stitch_saved_payment_methods`, `woocommerce_stitch_payment_form_i18n`, `woocommerce_stitch_accepted_card_brands`, `woocommerce_stitch_payment_header_html`, `woocommerce_stitch_is_checkout_context`, and related checkout/asset filters
+- Actions: `woocommerce_stitch_before_payment_form`, `woocommerce_stitch_after_payment_header`, `woocommerce_stitch_before_new_card_fields`, `woocommerce_stitch_after_payment_form`
+- `Checkout_Context` class for WooCommerce checkout, add-payment-method, shortcode, and Elementor widget detection
+- Public gateway helpers (`get_payment_form_i18n()`, `get_saved_payment_methods_for_checkout()`, etc.)
+- `Card_Icons::kses_payment_header_html()` for SVG-safe payment header output
+- In-plugin guide at `docs/DEVELOPERS.md`
+
+### Checkout UX
+
+- Auto-advance focus from card number → expiry → CVV → cardholder name when each field passes validation
+
+### Packaging & i18n
+
+- `package.php` release zip builder with `.distignore` for Windows-friendly packaging
+- Fixed `translators:` comments for surcharge disclosure strings
+
+### Fixed
+
+- Accepted card icon SVGs were stripped from the payment header by `wp_kses_post()` — header output now uses a dedicated allowlist
+
+### Documentation
+
+- Merchant and developer documentation site updated to match 0.2.0 (this site)
+
+---
+
 ## 0.1.0 — 2026-06-05
 
-Initial standalone plugin release.
+Initial standalone plugin scaffold.
 
 ### Added
 
@@ -25,15 +68,11 @@ Initial standalone plugin release.
 - Refund and void handling with admin order transaction details
 - WooCommerce Subscriptions renewal hooks and scheduled renewal processing
 - Surcharge calculation, session disclosure, and order-meta persistence
-- Admin settings UI with branded layout, credential tabs, and live checkout preview
-- Checkout display options: logo, card icons, description, card preview, custom logo URL, field labels
-- Elementor and shortcode checkout context detection for asset loading
-- Developer hooks, filters, and theme template override support
 - Data retention settings and uninstall policy options
 
 ### Notes
 
-This version is intended for local and staging verification. Complete manual testing for classic checkout, Blocks checkout, saved cards, refunds, voids, subscriptions, surcharge disclosure, HPOS, and failure paths before production use.
+This version established the migrated gateway for local and staging verification. Complete manual testing for classic checkout, Blocks checkout, saved cards, refunds, voids, subscriptions, surcharge disclosure, HPOS, and failure paths before production use.
 
 ---
 

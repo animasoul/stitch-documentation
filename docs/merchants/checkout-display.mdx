@@ -9,7 +9,9 @@ The **Checkout display** section controls branding on the payment form for both 
 
 ## Live preview
 
-The settings screen includes a **Checkout preview** panel on the right. As you change options, the preview updates immediately — you do not need to save first.
+The settings screen includes a **Checkout preview** panel on the right. As you change options, the preview updates immediately — you do not need to save first. On wide screens the preview stays visible while you scroll through settings.
+
+The preview reflects branding toggles, custom logo URL, field labels, and card preview setting. It does not run live card tokenization (the card number iframe is omitted in admin).
 
 ## Branding options
 
@@ -42,8 +44,20 @@ your-theme/woocommerce/stitch/payment-form.php
 
 See [Customization](/docs/developers/customization) for developer options.
 
+## Checkout field flow
+
+On the storefront, when a customer enters card details, focus automatically moves to the next field after validation succeeds:
+
+1. Card number (tokenizer returns a valid token)
+2. Expiry (`MM/YY`)
+3. CVV (3 digits, or 4 for Amex)
+4. Cardholder name
+
+This behavior is built into the classic checkout script and does not require configuration.
+
 ## Tips
 
 - Use a square or horizontal logo (PNG or SVG URL) around 120–180px wide for best results.
 - Disable **Show payment description** if the description already appears in the payment method list above the form.
 - **Show card preview** adds a small amount of visual polish; disable it for the simplest layout.
+- If accepted card icons do not appear after upgrading, save settings once — icon SVGs are preserved by a dedicated sanitizer in 0.2.0+.
