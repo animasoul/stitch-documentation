@@ -1,11 +1,11 @@
 // @ts-check
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Stitch Payments for WooCommerce',
   tagline: 'Secure CardPointe credit card payments for WooCommerce stores',
-  favicon: 'img/stitch-logo.png',
+  favicon: 'img/favicon.ico',
 
   future: {
     v4: true,
@@ -112,24 +112,24 @@ const config = {
           {
             title: 'Documentation',
             items: [
-              {label: 'Introduction', to: '/docs/intro'},
-              {label: 'For merchants', to: '/docs/merchants/benefits'},
-              {label: 'For developers', to: '/docs/developers/overview'},
-              {label: 'Changelog', to: '/docs/changelog'},
+              { label: 'Introduction', to: '/docs/intro' },
+              { label: 'For merchants', to: '/docs/merchants/benefits' },
+              { label: 'For developers', to: '/docs/developers/overview' },
+              { label: 'Changelog', to: '/docs/changelog' },
             ],
           },
           {
             title: 'Stitch Payments',
             items: [
-              {label: 'Website', href: 'https://www.stitchpayments.net/'},
-              {label: 'About Stitch', href: 'https://www.stitchpayments.net/about/'},
+              { label: 'Website', href: 'https://www.stitchpayments.net/' },
+              { label: 'About Stitch', href: 'https://www.stitchpayments.net/about/' },
             ],
           },
           {
             title: 'MindK',
             items: [
-              {label: 'Website', href: 'https://www.mindk.com/'},
-              {label: 'Contact', href: 'https://www.mindk.com/contacts/'},
+              { label: 'Website', href: 'https://www.mindk.com/' },
+              { label: 'Contact', href: 'https://www.mindk.com/contacts/' },
             ],
           },
         ],
