@@ -7,6 +7,39 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.3.0 — 2026-06-25
+
+Internal architecture, developer tooling, and surcharge hardening. No change to checkout behavior.
+
+### Architecture
+
+- Refactored the monolithic gateway into focused service classes: `Admin_Preview`, `Settings_Fields`, `Checkout_Display`, `Payment_Processor`, `Account_Payment_Methods`, `Subscription_Support`, `Surcharge_Service`, and `Order_Meta_Box`
+- The `Gateway` class shrank from roughly 2,630 to about 1,000 lines, with each responsibility now isolated and independently testable
+
+### Surcharge
+
+- The disclosed credit card surcharge is now derived from the **server-side cart total** instead of trusting the posted amount
+- AJAX surcharge responses now use standard `wp_send_json_success()` / `wp_send_json_error()` envelopes
+- Fixed a unit mismatch that could overstate the surcharge rate, and a case where a non-eligible card could still show a fee
+
+### Developer API
+
+- New filter `woocommerce_stitch_register_gateway` to enable or disable gateway registration (useful for staging or conditional rollouts), replacing a hardcoded flag
+- **Changed:** checkout-presentation helpers (`get_payment_form_i18n()`, `get_saved_payment_methods_for_checkout()`, `get_checkout_display_settings()`, `get_iframe_css()`, and related) moved from `Gateway` to the new `Checkout_Display` class, accessible via `$gateway->checkout_display()`
+
+### Quality & tooling
+
+- Added PHP_CodeSniffer (WordPress + WooCommerce), PHPStan, and a PHPUnit unit-test suite (all excluded from the release package)
+- Sanitized admin settings-screen detection query parameters
+
+### Documentation
+
+- Removed legacy child-theme references from code and docs
+- Clarified data-retention and activation / deactivation / uninstall behavior
+- Bumped tested-up-to to WordPress 6.9
+
+---
+
 ## 0.2.0 — 2026-06-10
 
 ### Admin

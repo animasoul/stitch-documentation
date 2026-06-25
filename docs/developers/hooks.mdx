@@ -64,6 +64,19 @@ Filter whether the current request is a checkout/payment-form context (used for 
 
 Filter whether CSS/JS are enqueued. Defaults to `Checkout_Context::is_checkout_context()`.
 
+### `woocommerce_stitch_register_gateway`
+
+_Since 0.3.0._ Filter whether the Stitch gateway is registered with WooCommerce. Returning `false` removes both the classic and Blocks payment methods — useful for staging environments or conditional rollouts. Defaults to `true`.
+
+```php
+// Disable Stitch on staging only.
+add_filter( 'woocommerce_stitch_register_gateway', function ( $register ) {
+	return ( defined( 'WP_ENVIRONMENT_TYPE' ) && 'staging' === WP_ENVIRONMENT_TYPE )
+		? false
+		: $register;
+} );
+```
+
 ### WooCommerce admin filters
 
 - `woocommerce_settings_api_form_fields_stitch`

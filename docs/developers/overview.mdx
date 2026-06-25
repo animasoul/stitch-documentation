@@ -13,15 +13,29 @@ The WooCommerce gateway ID is always **`stitch`**. Do not change it without a da
 
 ## Architecture
 
+The gateway is composed of focused service classes. The `Gateway` object owns credentials, settings, and the WooCommerce contract, and delegates presentation and processing to dedicated collaborators.
+
 | Component | Location |
 |-----------|----------|
 | Gateway & settings | `includes/Payments/class-gateway.php` |
+| Checkout presentation (labels, branding, saved methods, i18n, iframe CSS) | `includes/Payments/class-checkout-display.php` |
+| Payment processing (auth, refunds/voids, renewals, tokens) | `includes/Payments/class-payment-processor.php` |
+| Custom settings fields (API credentials panel) | `includes/Payments/class-settings-fields.php` |
+| Admin hero & live checkout preview | `includes/Payments/class-admin-preview.php` |
+| My Account saved-method display | `includes/Payments/class-account-payment-methods.php` |
+| Subscriptions (renewals, meta copy) | `includes/Payments/class-subscription-support.php` |
+| Surcharge (calculation, disclosure, persistence) | `includes/Payments/class-surcharge-service.php` |
+| Order transaction meta box | `includes/Payments/class-order-meta-box.php` |
 | Blocks integration | `includes/Payments/class-blocks-integration.php` |
 | Checkout context detection | `includes/Payments/class-checkout-context.php` |
 | Classic template | `templates/payment-form.php` |
 | Classic JS | `assets/js/stitch-gateway.js` |
 | Blocks JS | `assets/js/stitch-blocks.js` |
 | Styles | `assets/css/stitch-gateway.css` |
+
+:::note Since 0.3.0
+The gateway was refactored from a single large class into the service classes above. Behavior is unchanged, but some public helper methods moved off `Gateway` — see [Public gateway helpers](#public-gateway-helpers) below.
+:::
 
 ## Getting the gateway instance
 
@@ -53,6 +67,20 @@ add_action( 'stitch_payments_loaded', function () {
 
 ## Public gateway helpers
 
+:::warning Changed in 0.3.0
+These checkout-presentation helpers moved from `Gateway` to the `Checkout_Display` class. Access them through the `$gateway->checkout_display()` accessor instead of calling them directly on the gateway.
+
+```php
+// Before (0.2.x)
+$labels = $gateway->get_checkout_field_labels();
+
+// Now (0.3.0+)
+$labels = $gateway->checkout_display()->get_checkout_field_labels();
+```
+:::
+
+Available on `$gateway->checkout_display()`:
+
 | Method | Purpose |
 |--------|---------|
 | `get_checkout_field_labels()` | Field labels (classic + Blocks) |
@@ -63,6 +91,10 @@ add_action( 'stitch_payments_loaded', function () {
 | `get_default_saved_account_id( $methods )` | Default selected saved card |
 | `get_iframe_css()` | CardPointe tokenizer iframe CSS |
 | `get_checkout_logo_url()` | Resolved logo URL |
+
+:::tip
+For most customizations you should prefer the [filters](/docs/developers/hooks) over calling these helpers directly — filters keep classic and Blocks checkout aligned and survive internal refactors.
+:::
 
 `Checkout_Context::is_checkout_context( $gateway )` detects checkout, shortcode pages, and Elementor layouts.
 
