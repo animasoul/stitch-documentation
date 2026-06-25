@@ -7,6 +7,25 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.3.1 — 2026-06-25
+
+Security hardening and modern-WordPress maintenance. No change to checkout behavior.
+
+### Security
+
+- The card security code (**CVV**) is no longer written to the database during WooCommerce Blocks checkout. It is now held in a request-scoped in-memory store (`Payment_Request_Store`) for the duration of the authorization request and discarded immediately afterward — reducing PCI scope. The classic checkout path already passed the CVV through the same request without persisting it.
+
+### Maintenance
+
+- Removed the manual `load_plugin_textdomain()` call. The plugin requires WordPress 6.5+ and its text domain matches the slug, so translations load automatically; this also avoids the "translation loading triggered too early" notice on newer WordPress.
+
+### Quality & tooling
+
+- Upgraded static analysis to **PHPStan 2.x** and reduced the ignore baseline (resolved redundant `method_exists()` guards, narrowed return types, and other findings)
+- Expanded the unit-test suite (payment validation, auth payloads, checkout display, card icons, checkout context, CVV store) and added a **WordPress + WooCommerce integration-test scaffold** (all excluded from the release package)
+
+---
+
 ## 0.3.0 — 2026-06-25
 
 Internal architecture, developer tooling, and surcharge hardening. No change to checkout behavior.

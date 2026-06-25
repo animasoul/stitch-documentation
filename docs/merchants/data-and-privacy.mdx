@@ -14,7 +14,7 @@ For saved-card behavior from a customer perspective, see [Stored payment methods
 | Data type | Stored on your site? |
 |-----------|----------------------|
 | Full card number (PAN) | **No** — entered in a CardPointe hosted iframe; only a token is sent to your server |
-| CVV / security code | **No** — used only during the payment request, then removed from the order |
+| CVV / security code | **No** — never written to the database; held in memory only for the authorization request |
 | Card tokenizer token | **Temporarily** on the order during checkout, then deleted after processing |
 | Last four digits, card brand, expiry | **Yes** — on saved payment tokens (when the customer opts in) and in CardPointe merchant records |
 | Transaction references | **Yes** — on orders for refunds, support, and accounting |
@@ -30,7 +30,7 @@ The card number field is not a normal HTML input on your site. It is loaded insi
 2. CardPointe returns a **single-use token** string to the checkout form.
 3. Only that token (not the full card number) is posted to WordPress with the order.
 
-Expiry, CVV, and cardholder name are collected in standard checkout fields on your site. They are required to complete the authorization but are **not kept on the order** after payment processing finishes (see below).
+Expiry, CVV, and cardholder name are collected in standard checkout fields on your site. They are required to complete the authorization. The **CVV is never written to the database** — it is held in memory only for the authorization request. Expiry and cardholder name may be attached to the order briefly during Blocks checkout and are removed in the cleanup step (see below).
 
 ```mermaid
 flowchart LR
@@ -50,17 +50,16 @@ This design reduces PCI scope for your WordPress installation because sensitive 
 
 ## During checkout — temporary data
 
-While an order is being paid, the plugin may briefly attach sensitive checkout fields to the order as metadata (for example during Blocks checkout). These keys are **removed in a cleanup step after every payment attempt**, whether the payment succeeds or fails:
+While an order is being paid, the plugin may briefly attach some checkout fields to the order as metadata (for example during Blocks checkout). These keys are **removed in a cleanup step after every payment attempt**, whether the payment succeeds or fails:
 
 | Order meta key | Contents |
 |----------------|----------|
 | `_stitch_token` | CardPointe tokenizer token |
 | `_stitch_card_expiry` | Expiry entered at checkout |
-| `_stitch_card_cvv` | CVV entered at checkout |
 | `_stitch_card_name` | Cardholder name |
 | `_stitch_save_payment_method` | Whether the customer chose to save the card |
 
-After cleanup, **full card numbers and CVV values are not retained** on the order.
+The **CVV is deliberately excluded from order metadata**. During Blocks checkout it is held in a request-scoped in-memory store for the duration of the authorization request and discarded immediately afterward, so it is never written to the database. Full card numbers never reach your server at all.
 
 ## After payment — what stays on orders
 
