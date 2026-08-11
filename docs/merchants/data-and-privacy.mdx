@@ -46,7 +46,7 @@ flowchart LR
   CP -->|Approval + references| WP
 ```
 
-This design reduces PCI scope for your WordPress installation because sensitive card entry happens in CardPointe’s hosted field, not in your theme or database.
+This design reduces PCI scope for your WordPress installation because sensitive card entry happens in CardPointe’s hosted field, not in your theme or database. Browser messages between the checkout page and the tokenizer iframe are restricted to the tokenizer’s own origin, so other scripts on the page cannot intercept them.
 
 ## During checkout — temporary data
 
@@ -108,7 +108,7 @@ Payment requests are sent to your configured CardPointe REST API base URL (test 
 - CVV and expiry (for new-card payments)
 - Merchant ID and capture settings
 
-All communication uses **HTTPS**. API username and password are stored in the gateway settings option `woocommerce_stitch_settings` in your WordPress database.
+All communication uses **HTTPS**. API username and password are stored in the gateway settings option `woocommerce_stitch_settings` in your WordPress database. That option is **not autoloaded** — it is read only when the gateway needs it — and saved passwords are never pre-filled back into the admin settings form.
 
 ## Logging
 
@@ -122,17 +122,13 @@ The plugin can write to **WooCommerce logs** (`wp-content/uploads/wc-logs/`):
 
 API logging **redacts** sensitive fields such as `token`, `account`, `cvv` / `cvv2`, and passwords before writing log lines.
 
-**Enhanced debug logging** (under **Other settings**) increases verbosity for troubleshooting. Keep it **disabled in production** unless support asks you to enable it temporarily.
-
-## Webhook URL
-
-Gateway settings display a **Webhook URL** (WooCommerce API endpoint) to register in your CardPointe merchant dashboard for transaction notifications. Configure this if your Stitch/CardPointe integration requires asynchronous status updates.
+Payment-complete log entries record only order and transaction references by default. **Enhanced debug logging** (under **Other settings**) adds customer details (user ID, email, billing name, postal code) to those entries for troubleshooting. Keep it **disabled in production** unless support asks you to enable it temporarily, so personal data stays out of your logs.
 
 ## Plugin configuration stored in WordPress
 
 | Storage | Contents |
 |---------|----------|
-| `woocommerce_stitch_settings` | Gateway title, credentials, checkout display toggles, surcharge settings, debug logging, uninstall cleanup preference |
+| `woocommerce_stitch_settings` | Gateway title, credentials, checkout display toggles, surcharge settings, debug logging, uninstall cleanup preference (not autoloaded) |
 | Validation transients | Short-lived admin notices after credential checks |
 | WooCommerce payment token tables | Saved Stitch tokens when customers opt in |
 | User meta `_stitch_profile_id` | CardPointe profile link per customer |

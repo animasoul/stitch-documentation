@@ -7,6 +7,40 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.3.2 — 2026-08-11
+
+Security and payment-safety hardening, privacy-conscious logging, and a compatibility refresh.
+
+### Security
+
+- **Saved-method ownership enforcement** — before charging a saved payment method, the plugin now verifies that the CardPointe profile/account pair belongs to the paying customer's own WooCommerce payment tokens. Profile identifiers supplied by the checkout request can no longer reference another customer's stored card.
+- **Surcharge endpoint hardening** — the surcharge AJAX endpoint only resolves saved-card profiles that belong to the logged-in customer, closing a probe path for arbitrary CardPointe profile IDs.
+- **Credential handling** — the gateway settings option (which contains API credentials) is no longer autoloaded on every request, and saved API passwords are no longer pre-filled into the settings form. Leave a password field blank to keep the current value.
+- **Tokenizer messaging** — checkout messages to the CardPointe tokenizer iframe are sent only to the tokenizer's origin instead of a wildcard (`*`) target.
+
+### Payment safety
+
+- **No more blind retries of money-moving calls** — authorizations, refunds, and profile creation are attempted exactly once. Previously a request that timed out was resent automatically, which could double-charge (or double-refund) if the original request had actually reached the processor. Idempotent calls (voids, inquiries, surcharge lookups) remain retryable.
+- **Interrupted-authorization recovery** — if an authorization fails without a usable response (timeout, dropped connection, gateway error), the plugin queries the processor by order ID and adopts the approved transaction if one exists, recording an order note. This applies to both checkout payments and subscription renewals.
+- **Safer refund failures** — a refund interrupted before a response arrives now returns a clear admin message asking the merchant to verify the transaction at CardPointe before retrying, instead of a generic error.
+
+### Privacy
+
+- Payment-complete log entries no longer include customer details (user ID, email, billing name, postal code) unless **Enhanced Debug Logging** is enabled. That setting is now functional; keep it disabled in production.
+
+### Changed
+
+- Added links to this documentation site from the plugin description, the gateway settings screen, and the readme files.
+- Removed the unimplemented **Webhook URL** settings section — it will return when a webhook handler ships.
+- The gateway is now hidden at checkout when the store currency is not USD, instead of failing with an error at payment time.
+
+### Compatibility
+
+- Tested up to **WordPress 7.0.3**, **WooCommerce 11.0.1**, and **PHP 8.5.1**
+- Updated plugin headers: `Tested up to: 7.0`, `WC tested up to: 11.0`
+
+---
+
 ## 0.3.1 — 2026-06-25
 
 Security hardening and modern-WordPress maintenance. No change to checkout behavior.

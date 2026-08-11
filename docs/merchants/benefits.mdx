@@ -11,6 +11,8 @@ Stitch Payments for WooCommerce brings enterprise-grade card processing to your 
 
 - **Hosted card fields** — The card number is entered in a CardPointe tokenizer iframe. Full card numbers and CVV are not stored on your WordPress site.
 - **Tokenized payments** — Each charge uses a secure token from CardPointe, reducing PCI scope for your store.
+- **Saved-card ownership checks** — Stored payment methods are verified to belong to the paying customer before any charge is attempted.
+- **Double-charge protection** — Charges and refunds are never blindly retried after a timeout; interrupted authorizations are looked up at the processor and recovered if they were approved.
 - **Transparent data handling** — Order cleanup removes sensitive checkout fields after every payment attempt; see [Data and privacy](/docs/merchants/data-and-privacy).
 - **Test mode** — Validate your integration in a UAT environment before going live.
 
@@ -36,7 +38,6 @@ Configure branding and behavior from **WooCommerce → Settings → Payments →
 
 - Transaction references on orders for support and reconciliation
 - Refund and void handling from the WooCommerce order screen
-- Webhook URL for CardPointe transaction notifications
 - WooCommerce Subscriptions renewal support
 - HPOS (custom order tables) compatible
 

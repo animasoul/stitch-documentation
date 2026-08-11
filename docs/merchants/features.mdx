@@ -9,16 +9,18 @@ title: Features
 
 | Feature | Description |
 |---------|-------------|
-| **Credit card gateway** | Accept cards via Stitch / CardPointe |
+| **Credit card gateway** | Accept cards via Stitch / CardPointe (USD stores) |
 | **Test & production** | Separate credential sets with a test mode toggle |
 | **Hosted tokenizer** | Card number captured in a secure iframe |
 | **Classic checkout** | Full payment form with validation and surcharge notices |
 | **Blocks checkout** | Native WooCommerce Blocks payment method integration |
+| **Payment safety** | Charges, refunds, and profile saves are attempted exactly once — never blindly retried. Interrupted authorizations are looked up at the processor and recovered if approved |
 
 ## Saved payment methods
 
 - Customers can save cards at checkout or from **My Account → Payment methods**
 - Saved cards appear as radio options on return visits
+- Saved methods are verified to belong to the paying customer before any charge
 - Subscription renewals can reuse stored tokens
 - Toggle **Enable Stored Payment Methods** in gateway settings
 
@@ -58,13 +60,14 @@ Configure:
 
 - Branded settings page with status pills (enabled/disabled, test/live)
 - Tabbed **Test** and **Production** API credentials
-- Grouped sections: Checkout display, API credentials, Other settings, Webhook, Data retention
+- Grouped sections: Checkout display, API credentials, Other settings, Data retention
 - Order meta box with transaction IDs and refund references
 
 ## Data and privacy
 
 - Card numbers tokenized via CardPointe hosted iframe — not stored on your site
 - CVV never written to the database; tokenizer tokens removed from orders after payment processing
+- Customer details appear in payment logs only when **Enhanced debug logging** is enabled
 - Configurable uninstall cleanup; order transaction records retained for accounting
 - In-admin **Data retention reference** for your privacy policy
 

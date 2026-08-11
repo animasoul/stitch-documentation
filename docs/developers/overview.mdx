@@ -37,6 +37,15 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 The gateway was refactored from a single large class into the service classes above. Behavior is unchanged, but some public helper methods moved off `Gateway` — see [Public gateway helpers](#public-gateway-helpers) below.
 :::
 
+:::note Since 0.3.2
+Behavior changes to be aware of when integrating:
+
+- **`is_available()` returns `false` for non-USD stores** — the gateway is hidden at checkout unless the store currency is USD.
+- **Money-moving API calls are single-attempt** — the API client no longer retries authorizations, refunds, or profile saves after a timeout. Idempotent calls (voids, inquiries) still retry. If an authorization is interrupted without a usable response, the payment processor inquires by order ID and adopts the approved transaction if one exists.
+- **Saved-method ownership is enforced** — profile/account IDs submitted at checkout (and to the surcharge AJAX endpoint) must belong to the current customer's payment tokens.
+- **The webhook URL setting was removed** — there was no handler behind it; it will return when webhook processing ships.
+:::
+
 ## Getting the gateway instance
 
 ```php

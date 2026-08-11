@@ -20,7 +20,7 @@ The plugin was developed by [MindK](https://www.mindk.com/) for merchants who wa
 
 ## Current release
 
-**0.3.1** — Security hardening (the card CVV is never written to the database), modern-WordPress translation handling, and an expanded test/lint toolchain (PHPStan 2.x). No change to checkout behavior. See the [Changelog](/docs/changelog).
+**0.3.2** — Security and payment-safety hardening: saved payment methods are verified to belong to the paying customer, money-moving API calls are never blindly retried (with automatic recovery of interrupted authorizations), API credential handling is hardened, and customer details stay out of payment logs unless enhanced debug logging is enabled. Also tested up to WordPress 7.0.3, WooCommerce 11.0.1, and PHP 8.5.1. See the [Changelog](/docs/changelog).
 
 ## What you get
 
@@ -34,9 +34,10 @@ The plugin was developed by [MindK](https://www.mindk.com/) for merchants who wa
 
 ## Requirements
 
-- WordPress 6.5+
-- WooCommerce (active)
-- PHP 7.4+
+- WordPress 6.5+ (tested up to 7.0.3)
+- WooCommerce (active, tested up to 11.0.1)
+- PHP 7.4+ (tested up to 8.5.1)
+- Store currency set to **USD** (the gateway is hidden at checkout for other currencies)
 - Stitch / CardPointe merchant credentials
 
 ## Support and partners

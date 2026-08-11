@@ -25,6 +25,8 @@ When a valid card is entered (or a saved card is selected), the checkout form ca
 
 On classic checkout, a disclosure may also appear near the order totals. On Blocks checkout, a note can appear in the order summary sidebar.
 
+Fee lookups for saved cards only work for the logged-in customer's own saved methods — the lookup endpoint rejects profile identifiers that don't belong to the current customer.
+
 ## Important: disclosure vs. cart total
 
 The surcharge feature is **disclosure-focused**. The displayed fee informs the customer; it is **not automatically added** as a WooCommerce cart fee in the order total shown at checkout. Confirm your legal and pricing requirements with [Stitch Payments](https://www.stitchpayments.net/) and your compliance team.

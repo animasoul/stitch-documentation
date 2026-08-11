@@ -41,6 +41,8 @@ WooCommerce Subscriptions renewal orders require a reusable payment method. When
 
 Saved cards use WooCommerce payment tokens with CardPointe profile and account identifiers — not full card numbers. CVV is never stored.
 
+Before a saved method is charged, the plugin verifies that the profile and account identifiers belong to the paying customer's own saved tokens — one customer's stored card can never be used by another account.
+
 See [Data and privacy](/docs/merchants/data-and-privacy) for tokenization, order metadata, logging, uninstall options, and privacy-policy guidance.
 
 ## Troubleshooting
