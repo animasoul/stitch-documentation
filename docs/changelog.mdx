@@ -28,6 +28,11 @@ Security and payment-safety hardening, privacy-conscious logging, and a compatib
 
 - Payment-complete log entries no longer include customer details (user ID, email, billing name, postal code) unless **Enhanced Debug Logging** is enabled. That setting is now functional; keep it disabled in production.
 
+### Fixed
+
+- **Saved cards bypassing the surcharge disclosure on Blocks checkout** — WooCommerce Blocks rendered saved Stitch cards as separate top-level payment options above the payment method list. Paying through that native option skipped the Stitch payment form entirely, so the customer was never shown the processing-fee disclosure. Saved Stitch cards are now always selected inside the Stitch payment method, which runs the fee lookup. A new [`woocommerce_stitch_hide_native_saved_methods`](/docs/developers/hooks#woocommerce_stitch_hide_native_saved_methods) filter can restore the native options. My Account → Payment methods is unaffected.
+- **Surcharge notice for preselected saved cards** — the processing-fee notice now stays visible when a customer's default saved card is preselected at checkout. Previously the checkout refresh that renders the order-total disclosure also wiped the in-form notice (and could drop the fee recorded for the order), so a customer who simply kept the default card and paid was never shown the surcharge.
+
 ### Changed
 
 - Added links to this documentation site from the plugin description, the gateway settings screen, and the readme files.

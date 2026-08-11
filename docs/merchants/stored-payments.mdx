@@ -20,10 +20,12 @@ Customers will see a **Save card for future purchases** checkbox when paying wit
 
 ### At checkout
 
-Logged-in customers with saved cards see a list of cards on the payment form. They can:
+Logged-in customers with saved cards see a list of cards on the Stitch payment form. They can:
 
 - Select a saved card, or
 - Choose **Use a new card** to enter fresh details
+
+Saved Stitch cards always appear inside the Stitch payment method — on both classic and Blocks checkout — rather than as separate top-level payment options. This keeps the [surcharge disclosure](/docs/merchants/surcharge) visible whenever a saved card is selected.
 
 ### My Account
 
@@ -32,6 +34,17 @@ Customers manage saved methods under **My Account → Payment methods**:
 - View saved cards
 - Add a new payment method
 - Remove cards they no longer need
+
+## Using Stitch alongside other card gateways
+
+Stitch coexists with other payment gateways (WooPayments, Stripe, bank transfer, cash on delivery, and so on) without conflicts:
+
+- **Checkout options** — every enabled gateway appears in the payment options list as usual. Only saved *Stitch* cards are moved inside the Stitch payment method; other gateways' saved cards still appear wherever those gateways display them (for example, as WooCommerce's top-level saved-card options on Blocks checkout).
+- **Default selection** — if a customer's only saved card is a Stitch card, checkout preselects the first enabled gateway rather than silently preselecting the hidden card.
+- **My Account** — **Payment methods** lists saved cards from all gateways, including Stitch.
+- **No data crossover** — Stitch payment tokens, order metadata, and the surcharge are all scoped to Stitch. An order paid with another gateway never records a Stitch surcharge (see [Surcharge disclosure](/docs/merchants/surcharge)).
+
+One shopper-experience note: running two card processors at once means customers see two "pay by card" options. Most merchants enable a single card gateway, or set distinct titles (for example "Credit card (Stitch)") to avoid confusion.
 
 ## Subscriptions
 

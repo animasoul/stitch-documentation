@@ -64,6 +64,15 @@ Filter whether the current request is a checkout/payment-form context (used for 
 
 Filter whether CSS/JS are enqueued. Defaults to `Checkout_Context::is_checkout_context()`.
 
+### `woocommerce_stitch_hide_native_saved_methods`
+
+_Since 0.3.2._ Filter whether saved Stitch cards are hidden from WooCommerce's own top-level saved-method options at checkout (rendered by the Blocks checkout above the payment method list). Defaults to `true` because paying through that native option bypasses the Stitch payment form and its surcharge disclosure — saved cards are instead selected inside the Stitch payment method. Return `false` to restore the native options (not recommended when surcharge disclosure is enabled). My Account → Payment methods is not affected either way.
+
+```php
+// Restore WooCommerce's native saved-card options at checkout.
+add_filter( 'woocommerce_stitch_hide_native_saved_methods', '__return_false' );
+```
+
 ### `woocommerce_stitch_register_gateway`
 
 _Since 0.3.0._ Filter whether the Stitch gateway is registered with WooCommerce. Returning `false` removes both the classic and Blocks payment methods — useful for staging environments or conditional rollouts. Defaults to `true`.
