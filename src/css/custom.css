@@ -26,6 +26,17 @@
   --docusaurus-highlighted-code-line-bg: rgba(96, 165, 250, 0.12);
 }
 
+/* The footer is dark in both themes, but copyright links inherit the theme
+   link color — a dark navy in light mode that disappears on the dark background.
+   Pin them to a light blue that works on the dark footer regardless of theme. */
+.footer--dark .footer__copyright a {
+  color: #93c5fd;
+}
+
+.footer--dark .footer__copyright a:hover {
+  color: #dbeafe;
+}
+
 .hero--stitch {
   background: var(--stitch-hero-gradient);
   color: #e2e8f0;
@@ -45,6 +56,26 @@
   height: auto;
   margin: 0 auto 1.5rem;
   max-width: 220px;
+}
+
+.stitch-hero-version {
+  display: inline-block;
+  margin-bottom: 1.75rem;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid rgba(248, 250, 252, 0.4);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #f8fafc;
+  background: rgba(248, 250, 252, 0.08);
+}
+
+.stitch-hero-version:hover {
+  border-color: #f8fafc;
+  background: rgba(248, 250, 252, 0.16);
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .stitch-home-cta {

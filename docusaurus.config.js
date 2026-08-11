@@ -1,11 +1,19 @@
 // @ts-check
 import { themes as prismThemes } from 'prism-react-renderer';
 
+// Current release of the Stitch Payments for WooCommerce plugin.
+// Shown on the homepage hero and in the footer; update on each release.
+const pluginVersion = '0.3.2';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Stitch Payments for WooCommerce',
   tagline: 'Secure CardPointe credit card payments for WooCommerce stores',
   favicon: 'img/favicon.ico',
+
+  customFields: {
+    pluginVersion,
+  },
 
   future: {
     v4: true,
@@ -133,7 +141,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a href="https://www.mindk.com/">MindK</a>.`,
+        copyright: `Plugin version <a href="/docs/changelog">${pluginVersion}</a> · Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a href="https://www.mindk.com/">MindK</a>.`,
       },
       prism: {
         theme: prismThemes.github,

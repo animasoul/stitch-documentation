@@ -8,6 +8,7 @@ import styles from './index.module.css';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
+  const pluginVersion = siteConfig.customFields.pluginVersion;
 
   return (
     <header className={clsx('hero hero--stitch', styles.heroBanner)}>
@@ -21,6 +22,9 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <Link className="stitch-hero-version" to="/docs/changelog">
+          Current version: {pluginVersion}
+        </Link>
         <div className={clsx(styles.buttons, 'stitch-home-cta')}>
           <Link className="button button--secondary button--lg" to="/docs/merchants/benefits">
             For merchants
