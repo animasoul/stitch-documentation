@@ -87,6 +87,12 @@ On the storefront, when a customer enters card details, focus automatically move
 
 This behavior is built into the classic checkout script and does not require configuration.
 
+### Card brand recognition
+
+Since 0.4.0, as soon as the card number is tokenized, the card brand (Visa, Mastercard, Amex, Discover) is recognized and a small brand icon appears inside the card number field on both classic and Blocks checkout. If **Show card preview** is enabled, the animated card graphic updates to the same brand. The brand is derived from the secure token — the card number itself never reaches your site — and it also drives the CVV length check (4 digits for Amex, 3 for other brands).
+
+Saved cards store their brand when the card is first saved, so the correct logo appears next to each saved card at checkout and in **My Account → Payment methods**.
+
 ## Tips
 
 - Use a square or horizontal logo (PNG or SVG URL) around 120–180px wide for best results.

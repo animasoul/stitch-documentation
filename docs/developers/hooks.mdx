@@ -5,68 +5,205 @@ title: Hooks reference
 
 # Hooks reference
 
-All Stitch-specific filters use the `woocommerce_stitch_*` prefix unless noted. Most filters receive the `Gateway` instance as the second parameter.
+All Stitch-specific filters use the `woocommerce_stitch_*` prefix unless noted. Most filters receive the `Gateway` instance as the last parameter — remember to pass the argument count to `add_filter()` when you use it (for example `add_filter( '...', $callback, 10, 2 )`).
+
+Code snippets below belong in a small site plugin or your theme's `functions.php`.
+
+## Quick index
+
+| Hook | Type | Use it to… |
+|------|------|------------|
+| [`woocommerce_stitch_payment_form_template_args`](#woocommerce_stitch_payment_form_template_args) | Filter | Change anything passed to the classic payment form template |
+| [`woocommerce_stitch_checkout_field_labels`](#woocommerce_stitch_checkout_field_labels) | Filter | Rename the card fields |
+| [`woocommerce_stitch_checkout_display_settings`](#woocommerce_stitch_checkout_display_settings) | Filter | Override branding (logo, icons, description) in code |
+| [`woocommerce_stitch_payment_form_i18n`](#woocommerce_stitch_payment_form_i18n) | Filter | Reword any UI or validation message |
+| [`woocommerce_stitch_saved_payment_methods`](#woocommerce_stitch_saved_payment_methods) | Filter | Hide or reorder saved cards at checkout |
+| [`woocommerce_stitch_accepted_card_brands`](#woocommerce_stitch_accepted_card_brands) | Filter | Change which brand icons appear in the header |
+| [`woocommerce_stitch_payment_header_html`](#woocommerce_stitch_payment_header_html) | Filter | Rewrite the rendered header HTML |
+| [`woocommerce_stitch_style_presets`](#woocommerce_stitch_style_presets) | Filter | Register your own checkout style preset |
+| [`woocommerce_stitch_iframe_css`](#woocommerce_stitch_iframe_css) | Filter | Restyle the card-number field inside the CardPointe iframe |
+| [`woocommerce_stitch_gateway_script_params`](#woocommerce_stitch_gateway_script_params) | Filter | Adjust data passed to the classic checkout script |
+| [`woocommerce_stitch_blocks_payment_method_data`](#woocommerce_stitch_blocks_payment_method_data) | Filter | Adjust data passed to the Blocks checkout script |
+| [`woocommerce_stitch_is_checkout_context`](#woocommerce_stitch_is_checkout_context) | Filter | Teach the plugin about custom checkout pages |
+| [`woocommerce_stitch_should_enqueue_payment_assets`](#woocommerce_stitch_should_enqueue_payment_assets) | Filter | Force or block CSS/JS loading |
+| [`woocommerce_stitch_hide_native_saved_methods`](#woocommerce_stitch_hide_native_saved_methods) | Filter | Restore WooCommerce's native saved-card options |
+| [`woocommerce_stitch_register_gateway`](#woocommerce_stitch_register_gateway) | Filter | Conditionally disable the gateway |
+| [`woocommerce_stitch_before_payment_form` and friends](#actions-classic-checkout-only) | Action | Print custom content around the classic form |
+| [`stitch_payments_loaded`](#stitch_payments_loaded) | Action | Run code once the plugin has booted |
 
 ## Filters
 
 ### `woocommerce_stitch_payment_form_template_args`
 
-Filter arguments passed to the classic `payment-form.php` template.
+Filter every variable passed to the classic `payment-form.php` template — the broadest hook for the classic form.
+
+**Parameters:** `$args` (array), `$gateway` (`Gateway`)
+
+**`$args` keys:** `gateway`, `enable_profiles`, `checkout_display`, `field_labels`, `i18n`, `saved_methods`, `default_acct_id`
+
+```php
+// Change the "save card" checkbox text and disable saved cards for one
+// product page's express flow.
+add_filter( 'woocommerce_stitch_payment_form_template_args', function ( $args, $gateway ) {
+	$args['i18n']['save_card'] = 'Store this card securely for next time';
+
+	if ( is_page( 'express-checkout' ) ) {
+		$args['enable_profiles'] = false;
+		$args['saved_methods']   = array();
+	}
+
+	return $args;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_checkout_field_labels`
 
-Filter field labels (`card_number`, `expiry`, `cvv`, `cardholder_name`).
+Rename the four card fields. Applies to classic checkout, Blocks checkout, and the JS validation messages that reference them. (Merchants can also change these in gateway settings without code.)
+
+**Parameters:** `$labels` (array), `$gateway` (`Gateway`)
+
+**`$labels` keys:** `card_number`, `expiry`, `cvv`, `cardholder_name`
 
 ```php
 add_filter( 'woocommerce_stitch_checkout_field_labels', function ( $labels, $gateway ) {
-	$labels['card_number'] = 'Card #';
+	$labels['card_number']     = 'Card #';
+	$labels['cvv']             = 'Security code';
+	$labels['cardholder_name'] = 'Name as shown on card';
 	return $labels;
 }, 10, 2 );
 ```
 
 ### `woocommerce_stitch_checkout_display_settings`
 
-Filter branding: `show_logo`, `show_card_icons`, `show_description`, `description`, `logo_url`.
+Override the branding options in code — useful when the setting should depend on context rather than a fixed admin choice.
+
+**Parameters:** `$settings` (array), `$gateway` (`Gateway`)
+
+**`$settings` keys:** `show_logo` (bool), `show_card_icons` (bool), `show_description` (bool), `description` (string), `logo_url` (string)
+
+```php
+// Use a seasonal logo in December and always hide the description.
+add_filter( 'woocommerce_stitch_checkout_display_settings', function ( $settings, $gateway ) {
+	if ( '12' === gmdate( 'm' ) ) {
+		$settings['logo_url'] = 'https://example.com/img/logo-holiday.png';
+	}
+
+	$settings['show_description'] = false;
+	return $settings;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_payment_form_i18n`
 
-Filter all UI, validation, and surcharge strings for classic checkout, Blocks, and classic JS.
+Reword any string the payment form shows — headings, buttons, surcharge notices, and every validation message. Works for classic checkout, Blocks checkout, and the shared JS.
+
+**Parameters:** `$strings` (array), `$gateway` (`Gateway`)
+
+**Commonly changed keys:** `payment_header`, `accepted_cards`, `use_new_card`, `save_card`, `surcharge_notice`, `checkout_surcharge_disclosure`, `calculating`, `no_surcharge`, `card_number_invalid`, `fix_errors_title` (about 30 keys total — inspect the array to see them all)
+
+```php
+add_filter( 'woocommerce_stitch_payment_form_i18n', function ( $strings, $gateway ) {
+	$strings['payment_header']   = 'Pay securely by card';
+	$strings['save_card']        = 'Remember this card';
+	// %s is replaced with the formatted fee amount.
+	$strings['surcharge_notice'] = 'This card carries a %s processing fee.';
+	return $strings;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_saved_payment_methods`
 
-Filter saved methods (keyed by account ID) before display on classic and Blocks checkout.
+Filter the saved cards offered at checkout (classic and Blocks). The array is keyed by CardPointe account ID.
+
+**Parameters:** `$methods` (array), `$gateway` (`Gateway`)
+
+**Each entry:** `profile_id`, `acct_id`, `last_four`, `card_type`, `expiry` (`MM/YY`), `default` (bool)
+
+```php
+// Hide saved cards that have already expired.
+add_filter( 'woocommerce_stitch_saved_payment_methods', function ( $methods, $gateway ) {
+	$cutoff = gmdate( 'ym' ); // Current year+month as YYMM.
+
+	foreach ( $methods as $acct_id => $method ) {
+		$digits = preg_replace( '/\D/', '', (string) $method['expiry'] ); // MM/YY -> MMYY.
+
+		if ( 4 === strlen( $digits ) && substr( $digits, 2 ) . substr( $digits, 0, 2 ) < $cutoff ) {
+			unset( $methods[ $acct_id ] );
+		}
+	}
+
+	return $methods;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_accepted_card_brands`
 
-Filter card brand slugs in the payment header. Default: `visa`, `mastercard`, `amex`, `discover`.
+Change which brand icons render in the payment header. Default: `visa`, `mastercard`, `amex`, `discover`.
+
+**Parameters:** `$accepted` (array of brand slugs), `$args` (array of header template args)
+
+```php
+// Don't advertise Amex.
+add_filter( 'woocommerce_stitch_accepted_card_brands', function ( $accepted ) {
+	return array_diff( $accepted, array( 'amex' ) );
+} );
+```
+
+:::note
+This only changes the icons shown; it does not block a card brand from being processed. Card acceptance is controlled by your CardPointe merchant account.
+:::
 
 ### `woocommerce_stitch_payment_header_html`
 
-Filter rendered header HTML (logo, icons, description). Output is sanitized with `Card_Icons::kses_payment_header_html()`.
+Filter the final rendered header (logo, icons, description) as HTML. Output is sanitized afterwards with `Card_Icons::kses_payment_header_html()`, so scripts and unexpected tags are stripped.
 
-### `woocommerce_stitch_iframe_css`
+**Parameters:** `$html` (string), `$args` (array of header template args)
 
-Filter minified CSS for the CardPointe tokenizer iframe. Since 0.4.0 this CSS is generated from the active [checkout style preset](#woocommerce_stitch_style_presets), so the inner card-number field matches the rest of the form; the filter still runs last as an escape hatch. See [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+```php
+// Append a trust message below the header.
+add_filter( 'woocommerce_stitch_payment_header_html', function ( $html, $args ) {
+	return $html . '<p class="stitch-trust-note">PCI-compliant &middot; your card number never touches our servers.</p>';
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_style_presets`
 
-_Since 0.4.0._ Register or modify the checkout style presets offered by the **Checkout style** setting. Each preset has a translated `label` and a `tokens` map of `--stitch-*` CSS custom property overrides; tokens you omit keep the stylesheet defaults. Built-in presets: `default`, `minimal`, `compact`, `dark`.
+_Since 0.4.0._ Register or modify the presets offered by the **Checkout style** setting (**WooCommerce → Settings → Payments → Stitch**). Each preset has a translated `label` and a `tokens` map of [`--stitch-*` CSS variables](#style-token-reference); tokens you omit keep their defaults. Built-in presets: `default`, `minimal`, `compact`, `dark`.
+
+**Parameters:** `$presets` (array keyed by preset slug)
 
 ```php
+// Add a "Brand" preset merchants can pick in gateway settings.
 add_filter( 'woocommerce_stitch_style_presets', function ( $presets ) {
 	$presets['brand'] = array(
 		'label'  => __( 'Brand', 'my-theme' ),
 		'tokens' => array(
-			'--stitch-accent'       => '#ff6600',
-			'--stitch-radius-sm'    => '2px',
-			'--stitch-field-height' => '44px',
+			'--stitch-accent'       => '#ff6600',                        // Orange focus/selection.
+			'--stitch-accent-soft'  => '#fff3eb',                        // Selected saved-card background.
+			'--stitch-focus-ring'   => 'rgba(255, 102, 0, 0.18)',        // Glow on the focused field.
+			'--stitch-header-bg'    => 'linear-gradient(135deg, #fff7f0, #ffe9d6)',
+			'--stitch-radius-sm'    => '4px',                            // Squarer inputs.
+			'--stitch-field-height' => '44px',                           // Slightly shorter fields.
 		),
 	);
 	return $presets;
 } );
 ```
 
-Merchants can also set an **Accent color** and **Custom checkout CSS** directly in the gateway settings — both are printed after the preset overrides, so they win over preset values. Themes that only need small tweaks can skip presets entirely and override the variables in CSS — the form stylesheet declares every token on `:root`:
+You can also tweak a built-in preset instead of adding one:
+
+```php
+// Make the Dark preset use a pure-black panel.
+add_filter( 'woocommerce_stitch_style_presets', function ( $presets ) {
+	$presets['dark']['tokens']['--stitch-form-bg'] = '#000';
+	return $presets;
+} );
+```
+
+Two things to know about precedence:
+
+1. The **Accent color** and **Custom checkout CSS** gateway settings are printed *after* the preset, so merchant choices win over preset values.
+2. Themes that only need small tweaks can skip presets entirely and override the variables in plain CSS — every token is declared on `:root` by the form stylesheet:
 
 ```css
 :root {
@@ -75,38 +212,193 @@ Merchants can also set an **Accent color** and **Custom checkout CSS** directly 
 }
 ```
 
-Available tokens: `--stitch-accent`, `--stitch-accent-soft`, `--stitch-focus-ring`, `--stitch-success`, `--stitch-error`, `--stitch-error-ring`, `--stitch-surface`, `--stitch-surface-soft`, `--stitch-form-bg`, `--stitch-form-padding`, `--stitch-form-text`, `--stitch-text-body`, `--stitch-text-muted`, `--stitch-field-text`, `--stitch-field-placeholder`, `--stitch-field-border`, `--stitch-border-soft`, `--stitch-saved-border`, `--stitch-header-bg`, `--stitch-header-padding`, `--stitch-radius-sm`, `--stitch-radius-md`, `--stitch-radius-lg`, `--stitch-field-height`, `--stitch-field-padding`, `--stitch-row-gap`, `--stitch-card-preview-bg`.
+The exception is the card-number field, which lives inside CardPointe's iframe: plain CSS can't reach it. `--stitch-field-height`, `--stitch-field-text`, and `--stitch-field-placeholder` *do* reach it when set through a preset, because the plugin regenerates the iframe CSS from the active preset. For anything beyond that, use [`woocommerce_stitch_iframe_css`](#woocommerce_stitch_iframe_css).
 
-The `--stitch-field-height`, `--stitch-field-text`, and `--stitch-field-placeholder` tokens also drive the CardPointe iframe field when set through a preset. Plain CSS variable overrides cannot reach inside the iframe — use a preset or the `woocommerce_stitch_iframe_css` filter for that.
+#### Style token reference
+
+Defaults shown are the `default` preset (they mirror `assets/css/stitch-gateway.css`).
+
+**Colors and accents**
+
+| Token | Default | Controls |
+|-------|---------|----------|
+| `--stitch-accent` | `#3b82f6` | Focused-field border, selected saved-card border, radio/checkbox color |
+| `--stitch-accent-soft` | `#eff6ff` | Background of the selected saved-card row |
+| `--stitch-focus-ring` | `rgba(59, 130, 246, 0.15)` | Soft glow around the focused field |
+| `--stitch-success` | `#16a34a` | Border of a field that passed validation |
+| `--stitch-error` | `#dc2626` | Border and message color of an invalid field |
+| `--stitch-error-ring` | `rgba(220, 38, 38, 0.12)` | Soft glow around an invalid field |
+
+**Surfaces and panels**
+
+| Token | Default | Controls |
+|-------|---------|----------|
+| `--stitch-surface` | `#fff` | Background of inputs, the card-number frame, and saved-card rows |
+| `--stitch-surface-soft` | `#f8fafc` | Subtle secondary background (e.g. the surcharge disclosure box) |
+| `--stitch-form-bg` | `transparent` | Panel behind the whole payment form (the Dark preset sets this) |
+| `--stitch-form-padding` | `0px` | Inner padding of that panel |
+| `--stitch-header-bg` | `linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)` | Header strip behind the logo, icons, and description |
+| `--stitch-card-preview-bg` | dark gradient | Background of the animated card preview graphic |
+
+**Text**
+
+| Token | Default | Controls |
+|-------|---------|----------|
+| `--stitch-form-text` | `inherit` | Base text color inside the form panel |
+| `--stitch-text-body` | `#475569` | Description / body copy |
+| `--stitch-text-muted` | `#64748b` | Secondary text (saved-card expiry, "we accept" label) |
+| `--stitch-field-text` | `inherit` | Text typed into fields — also applied inside the card-number iframe |
+| `--stitch-field-placeholder` | `#9ca3af` | Placeholder text — also applied inside the card-number iframe |
+
+**Borders**
+
+| Token | Default | Controls |
+|-------|---------|----------|
+| `--stitch-field-border` | `#cbd5e1` | Input borders (resting state) |
+| `--stitch-border-soft` | `#e2e8f0` | Separator line below the header |
+| `--stitch-saved-border` | `#dbe3ea` | Border of saved-card rows (unselected) |
+
+**Size and spacing**
+
+| Token | Default | Controls |
+|-------|---------|----------|
+| `--stitch-field-height` | `48px` | Input height — also applied inside the card-number iframe |
+| `--stitch-field-padding` | `0.75rem` | Inner horizontal padding of inputs |
+| `--stitch-row-gap` | `1rem` | Vertical gap between form rows |
+| `--stitch-header-padding` | `1.5rem` | Padding of the header strip |
+| `--stitch-radius-sm` | `8px` | Corner radius of inputs |
+| `--stitch-radius-md` | `10px` | Corner radius of saved-card rows |
+| `--stitch-radius-lg` | `12px` | Corner radius of the form panel and header |
+
+#### Recipes
+
+Sharp, minimal fields matching a flat theme:
+
+```css
+:root {
+	--stitch-radius-sm: 0;
+	--stitch-radius-md: 0;
+	--stitch-radius-lg: 0;
+	--stitch-header-bg: transparent;
+	--stitch-border-soft: transparent;
+}
+```
+
+Brand-green accents everywhere:
+
+```css
+:root {
+	--stitch-accent: #0a7d4f;
+	--stitch-accent-soft: #e8f5ef;
+	--stitch-focus-ring: rgba(10, 125, 79, 0.18);
+	--stitch-success: #0a7d4f;
+}
+```
+
+Denser form for narrow sidebars or modals (heights via preset so the iframe matches):
+
+```php
+add_filter( 'woocommerce_stitch_style_presets', function ( $presets ) {
+	$presets['dense'] = array(
+		'label'  => __( 'Dense', 'my-theme' ),
+		'tokens' => array(
+			'--stitch-field-height'  => '38px',
+			'--stitch-field-padding' => '0.5rem',
+			'--stitch-row-gap'       => '0.5rem',
+			'--stitch-header-padding' => '0.75rem',
+		),
+	);
+	return $presets;
+} );
+```
+
+### `woocommerce_stitch_iframe_css`
+
+Filter the minified CSS injected into the CardPointe tokenizer iframe (the card-number field). Since 0.4.0 this CSS is generated from the active [checkout style preset](#woocommerce_stitch_style_presets) so the field matches the rest of the form; this filter runs last as an escape hatch. See the [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+
+**Parameters:** `$css` (string, minified)
+
+```php
+// Use a monospaced font for the card number.
+add_filter( 'woocommerce_stitch_iframe_css', function ( $css ) {
+	return $css . 'input{font-family:ui-monospace,Menlo,monospace;letter-spacing:1px;}';
+} );
+```
 
 ### `woocommerce_stitch_gateway_script_params`
 
-Filter `wc_stitch_params` for classic checkout JS.
+Filter `wc_stitch_params`, the settings object handed to the classic checkout script (also loaded on Blocks checkout as a shared dependency).
+
+**Parameters:** `$params` (array)
+
+**`$params` keys:** `gateway_id`, `test_mode`, `merchant_id`, `enable_profiles`, `enable_surcharge`, `show_card_preview`, `iframe_url`, `iframe_css`, `logo_url`, `card_brand_icons`, `accepted_card_icons`, `i18n_card_number`, `i18n`
+
+```php
+// Force the animated card preview off on mobile, whatever the setting says.
+add_filter( 'woocommerce_stitch_gateway_script_params', function ( $params ) {
+	if ( wp_is_mobile() ) {
+		$params['show_card_preview'] = 'no';
+	}
+	return $params;
+} );
+```
 
 ### `woocommerce_stitch_blocks_payment_method_data`
 
-Filter all data passed to `stitch-blocks.js`.
+Filter all data passed to `stitch-blocks.js` — labels, feature flags, icons, and display settings for the Blocks checkout UI.
+
+**Parameters:** `$data` (array), `$gateway` (`Gateway`)
+
+```php
+// Change the payment method title shown in the Blocks payment list.
+add_filter( 'woocommerce_stitch_blocks_payment_method_data', function ( $data, $gateway ) {
+	$data['title'] = 'Credit card (secure)';
+	return $data;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_is_checkout_context`
 
-Filter whether the current request is a checkout/payment-form context (used for asset loading).
+Filter whether the current request counts as a checkout/payment context. The plugin uses this to decide when its CSS/JS may be needed — override it if you render checkout on a custom page the plugin can't detect.
+
+**Parameters:** `$is_context` (bool), `$gateway` (`Gateway`)
+
+```php
+add_filter( 'woocommerce_stitch_is_checkout_context', function ( $is_context, $gateway ) {
+	return $is_context || is_page( 'custom-checkout' );
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_should_enqueue_payment_assets`
 
-Filter whether CSS/JS are enqueued. Defaults to `Checkout_Context::is_checkout_context()`.
+Filter whether the payment CSS/JS are actually enqueued. Defaults to the result of the checkout-context check above; this is the more forceful switch of the two.
+
+**Parameters:** `$should` (bool), `$gateway` (`Gateway`)
+
+```php
+// Never load Stitch assets on the blog.
+add_filter( 'woocommerce_stitch_should_enqueue_payment_assets', function ( $should, $gateway ) {
+	return is_singular( 'post' ) ? false : $should;
+}, 10, 2 );
+```
 
 ### `woocommerce_stitch_hide_native_saved_methods`
 
-_Since 0.3.2._ Filter whether saved Stitch cards are hidden from WooCommerce's own top-level saved-method options at checkout (rendered by the Blocks checkout above the payment method list). Defaults to `true` because paying through that native option bypasses the Stitch payment form and its surcharge disclosure — saved cards are instead selected inside the Stitch payment method. Return `false` to restore the native options (not recommended when surcharge disclosure is enabled). My Account → Payment methods is not affected either way.
+_Since 0.3.2._ Saved Stitch cards are hidden from WooCommerce's own top-level saved-method options at checkout (defaults to `true`), because paying through the native option would bypass the Stitch payment form and its surcharge disclosure. Saved cards are instead selected inside the Stitch payment method. My Account → Payment methods is unaffected either way.
+
+**Parameters:** `$hide` (bool)
 
 ```php
-// Restore WooCommerce's native saved-card options at checkout.
+// Restore WooCommerce's native saved-card options at checkout
+// (not recommended when surcharge disclosure is enabled).
 add_filter( 'woocommerce_stitch_hide_native_saved_methods', '__return_false' );
 ```
 
 ### `woocommerce_stitch_register_gateway`
 
-_Since 0.3.0._ Filter whether the Stitch gateway is registered with WooCommerce. Returning `false` removes both the classic and Blocks payment methods — useful for staging environments or conditional rollouts. Defaults to `true`.
+_Since 0.3.0._ Filter whether the Stitch gateway is registered with WooCommerce at all. Returning `false` removes both the classic and Blocks payment methods — useful for staging environments or conditional rollouts.
+
+**Parameters:** `$register` (bool, default `true`)
 
 ```php
 // Disable Stitch on staging only.
@@ -119,21 +411,41 @@ add_filter( 'woocommerce_stitch_register_gateway', function ( $register ) {
 
 ### WooCommerce admin filters
 
-- `woocommerce_settings_api_form_fields_stitch`
-- `woocommerce_settings_api_sanitized_fields_stitch`
+Standard WooCommerce settings-API filters also apply to the gateway's settings screen:
+
+```php
+// Hide the card preview toggle from the settings screen.
+add_filter( 'woocommerce_settings_api_form_fields_stitch', function ( $fields ) {
+	unset( $fields['show_card_preview'] );
+	return $fields;
+} );
+```
+
+- `woocommerce_settings_api_form_fields_stitch` — filter the settings form fields
+- `woocommerce_settings_api_sanitized_fields_stitch` — filter values as they are saved
 
 ## Actions (classic checkout only)
 
-| Hook | When |
-|------|------|
-| `woocommerce_stitch_before_payment_form` | Before the payment `<fieldset>` |
-| `woocommerce_stitch_after_payment_header` | After logo / icons / description |
-| `woocommerce_stitch_before_new_card_fields` | Before new card inputs |
-| `woocommerce_stitch_after_payment_form` | After the `</fieldset>` |
+These fire while `payment-form.php` renders, so anything you `echo` appears at that position. They do not run on Blocks checkout (React renders that form).
+
+| Hook | Fires | Parameters |
+|------|-------|------------|
+| `woocommerce_stitch_before_payment_form` | Before the payment `<fieldset>` | `$gateway`, `$saved_methods` |
+| `woocommerce_stitch_after_payment_header` | After the logo / icons / description | `$gateway`, `$checkout_display`, `$saved_methods` |
+| `woocommerce_stitch_before_new_card_fields` | Before the new-card inputs | `$gateway`, `$saved_methods` |
+| `woocommerce_stitch_after_payment_form` | After the closing `</fieldset>` | `$gateway`, `$saved_methods` |
 
 ```php
+// A reassurance note above the form.
 add_action( 'woocommerce_stitch_before_payment_form', function ( $gateway, $saved_methods ) {
-	echo '<p class="stitch-checkout-notice">Cards are processed securely.</p>';
+	echo '<p class="stitch-checkout-notice">Cards are processed securely by CardPointe.</p>';
+}, 10, 2 );
+
+// A hint above the new-card fields, only for customers with saved cards.
+add_action( 'woocommerce_stitch_before_new_card_fields', function ( $gateway, $saved_methods ) {
+	if ( array() !== $saved_methods ) {
+		echo '<p class="stitch-new-card-hint">Adding a new card? You can save it for next time below.</p>';
+	}
 }, 10, 2 );
 ```
 
@@ -141,7 +453,16 @@ add_action( 'woocommerce_stitch_before_payment_form', function ( $gateway, $save
 
 ### `stitch_payments_loaded`
 
-Fires after the plugin has loaded core services.
+Fires once after the plugin has loaded its core services — the safe point to interact with Stitch classes from other plugins.
+
+```php
+add_action( 'stitch_payments_loaded', function () {
+	// Stitch classes are available from here on.
+	if ( class_exists( \StitchPayments\WooCommerce\Payments\Style_Presets::class ) ) {
+		// e.g. read the registered presets.
+	}
+} );
+```
 
 ## Blocks vs classic
 

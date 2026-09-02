@@ -16,9 +16,13 @@ Checkout styling system: presets, accent color, custom CSS, and a live-restyling
 - **Checkout style presets** — a new **Checkout style** setting in the Checkout display section switches the payment form between **Default**, **Minimal**, **Compact**, and **Dark** looks on both classic and Blocks checkout. The form stylesheet is now built on `--stitch-*` CSS variables, so a theme can restyle the form by overriding variables instead of fighting selectors, and developers can register their own presets with the new [`woocommerce_stitch_style_presets`](/docs/developers/hooks#woocommerce_stitch_style_presets) filter. The card-number field rendered inside the CardPointe iframe follows the active preset automatically.
 - **Accent color and custom CSS** — an **Accent color** picker overrides the preset accent (field focus outlines, the selected saved-card highlight, and the form's radio/checkbox controls), and an advanced **Custom checkout CSS** box appends merchant CSS after the preset on both checkout types. Custom CSS is sanitized so it cannot inject markup, and the setting links to the [full variable reference](/docs/developers/hooks#woocommerce_stitch_style_presets).
 - **Live style preview** — the settings-screen checkout preview now restyles instantly as you change the style preset, accent color, or custom CSS, before saving.
+- **Inline card brand icon** — a Visa/Mastercard/Amex/Discover icon now appears inside the card number field as soon as the card is recognized, on classic and Blocks checkout. Previously a brand icon only appeared in the optional animated card preview.
+- **Brand fallback for saved cards** — when a CardPointe response omits the card brand, saved cards now derive it from the format-preserving token (its second digit is the first digit of the real card number), so the correct logo still shows at checkout and in My Account.
 
 ### Fixed
 
+- **Card brand detection from tokens** — CardSecure tokens always start with `9`, so the previous first-digit matching never identified a brand from the tokenized number. The card preview icon and the Amex 4-digit CVV rule now work correctly.
+- **Saved Discover cards** — CardPointe reports Discover as `DSCV`, which the icon mapping did not recognize; those cards now display the Discover logo instead of a generic card icon.
 - **Dark preset readability** — the payment form now gets its own dark panel with light text, so field labels and saved-card details stay readable regardless of the site theme (previously the theme's dark text could sit on the preset's dark surfaces).
 - **Dark preset logo** — the white Stitch logo variant is used automatically with the Dark preset so it remains visible; a custom logo URL still takes precedence.
 
