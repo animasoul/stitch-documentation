@@ -7,11 +7,43 @@ title: Checkout display
 
 The **Checkout display** section controls branding on the payment form for both classic and Blocks checkout.
 
+## Checkout style
+
+_Since 0.4.0._ The **Checkout style** dropdown switches the payment form between built-in visual presets — no code or CSS required:
+
+| Preset | Look |
+|--------|------|
+| **Default** | The standard Stitch form: framed header panel, rounded fields |
+| **Minimal** | No header panel background, smaller corner radii — blends into lightweight themes |
+| **Compact** | Shorter fields and tighter spacing for dense checkouts |
+| **Dark** | The whole form becomes a dark panel with light text and the white Stitch logo — readable on light and dark themes alike |
+
+The preset applies to classic and Blocks checkout, and the card-number field (which is served securely from CardPointe) follows it automatically so the whole form stays consistent.
+
+### Accent color
+
+The **Accent color** picker overrides the preset's accent — the color used for field focus outlines, the selected saved-card highlight, and the radio/checkbox controls on the payment form. The softer focus-ring and highlight background shades are derived from your color automatically. Leave it blank to use the preset's own accent.
+
+### Custom checkout CSS
+
+The **Custom checkout CSS** box (advanced) appends your CSS after the preset on both checkout types. The most reliable approach is overriding the form's CSS variables rather than targeting selectors:
+
+```css
+:root {
+	--stitch-radius-sm: 2px;
+	--stitch-field-height: 44px;
+}
+```
+
+The full variable list is in the [developer hooks reference](/docs/developers/hooks#woocommerce_stitch_style_presets). The CSS is sanitized on save, so it cannot inject markup into the page.
+
+Developers can also register additional presets — see the [`woocommerce_stitch_style_presets`](/docs/developers/hooks#woocommerce_stitch_style_presets) filter.
+
 ## Live preview
 
 The settings screen includes a **Checkout preview** panel on the right. As you change options, the preview updates immediately — you do not need to save first. On wide screens the preview stays visible while you scroll through settings.
 
-The preview reflects branding toggles, custom logo URL, field labels, and card preview setting. It does not run live card tokenization (the card number iframe is omitted in admin).
+The preview reflects branding toggles, custom logo URL, field labels, the card preview setting, and — since 0.4.0 — the **Checkout style** preset, **Accent color**, and **Custom checkout CSS**, which restyle the preview live as you type. It does not run live card tokenization (the card number iframe is omitted in admin).
 
 ## Branding options
 

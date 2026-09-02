@@ -46,7 +46,38 @@ Filter rendered header HTML (logo, icons, description). Output is sanitized with
 
 ### `woocommerce_stitch_iframe_css`
 
-Filter minified CSS for the CardPointe tokenizer iframe. See [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+Filter minified CSS for the CardPointe tokenizer iframe. Since 0.4.0 this CSS is generated from the active [checkout style preset](#woocommerce_stitch_style_presets), so the inner card-number field matches the rest of the form; the filter still runs last as an escape hatch. See [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+
+### `woocommerce_stitch_style_presets`
+
+_Since 0.4.0._ Register or modify the checkout style presets offered by the **Checkout style** setting. Each preset has a translated `label` and a `tokens` map of `--stitch-*` CSS custom property overrides; tokens you omit keep the stylesheet defaults. Built-in presets: `default`, `minimal`, `compact`, `dark`.
+
+```php
+add_filter( 'woocommerce_stitch_style_presets', function ( $presets ) {
+	$presets['brand'] = array(
+		'label'  => __( 'Brand', 'my-theme' ),
+		'tokens' => array(
+			'--stitch-accent'       => '#ff6600',
+			'--stitch-radius-sm'    => '2px',
+			'--stitch-field-height' => '44px',
+		),
+	);
+	return $presets;
+} );
+```
+
+Merchants can also set an **Accent color** and **Custom checkout CSS** directly in the gateway settings — both are printed after the preset overrides, so they win over preset values. Themes that only need small tweaks can skip presets entirely and override the variables in CSS — the form stylesheet declares every token on `:root`:
+
+```css
+:root {
+	--stitch-accent: #ff6600;
+	--stitch-radius-sm: 2px;
+}
+```
+
+Available tokens: `--stitch-accent`, `--stitch-accent-soft`, `--stitch-focus-ring`, `--stitch-success`, `--stitch-error`, `--stitch-error-ring`, `--stitch-surface`, `--stitch-surface-soft`, `--stitch-form-bg`, `--stitch-form-padding`, `--stitch-form-text`, `--stitch-text-body`, `--stitch-text-muted`, `--stitch-field-text`, `--stitch-field-placeholder`, `--stitch-field-border`, `--stitch-border-soft`, `--stitch-saved-border`, `--stitch-header-bg`, `--stitch-header-padding`, `--stitch-radius-sm`, `--stitch-radius-md`, `--stitch-radius-lg`, `--stitch-field-height`, `--stitch-field-padding`, `--stitch-row-gap`, `--stitch-card-preview-bg`.
+
+The `--stitch-field-height`, `--stitch-field-text`, and `--stitch-field-placeholder` tokens also drive the CardPointe iframe field when set through a preset. Plain CSS variable overrides cannot reach inside the iframe — use a preset or the `woocommerce_stitch_iframe_css` filter for that.
 
 ### `woocommerce_stitch_gateway_script_params`
 
