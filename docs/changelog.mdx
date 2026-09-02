@@ -19,9 +19,17 @@ Checkout styling system: presets, accent color, custom CSS, and a live-restyling
 - **Inline card brand icon** — a Visa/Mastercard/Amex/Discover icon now appears inside the card number field as soon as the card is recognized, on classic and Blocks checkout. Previously a brand icon only appeared in the optional animated card preview.
 - **Brand fallback for saved cards** — when a CardPointe response omits the card brand, saved cards now derive it from the format-preserving token (its second digit is the first digit of the real card number), so the correct logo still shows at checkout and in My Account.
 
+### Security
+
+- **API host allowlist** — the test/production base URL overrides now only accept CardPointe domains (`cardconnect.com` / `cardpointe.com`), so API credentials can never be sent to an arbitrary host through a mistyped setting. White-label hosts can be allowed via the new [`woocommerce_stitch_allowed_api_hosts`](/docs/developers/hooks#woocommerce_stitch_allowed_api_hosts) filter; rejected overrides fall back to the default endpoint and log a warning.
+- **Log redaction for raw bodies** — unparseable (non-JSON) API responses are now redacted before they reach the logs, matching the redaction already applied to structured responses.
+
 ### Fixed
 
 - **Card brand detection from tokens** — CardSecure tokens always start with `9`, so the previous first-digit matching never identified a brand from the tokenized number. The card preview icon and the Amex 4-digit CVV rule now work correctly.
+- **Leftover Blocks-checkout order meta** — the temporary `_stitch_save_payment_method` flag written by Blocks (Store API) checkout is now removed after payment, as the data retention reference already documented. The cleanup now reads the retention reference's key list directly so documentation and behavior cannot drift apart.
+- **Untranslated strings** — the card preview's "Your name" placeholder on classic checkout and the accepted-card icon titles are now translatable.
+- **Elementor detection cost** — checkout detection now skips all Elementor page-meta lookups on sites that don't run Elementor.
 - **Saved Discover cards** — CardPointe reports Discover as `DSCV`, which the icon mapping did not recognize; those cards now display the Discover logo instead of a generic card icon.
 - **Dark preset readability** — the payment form now gets its own dark panel with light text, so field labels and saved-card details stay readable regardless of the site theme (previously the theme's dark text could sit on the preset's dark surfaces).
 - **Dark preset logo** — the white Stitch logo variant is used automatically with the Dark preset so it remains visible; a custom logo URL still takes precedence.

@@ -47,6 +47,10 @@ The gateway processes payments in **USD**. If your store currency is set to anyt
 For security, saved API passwords are not shown or pre-filled when you revisit the settings page. **Leave a password field blank to keep the current password** — only enter a value when you want to change it.
 :::
 
+:::note Base URL overrides
+The optional test/production base URL fields only accept CardPointe hosts (`cardconnect.com` / `cardpointe.com`), entered as a bare hostname such as `fts-uat.cardconnect.com`. Anything else is ignored and the default endpoint is used, so your API credentials can never be sent to the wrong host by a typo. White-label hosts can be allowed by a developer via the [`woocommerce_stitch_allowed_api_hosts`](/docs/developers/hooks#woocommerce_stitch_allowed_api_hosts) filter.
+:::
+
 ### Checkout display (optional)
 
 Use the **Checkout display** section and the live preview on the right to tune the form: pick a **Checkout style** preset (Default, Minimal, Compact, or Dark), optionally set an **Accent color** or **Custom checkout CSS**, and adjust branding (logo, card icons, description, card preview, custom logo URL, field labels). The preview restyles as you type. See [Checkout display](/docs/merchants/checkout-display).

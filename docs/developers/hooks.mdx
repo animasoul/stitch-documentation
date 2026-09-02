@@ -28,6 +28,7 @@ Code snippets below belong in a small site plugin or your theme's `functions.php
 | [`woocommerce_stitch_should_enqueue_payment_assets`](#woocommerce_stitch_should_enqueue_payment_assets) | Filter | Force or block CSS/JS loading |
 | [`woocommerce_stitch_hide_native_saved_methods`](#woocommerce_stitch_hide_native_saved_methods) | Filter | Restore WooCommerce's native saved-card options |
 | [`woocommerce_stitch_register_gateway`](#woocommerce_stitch_register_gateway) | Filter | Conditionally disable the gateway |
+| [`woocommerce_stitch_allowed_api_hosts`](#woocommerce_stitch_allowed_api_hosts) | Filter | Allow a white-label CardPointe API host |
 | [`woocommerce_stitch_before_payment_form` and friends](#actions-classic-checkout-only) | Action | Print custom content around the classic form |
 | [`stitch_payments_loaded`](#stitch_payments_loaded) | Action | Run code once the plugin has booted |
 
@@ -406,6 +407,20 @@ add_filter( 'woocommerce_stitch_register_gateway', function ( $register ) {
 	return ( defined( 'WP_ENVIRONMENT_TYPE' ) && 'staging' === WP_ENVIRONMENT_TYPE )
 		? false
 		: $register;
+} );
+```
+
+### `woocommerce_stitch_allowed_api_hosts`
+
+_Since 0.4.0._ The test/production **base URL** override settings only accept hosts on CardPointe domains (`cardconnect.com`, `cardpointe.com`), so API credentials cannot be sent to an arbitrary host through a mistyped or tampered setting. If your merchant account runs on a white-label CardPointe host, add its domain here. Overrides must be bare hostnames (no port, path, or `user@`); anything rejected falls back to the default CardPointe endpoint and logs a warning to the `stitch-api` log.
+
+**Parameters:** `$allowed` (array of domain suffixes; an override host must equal a suffix or be a subdomain of it)
+
+```php
+// Allow a white-label CardPointe host such as api.mypartner.example.
+add_filter( 'woocommerce_stitch_allowed_api_hosts', function ( $allowed ) {
+	$allowed[] = 'mypartner.example';
+	return $allowed;
 } );
 ```
 
