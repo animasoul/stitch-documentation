@@ -14,7 +14,7 @@ In **WooCommerce → Settings → Payments → Stitch**, under **Other settings*
 1. Enable **Enable Stored Payment Methods**.
 2. Save changes.
 
-Customers will see a **Save card for future purchases** checkbox when paying with a new card.
+Customers will see a **Save card for future purchases** checkbox when paying with a new card **while logged in**. Guests can still pay with a new card; they will not see saved methods or the save checkbox.
 
 ## Customer experience
 
@@ -64,6 +64,6 @@ See [Data and privacy](/docs/merchants/data-and-privacy) for tokenization, order
 
 | Issue | Check |
 |-------|-------|
-| Save checkbox missing | **Enable Stored Payment Methods** is on and customer is logged in |
+| Save checkbox missing | **Enable Stored Payment Methods** is on and the customer is logged in (guests never see the checkbox) |
 | Saved cards not listed | Customer has tokens for gateway `stitch`; profile/acct IDs must be present |
-| Guest checkout | Gateway currently requires login at checkout for new payments |
+| Guest cannot use a saved card | Expected — guests pay with a new card only. Saving and reusing cards requires an account |

@@ -19,7 +19,7 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 |-----------|----------|
 | Gateway & settings | `includes/Payments/class-gateway.php` |
 | Checkout presentation (labels, branding, saved methods, i18n, iframe CSS) | `includes/Payments/class-checkout-display.php` |
-| Payment processing (auth, refunds/voids, renewals, tokens) | `includes/Payments/class-payment-processor.php` |
+| Payment processing (auth, capture, refunds/voids, renewals, tokens) | `includes/Payments/class-payment-processor.php` |
 | Custom settings fields (API credentials panel) | `includes/Payments/class-settings-fields.php` |
 | Admin hero & live checkout preview | `includes/Payments/class-admin-preview.php` |
 | My Account saved-method display | `includes/Payments/class-account-payment-methods.php` |
@@ -44,6 +44,11 @@ Behavior changes to be aware of when integrating:
 - **Money-moving API calls are single-attempt** — the API client no longer retries authorizations, refunds, or profile saves after a timeout. Idempotent calls (voids, inquiries) still retry. If an authorization is interrupted without a usable response, the payment processor inquires by order ID and adopts the approved transaction if one exists.
 - **Saved-method ownership is enforced** — profile/account IDs submitted at checkout (and to the surcharge AJAX endpoint) must belong to the current customer's payment tokens.
 - **The webhook URL setting was removed** — there was no handler behind it; it will return when webhook processing ships.
+:::
+
+:::note Since 0.5.0
+- **Guests can check out** — `is_available()` no longer requires a logged-in user. Saved-card UI is gated by `Gateway::profiles_enabled_for_current_user()` (profiles enabled **and** logged in). Guests can only pay with a new card; ownership checks still reject user ID 0.
+- **Authorize-only payments** — `Gateway::$capture_mode` is `sale` or `authorize`. Checkout auth sends `capture: Y` or `N`. Capture and void run from order-status hooks in `Gateway_Loader` (Processing/Completed capture; Cancelled voids). Use `$gateway->payment_processor()` to reach `capture_authorized_payment()` / `void_authorized_payment()`. Subscription renewals always send `capture: Y`.
 :::
 
 ## Getting the gateway instance
@@ -101,11 +106,19 @@ Available on `$gateway->checkout_display()`:
 | `get_iframe_css()` | CardPointe tokenizer iframe CSS |
 | `get_checkout_logo_url()` | Resolved logo URL |
 
+`Checkout_Context::is_checkout_context( $gateway )` detects checkout, shortcode pages, and Elementor layouts.
+
+Available on `$gateway` itself:
+
+| Method | Purpose |
+|--------|---------|
+| `profiles_enabled_for_current_user()` | Saved-card UI for this visitor (profiles enabled **and** logged in) |
+| `payment_processor()` | Auth, capture, refund, void, and renewal engine |
+| `checkout_display()` | Presentation helper (table above) |
+
 :::tip
 For most customizations you should prefer the [filters](/docs/developers/hooks) over calling these helpers directly — filters keep classic and Blocks checkout aligned and survive internal refactors.
 :::
-
-`Checkout_Context::is_checkout_context( $gateway )` detects checkout, shortcode pages, and Elementor layouts.
 
 ## Next steps
 

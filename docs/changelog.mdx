@@ -7,6 +7,22 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.0 — 2026-09-03
+
+Guest checkout and authorize-only (capture later).
+
+### Added
+
+- **Guest checkout** — shoppers can pay with a new card without logging in, on classic and Blocks checkout. Saved cards and the **Save card for future purchases** checkbox still require an account: guests never see stored methods, and a guest request cannot charge another customer's saved profile. WooCommerce Subscriptions still creates an account at checkout when a subscription is in the cart, so renewals are unaffected.
+- **Authorize only (capture later)** — a new **Transaction type** setting under **WooCommerce → Settings → Payments → Stitch → Other settings** chooses **Charge** (authorize and capture immediately, the default) or **Authorize only**. In authorize-only mode the card is held, the order moves to **On hold**, and stock is reserved. Change the order to **Processing** or **Completed** to capture the payment, or **cancel** it to void the hold and release the customer. If capture fails, the order returns to On hold so you can retry after checking CardPointe. See [Authorize and capture](/docs/merchants/authorize-and-capture).
+- **Capture status on orders** — authorize-only orders store `_stitch_capture_status` (`authorized`, `captured`, or `voided`) alongside the other payment references, and it is retained for accounting.
+
+### Changed
+
+- Subscription renewals always charge immediately, regardless of the Transaction type setting. Card authorizations expire after several days — capture promptly.
+
+---
+
 ## 0.4.0 — 2026-09-02
 
 Checkout styling system: presets, accent color, custom CSS, and a live-restyling admin preview.

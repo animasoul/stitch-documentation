@@ -57,7 +57,7 @@ Use the **Checkout display** section and the live preview on the right to tune t
 
 ### Other settings
 
-Under **Other settings** you can enable stored payment methods, surcharge disclosure, and enhanced debug logging. Stored payments and surcharge are documented in their own guides. Enhanced debug logging adds customer details (email, name, postal code) to payment log entries — keep it off in production unless support asks for it.
+Under **Other settings** you can enable stored payment methods, choose whether to **charge immediately or authorize only** (see [Authorize and capture](/docs/merchants/authorize-and-capture)), enable surcharge disclosure, and turn on enhanced debug logging. Stored payments and surcharge are documented in their own guides. Enhanced debug logging adds customer details (email, name, postal code) to payment log entries — keep it off in production unless support asks for it.
 
 ### Data retention
 
@@ -68,11 +68,8 @@ Scroll to **Data Retention** to review what the plugin stores and optionally ena
 1. Keep **Test Mode** enabled.
 2. Place a test order on classic checkout and, if used, Blocks checkout.
 3. Verify payment completes, order notes/meta appear, and refunds work in test.
-4. Test saved cards if **Enable Stored Payment Methods** is on.
-
-:::note Logged-in checkout
-The gateway currently requires customers to be **logged in** at checkout (except on account payment-method pages). Plan guest-checkout support with your developer if needed.
-:::
+4. Test a **guest** checkout with a new card, and a logged-in checkout with a saved card if **Enable Stored Payment Methods** is on.
+5. If **Transaction type** is Authorize only, place a test order, then capture it from the order screen (Processing or Completed) and try cancelling another to confirm the hold is voided.
 
 ## 5. Go live
 

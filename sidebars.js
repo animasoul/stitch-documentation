@@ -12,6 +12,7 @@ const sidebars = {
         'merchants/benefits',
         'merchants/features',
         'merchants/getting-started',
+        'merchants/authorize-and-capture',
         'merchants/checkout-display',
         'merchants/stored-payments',
         'merchants/data-and-privacy',

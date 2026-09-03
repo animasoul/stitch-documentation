@@ -74,6 +74,7 @@ For refunds, voids, subscription renewals, and merchant accounting, the plugin k
 | `_stitch_acct_id` | CardPointe account ID within the profile |
 | `_stitch_refund_retrefs` | Comma-separated refund transaction references |
 | `_stitch_surcharge_amount` | Disclosed surcharge amount (when enabled) |
+| `_stitch_capture_status` | Authorize-only lifecycle: `authorized`, `captured`, or `voided` (since 0.5.0) |
 
 These records are **intentionally kept** even if you enable plugin data removal on uninstall, so you retain payment history for accounting and chargebacks.
 
@@ -106,7 +107,7 @@ Payment requests are sent to your configured CardPointe REST API base URL (test 
 - Order amount and currency
 - Billing name and address from the WooCommerce order
 - CVV and expiry (for new-card payments)
-- Merchant ID and capture settings
+- Merchant ID and capture settings (immediate charge vs authorize-only)
 
 All communication uses **HTTPS**. API username and password are stored in the gateway settings option `woocommerce_stitch_settings` in your WordPress database. That option is **not autoloaded** — it is read only when the gateway needs it — and saved passwords are never pre-filled back into the admin settings form.
 
@@ -128,7 +129,7 @@ Payment-complete log entries record only order and transaction references by def
 
 | Storage | Contents |
 |---------|----------|
-| `woocommerce_stitch_settings` | Gateway title, credentials, checkout display toggles, surcharge settings, debug logging, uninstall cleanup preference (not autoloaded) |
+| `woocommerce_stitch_settings` | Gateway title, credentials, checkout display toggles, surcharge settings, capture mode, debug logging, uninstall cleanup preference (not autoloaded) |
 | Validation transients | Short-lived admin notices after credential checks |
 | WooCommerce payment token tables | Saved Stitch tokens when customers opt in |
 | User meta `_stitch_profile_id` | CardPointe profile link per customer |
@@ -150,7 +151,7 @@ As the store owner, you are responsible for your site’s privacy policy and law
 1. **Payment processor** — Stitch / CardPointe processes card payments on your behalf.
 2. **What you collect** — billing details, order history, and (if enabled) saved payment method display data.
 3. **What you do not store** — full card numbers and CVV after checkout completes.
-4. **Customer choices** — saved cards require a logged-in account and explicit opt-in at checkout (except subscription flows that require a reusable method).
+4. **Customer choices** — guests can pay with a new card; saved cards require a logged-in account and explicit opt-in at checkout (except subscription flows that require a reusable method).
 5. **Retention** — order payment references are kept for accounting; uninstall cleanup options above.
 6. **Third-party transfer** — payment data transmitted to CardPointe for authorization, capture, refunds, voids, and stored profiles.
 

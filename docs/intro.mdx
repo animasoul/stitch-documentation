@@ -20,13 +20,14 @@ The plugin was developed by [MindK](https://www.mindk.com/) for merchants who wa
 
 ## Current release
 
-**0.4.0** — Checkout styling system: switch the payment form between Default, Minimal, Compact, and Dark presets, pick a brand accent color, or add custom CSS — with a live-restyling preview in the admin settings. Tested up to WordPress 7.1, WooCommerce 11.0.1, and PHP 8.5.1. See the [Changelog](/docs/changelog).
+**0.5.0** — Guest checkout and authorize-only (capture later). Shoppers can pay with a new card without an account, and merchants can hold a card at checkout then capture or void from the order screen. Tested up to WordPress 7.1, WooCommerce 11.0.1, and PHP 8.5.1. See the [Changelog](/docs/changelog).
 
 ## What you get
 
 - A WooCommerce payment gateway (`stitch`) with test and production credentials
 - Hosted card number tokenization — card data stays off your server
-- Saved payment methods for returning customers
+- Guest checkout with a new card; saved payment methods for returning (logged-in) customers
+- Charge immediately, or authorize now and capture later from the order screen
 - Refunds, voids, and subscription renewal support
 - Optional surcharge disclosure at checkout
 - Admin settings with a **live checkout preview**

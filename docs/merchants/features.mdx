@@ -12,13 +12,14 @@ title: Features
 | **Credit card gateway** | Accept cards via Stitch / CardPointe (USD stores) |
 | **Test & production** | Separate credential sets with a test mode toggle |
 | **Hosted tokenizer** | Card number captured in a secure iframe |
-| **Classic checkout** | Full payment form with validation and surcharge notices |
-| **Blocks checkout** | Native WooCommerce Blocks payment method integration |
+| **Classic checkout** | Full payment form with validation and surcharge notices; guests can pay with a new card |
+| **Blocks checkout** | Native WooCommerce Blocks payment method integration; guests can pay with a new card |
+| **Authorize / capture** | Charge immediately (default), or authorize only and capture later from the order screen — see [Authorize and capture](/docs/merchants/authorize-and-capture) |
 | **Payment safety** | Charges, refunds, and profile saves are attempted exactly once — never blindly retried. Interrupted authorizations are looked up at the processor and recovered if approved |
 
 ## Saved payment methods
 
-- Customers can save cards at checkout or from **My Account → Payment methods**
+- Customers can save cards at checkout or from **My Account → Payment methods** (logged-in only; guests pay with a new card)
 - Saved cards appear as radio options on return visits
 - Saved methods are verified to belong to the paying customer before any charge
 - Subscription renewals can reuse stored tokens
@@ -55,6 +56,7 @@ Configure:
 
 - Full and partial refunds from the order admin screen
 - Void support for unsettled transactions (settlement window notice shown on recent orders)
+- [Authorize-only orders](/docs/merchants/authorize-and-capture): capture by moving the order to Processing or Completed; void the hold by cancelling
 - Refund reference tracking on orders
 
 ## Admin experience
