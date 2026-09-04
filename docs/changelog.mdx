@@ -7,6 +7,21 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.1 — 2026-09-04
+
+Checkout performance follow-up.
+
+### Improved
+
+- **Faster Place order** — classic and Blocks checkout now ask the CardPointe tokenizer iframe immediately and retry fewer times, instead of waiting 200ms and polling for up to 3 seconds.
+- **Fewer surcharge requests** — billing postcode changes no longer trigger a surcharge lookup on every keystroke. The lookup waits until typing pauses; leaving the field or using autofill still updates immediately.
+
+### Security
+
+- **Blocks tokenizer origin** — Blocks checkout now sends tokenizer `postMessage` calls only to the CardPointe origin, matching classic checkout (no wildcard target).
+
+---
+
 ## 0.5.0 — 2026-09-03
 
 Guest checkout and authorize-only (capture later).

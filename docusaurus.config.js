@@ -3,7 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 // Current release of the Stitch Payments for WooCommerce plugin.
 // Shown on the homepage hero and in the footer; update on each release.
-const pluginVersion = '0.5.0';
+const pluginVersion = '0.5.1';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
