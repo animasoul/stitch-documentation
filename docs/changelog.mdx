@@ -7,6 +7,16 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.3 — 2026-09-16
+
+Surcharge disclosure on mobile Blocks checkout.
+
+### Fixed
+
+- **Mobile order-summary surcharge note** — on Blocks checkout, the surcharge disclosure under the order total now also appears on mobile. WooCommerce Blocks shows duplicate order summaries on small screens (collapsible top summary and another near Place order); the note previously only targeted the desktop sidebar. It now uses WooCommerce's `ExperimentalOrderMeta` Slot Fill so every summary instance shows the disclosure. See [Surcharge](/docs/merchants/surcharge).
+
+---
+
 ## 0.5.2 — 2026-09-16
 
 Clearer decline messages at checkout, and a fix for CardPointe tokenizer iframe styling.
