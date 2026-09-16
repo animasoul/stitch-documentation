@@ -22,6 +22,7 @@ Code snippets below belong in a small site plugin or your theme's `functions.php
 | [`woocommerce_stitch_payment_header_html`](#woocommerce_stitch_payment_header_html) | Filter | Rewrite the rendered header HTML |
 | [`woocommerce_stitch_style_presets`](#woocommerce_stitch_style_presets) | Filter | Register your own checkout style preset |
 | [`woocommerce_stitch_iframe_css`](#woocommerce_stitch_iframe_css) | Filter | Restyle the card-number field inside the CardPointe iframe |
+| [`woocommerce_stitch_customer_decline_message`](#woocommerce_stitch_customer_decline_message) | Filter | Customize decline messages shown to customers |
 | [`woocommerce_stitch_gateway_script_params`](#woocommerce_stitch_gateway_script_params) | Filter | Adjust data passed to the classic checkout script |
 | [`woocommerce_stitch_blocks_payment_method_data`](#woocommerce_stitch_blocks_payment_method_data) | Filter | Adjust data passed to the Blocks checkout script |
 | [`woocommerce_stitch_is_checkout_context`](#woocommerce_stitch_is_checkout_context) | Filter | Teach the plugin about custom checkout pages |
@@ -317,6 +318,8 @@ add_filter( 'woocommerce_stitch_style_presets', function ( $presets ) {
 
 Filter the minified CSS injected into the CardPointe tokenizer iframe (the card-number field). Since 0.4.0 this CSS is generated from the active [checkout style preset](#woocommerce_stitch_style_presets) so the field matches the rest of the form; this filter runs last as an escape hatch. See the [CardPointe tokenizer docs](https://developer.cardpointe.com/hosted-iframe-tokenizer).
 
+**Do not include double quotes** in the CSS string (for example around multi-word `font-family` names). CardPointe rejects the entire `css` parameter when quotes are present — use unquoted names such as `Segoe UI` instead.
+
 **Parameters:** `$css` (string, minified)
 
 ```php
@@ -324,6 +327,21 @@ Filter the minified CSS injected into the CardPointe tokenizer iframe (the card-
 add_filter( 'woocommerce_stitch_iframe_css', function ( $css ) {
 	return $css . 'input{font-family:ui-monospace,Menlo,monospace;letter-spacing:1px;}';
 } );
+```
+
+### `woocommerce_stitch_customer_decline_message`
+
+Filter the customer-facing message shown when CardPointe declines a payment (since 0.5.2). Processor `resptext` stays in the payment logs; checkout shows this safer copy on classic and Blocks.
+
+**Parameters:** `$message` (string), `$error` (`WP_Error`), `$respcode` (string), `$resptext` (string)
+
+```php
+add_filter( 'woocommerce_stitch_customer_decline_message', function ( $message, $error, $respcode, $resptext ) {
+	if ( '107' === $respcode ) {
+		return 'Please call the number on the back of your card, then try again.';
+	}
+	return $message;
+}, 10, 4 );
 ```
 
 ### `woocommerce_stitch_gateway_script_params`

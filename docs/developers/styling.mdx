@@ -51,7 +51,9 @@ add_filter( 'woocommerce_stitch_iframe_css', function ( $css ) {
 } );
 ```
 
-CardPointe only accepts inline CSS through the tokenizer URL parameter. See the [CardPointe hosted iframe tokenizer documentation](https://developer.cardpointe.com/hosted-iframe-tokenizer).
+CardPointe only accepts inline CSS through the tokenizer URL parameter. **Do not use double quotes** in the CSS (for example around multi-word font names) — CardPointe rejects the entire stylesheet when quotes are present. Use unquoted names such as `Segoe UI` instead.
+
+See the [CardPointe hosted iframe tokenizer documentation](https://developer.cardpointe.com/hosted-iframe-tokenizer).
 
 ## Validation states
 

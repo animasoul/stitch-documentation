@@ -7,6 +7,17 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.2 — 2026-09-16
+
+Clearer decline messages at checkout, and a fix for CardPointe tokenizer iframe styling.
+
+### Fixed
+
+- **Meaningful decline messages** — when CardPointe declines a card (expired, do not honor, call for authorization, PIN tries exceeded, and related responses), customers see a clear explanation on classic and Blocks checkout instead of WooCommerce Blocks' generic "Something went wrong" fallback. Processor `resptext` still goes to the payment logs. Developers can override the copy with [`woocommerce_stitch_customer_decline_message`](/docs/developers/hooks#woocommerce_stitch_customer_decline_message).
+- **Tokenizer iframe CSS** — the card-number field inside the CardPointe iframe now receives height, padding, border, and color from the active style preset. CardPointe rejects the entire `css` URL parameter when it contains double quotes (for example around `"Segoe UI"`); font names are now unquoted so the stylesheet injects correctly.
+
+---
+
 ## 0.5.1 — 2026-09-04
 
 Checkout performance follow-up.
