@@ -7,6 +7,28 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.4 — 2026-09-21
+
+Commercial card data, WooCommerce Pre-Orders, optional address and CVV checks, and adding a card from My Account.
+
+### Added
+
+- **Level 2 / 3 data** — authorization and capture send tax, freight, PO number, ship-to and ship-from ZIP, order date, and line items so corporate and purchasing cards can qualify for better interchange. **Level 2 / 3 data** under **Other settings** is on by default. An order with tax is sent as not exempt with a positive tax amount; an order with no tax is sent as tax exempt and omits the tax amount. The amount charged stays the WooCommerce order total. See [Commercial card data](/docs/merchants/commercial-data).
+- **WooCommerce Pre-Orders** — an upfront pre-order is charged at checkout. Pay-upon-release stores the logged-in customer's card with a $0 verification, then charges that saved profile when the pre-order is released, the same way a subscription renewal is charged. Guests are asked to log in. See [Stored payment methods](/docs/merchants/stored-payments#pre-orders).
+- **AVS and CVV no-match actions** — **AVS no-match** and **CVV no-match** each offer **Accept the payment** (the default), **Hold the order for review**, or **Void and decline checkout**. Only a CardPointe code of `N` is a mismatch. Partial AVS matches are accepted. If both fail, void wins. The check runs on customer checkout and on the pre-order $0 verification. It does not run on subscription renewals or pre-order release charges. See [Address and CVV checks](/docs/merchants/card-checks).
+- **Add a card in My Account** — a logged-in customer can save a card from **My Account → Payment methods → Add payment method** without placing an order. The card is checked with a $0 authorization. The CVV is used only for that check and is never stored.
+
+### Changed
+
+- Saved cards, the settings screen, refunds, checkout field validation, the surcharge disclosure, API log redaction, and Blocks checkout field mapping now live in their own files. Authorization, capture, and renewals stay in the payment processor.
+
+### Compatibility
+
+- Tested with **WordPress 7.1.1** and **WooCommerce 11.1.1**
+- Updated plugin header: `WC tested up to: 11.1` (`Tested up to` remains 7.1)
+
+---
+
 ## 0.5.3 — 2026-09-16
 
 Surcharge disclosure on mobile Blocks checkout.

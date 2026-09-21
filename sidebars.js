@@ -15,6 +15,8 @@ const sidebars = {
         'merchants/authorize-and-capture',
         'merchants/checkout-display',
         'merchants/stored-payments',
+        'merchants/commercial-data',
+        'merchants/card-checks',
         'merchants/data-and-privacy',
         'merchants/surcharge',
       ],

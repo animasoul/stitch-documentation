@@ -17,10 +17,13 @@ title: Features
 | **Authorize / capture** | Charge immediately (default), or authorize only and capture later from the order screen — see [Authorize and capture](/docs/merchants/authorize-and-capture) |
 | **Payment safety** | Charges, refunds, and profile saves are attempted exactly once — never blindly retried. Interrupted authorizations are looked up at the processor and recovered if approved |
 | **Clear decline messages** | CardPointe declines (expired card, bank decline, call for authorization, and related responses) show a clear reason at checkout instead of a generic error |
+| **Level 2 / 3 data** | Tax, freight, PO number, and line items are sent with authorization and capture for commercial cards — see [Commercial card data](/docs/merchants/commercial-data) |
+| **Address and CVV checks** | Optional hold or void when CardPointe reports an AVS or CVV no-match — see [Address and CVV checks](/docs/merchants/card-checks) |
 
 ## Saved payment methods
 
 - Customers can save cards at checkout or from **My Account → Payment methods** (logged-in only; guests pay with a new card)
+- Adding a card from My Account checks it with a $0 authorization. The CVV is used only for that check and is never stored
 - Saved cards appear as radio options on return visits
 - Saved methods are verified to belong to the paying customer before any charge
 - Subscription renewals can reuse stored tokens
@@ -53,6 +56,12 @@ Configure:
 - Scheduled renewal payments via saved payment methods
 - Payment method change support in admin
 
+## Pre-Orders
+
+- WooCommerce Pre-Orders: upfront pre-orders charge at checkout
+- Pay-upon-release stores the card, then charges that saved profile when the pre-order is released
+- See [Stored payment methods](/docs/merchants/stored-payments#pre-orders)
+
 ## Refunds and voids
 
 - Full and partial refunds from the order admin screen
@@ -79,6 +88,7 @@ See [Data and privacy](/docs/merchants/data-and-privacy) for the full breakdown.
 
 ## Compatibility
 
+- WordPress 7.1.1 and WooCommerce 11.1.1
 - WooCommerce HPOS / custom order tables
 - WooCommerce Cart & Checkout Blocks
 - Elementor checkout layouts (when standard WooCommerce payment fields are used)

@@ -35,6 +35,8 @@ Customers manage saved methods under **My Account → Payment methods**:
 - Add a new payment method
 - Remove cards they no longer need
 
+**Add payment method** does not place an order. Stitch checks the new card with a $0 authorization, then saves the CardPointe profile on the customer's account. The security code is sent only with that check and is not stored. The customer must be logged in, and **Enable Stored Payment Methods** must be on. A declined card is not saved.
+
 ## Using Stitch alongside other card gateways
 
 Stitch coexists with other payment gateways (WooPayments, Stripe, bank transfer, cash on delivery, and so on) without conflicts:
@@ -49,6 +51,15 @@ One shopper-experience note: running two card processors at once means customers
 ## Subscriptions
 
 WooCommerce Subscriptions renewal orders require a reusable payment method. When subscriptions are enabled, saved tokens are used for scheduled renewals.
+
+## Pre-Orders
+
+_Since 0.5.4._ With [WooCommerce Pre-Orders](https://woocommerce.com/products/woocommerce-pre-orders/) active:
+
+- **Charge upfront** — checkout charges the order total, the same as any other Stitch payment.
+- **Pay upon release** — checkout does not charge the order total. A logged-in customer verifies a new card with a $0 authorization, or selects a card already saved on their account. When you release the pre-order, Stitch charges that saved profile for the order total, the same way a subscription renewal is charged.
+
+Guests cannot complete a pay-upon-release pre-order; they are asked to log in. A release with no saved card, or a decline from CardPointe, marks the order failed and adds an order note. Address and CVV no-match actions apply to the $0 check at checkout. They do not apply to the release charge.
 
 ## Data and privacy
 

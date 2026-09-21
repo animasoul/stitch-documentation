@@ -9,7 +9,7 @@ const FeatureList = [
     description: (
       <>
         Native gateway integration for classic checkout and WooCommerce Blocks, with HPOS
-        compatibility and subscription support.
+        compatibility, subscription renewals, and WooCommerce Pre-Orders.
       </>
     ),
     link: '/docs/merchants/features',
