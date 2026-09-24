@@ -17,27 +17,27 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 
 | Component | Location |
 |-----------|----------|
-| Gateway & settings | `includes/Payments/class-gateway.php` |
-| Checkout presentation (labels, branding, saved methods, i18n, iframe CSS) | `includes/Payments/class-checkout-display.php` |
-| Payment processing (auth, capture, renewals, pre-order release) | `includes/Payments/class-payment-processor.php` |
-| Refunds and voids | `includes/Payments/class-refund-processor.php` |
-| Saved cards and My Account add-card | `includes/Payments/class-saved-card-store.php` |
-| Level 2 / 3 commercial fields | `includes/Payments/class-level-data.php` |
-| AVS / CVV no-match policy | `includes/Payments/class-verification-policy.php` |
-| WooCommerce Pre-Orders release hook | `includes/Payments/class-pre-order-support.php` |
-| Gateway settings screen | `includes/Payments/class-admin-settings.php` |
-| Settings field definitions | `includes/Payments/class-settings-fields.php` |
-| Customer-facing decline message mapping | `includes/Payments/class-decline-messages.php` |
-| Admin hero & live checkout preview | `includes/Payments/class-admin-preview.php` |
-| My Account saved-method display | `includes/Payments/class-account-payment-methods.php` |
-| Subscriptions (renewals, meta copy) | `includes/Payments/class-subscription-support.php` |
-| Surcharge calculation and persistence | `includes/Payments/class-surcharge-service.php` |
-| Surcharge disclosure markup | `includes/Payments/class-surcharge-disclosure.php` |
-| Blocks checkout payment fields | `includes/Payments/class-store-api-payment-data.php` |
+| Gateway | `includes/Payments/class-gateway.php` |
+| Checkout presentation (labels, branding, saved methods, i18n, iframe CSS) | `includes/Payments/Checkout/class-checkout-display.php` |
+| Payment processing (auth, capture, renewals, pre-order release) | `includes/Payments/Processing/class-payment-processor.php` |
+| Refunds and voids | `includes/Payments/Processing/class-refund-processor.php` |
+| Saved cards and My Account add-card | `includes/Payments/Processing/class-saved-card-store.php` |
+| Level 2 / 3 commercial fields | `includes/Payments/Processing/class-level-data.php` |
+| AVS / CVV no-match policy | `includes/Payments/Processing/class-verification-policy.php` |
+| WooCommerce Pre-Orders release hook | `includes/Payments/Processing/class-pre-order-support.php` |
+| Gateway settings screen | `includes/Payments/Admin/class-admin-settings.php` |
+| Settings field definitions | `includes/Payments/Admin/class-settings-fields.php` |
+| Customer-facing decline message mapping | `includes/Payments/Checkout/class-decline-messages.php` |
+| Admin hero & live checkout preview | `includes/Payments/Admin/class-admin-preview.php` |
+| My Account saved-method display | `includes/Payments/Checkout/class-account-payment-methods.php` |
+| Subscriptions (renewals, meta copy) | `includes/Payments/Processing/class-subscription-support.php` |
+| Surcharge calculation and persistence | `includes/Payments/Surcharge/class-surcharge-service.php` |
+| Surcharge disclosure markup | `includes/Payments/Surcharge/class-surcharge-disclosure.php` |
+| Blocks checkout payment fields | `includes/Payments/Checkout/class-store-api-payment-data.php` |
 | API log redaction | `includes/API/class-log-redactor.php` |
-| Order transaction meta box | `includes/Payments/class-order-meta-box.php` |
-| Blocks integration | `includes/Payments/class-blocks-integration.php` |
-| Checkout context detection | `includes/Payments/class-checkout-context.php` |
+| Order transaction meta box | `includes/Payments/Admin/class-order-meta-box.php` |
+| Blocks integration | `includes/Payments/Checkout/class-blocks-integration.php` |
+| Checkout context detection | `includes/Payments/Checkout/class-checkout-context.php` |
 | Classic template | `templates/payment-form.php` |
 | Classic JS | `assets/js/stitch-gateway.js` |
 | Checkout field validation | `assets/js/stitch-validation.js` |
@@ -61,6 +61,10 @@ Behavior changes to be aware of when integrating:
 :::note Since 0.5.0
 - **Guests can check out** — `is_available()` no longer requires a logged-in user. Saved-card UI is gated by `Gateway::profiles_enabled_for_current_user()` (profiles enabled **and** logged in). Guests can only pay with a new card; ownership checks still reject user ID 0.
 - **Authorize-only payments** — `Gateway::$capture_mode` is `sale` or `authorize`. Checkout auth sends `capture: Y` or `N`. Capture and void run from order-status hooks in `Gateway_Loader` (Processing/Completed capture; Cancelled voids). Use `$gateway->payment_processor()` to reach `capture_authorized_payment()` / `void_authorized_payment()`. Subscription renewals always send `capture: Y`.
+:::
+
+:::note Since 0.5.5
+Payment classes are grouped into `Checkout`, `Processing`, `Admin`, and `Surcharge` under `includes/Payments/`. The namespace is still `StitchPayments\WooCommerce\Payments`.
 :::
 
 :::note Since 0.5.4

@@ -7,6 +7,26 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.5.5 — 2026-09-24
+
+Compatibility refresh and a clearer layout of the payment code.
+
+### Changed
+
+- **Payment code folders** — gateway classes are grouped into `includes/Payments/Checkout`, `Processing`, `Admin`, and `Surcharge`. The gateway and its loader stay in `includes/Payments`. Class names, the `StitchPayments\WooCommerce\Payments` namespace, and the `stitch` gateway ID are unchanged. See [Developer overview](/docs/developers/overview).
+
+### Fixed
+
+- **Release package** — the zip no longer includes `.distignore` or other hidden development files.
+- **Uninstall token cleanup** — stored Stitch tokens are selected with a prepared `%i` table identifier.
+
+### Compatibility
+
+- Tested with **WordPress 7.1.2** and **WooCommerce 11.1.2**
+- Plugin headers stay `Tested up to: 7.1` and `WC tested up to: 11.1`
+
+---
+
 ## 0.5.4 — 2026-09-21
 
 Commercial card data, WooCommerce Pre-Orders, optional address and CVV checks, and adding a card from My Account.
