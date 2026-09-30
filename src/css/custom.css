@@ -55,6 +55,9 @@
 }
 
 .hero--stitch .hero__subtitle {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
   opacity: 0.92;
 }
 
@@ -65,24 +68,22 @@
   max-width: 220px;
 }
 
-.stitch-hero-version {
-  display: inline-block;
-  margin-bottom: 1.75rem;
-  padding: 0.3rem 0.9rem;
-  border: 1px solid rgba(248, 250, 252, 0.4);
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #f8fafc;
-  background: rgba(248, 250, 252, 0.08);
+.stitch-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.25rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.95rem;
 }
 
-.stitch-hero-version:hover {
-  border-color: #f8fafc;
-  background: rgba(248, 250, 252, 0.16);
+.stitch-hero-links a {
+  color: rgba(248, 250, 252, 0.82);
+  font-weight: 600;
+}
+
+.stitch-hero-links a:hover {
   color: #ffffff;
-  text-decoration: none;
 }
 
 .stitch-home-cta {
@@ -93,13 +94,15 @@
 }
 
 /* Hero is always on a dark gradient; outline CTAs need light text in light mode */
-.hero--stitch .stitch-home-cta .button--outline {
+.hero--stitch .stitch-home-cta .button--outline,
+.stitch-home-close .stitch-home-cta .button--outline {
   --ifm-button-background-color: transparent;
   --ifm-button-border-color: rgba(248, 250, 252, 0.75);
   color: #f8fafc;
 }
 
-.hero--stitch .stitch-home-cta .button--outline:hover {
+.hero--stitch .stitch-home-cta .button--outline:hover,
+.stitch-home-close .stitch-home-cta .button--outline:hover {
   --ifm-button-background-color: rgba(248, 250, 252, 0.12);
   --ifm-button-border-color: #f8fafc;
   color: #ffffff;
@@ -116,6 +119,85 @@
 
 .stitch-feature-card h3 {
   margin-top: 0;
+}
+
+.stitch-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.85rem;
+  border-radius: 12px;
+  background: rgba(30, 58, 95, 0.08);
+  color: var(--ifm-color-primary);
+  flex-shrink: 0;
+}
+
+.stitch-card-icon svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+[data-theme='dark'] .stitch-card-icon {
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.stitch-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.stitch-card-head .stitch-card-icon {
+  margin-bottom: 0;
+}
+
+.stitch-brand {
+  white-space: nowrap;
+}
+
+.stitch-brand__mark {
+  display: inline-block;
+  height: 1.05em;
+  width: auto;
+  margin-right: 0.28em;
+  vertical-align: -0.18em;
+}
+
+.stitch-brand__mark--word {
+  height: 1.65em;
+  vertical-align: -0.42em;
+}
+
+h1 .stitch-brand__mark,
+h2 .stitch-brand__mark {
+  height: 0.72em;
+  vertical-align: -0.08em;
+}
+
+.stitch-brand__mark--dark {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-brand__mark--light {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-brand__mark--dark {
+  display: inline-block;
+}
+
+.hero--stitch .stitch-brand__mark--light,
+.stitch-home-close .stitch-brand__mark--light,
+.stitch-security-band .stitch-brand__mark--light {
+  display: none;
+}
+
+.hero--stitch .stitch-brand__mark--dark,
+.stitch-home-close .stitch-brand__mark--dark,
+.stitch-security-band .stitch-brand__mark--dark {
+  display: inline-block;
 }
 
 .stitch-accepted-cards {
@@ -176,6 +258,274 @@
   }
 }
 
+.stitch-home-section {
+  padding: 1.5rem 0 2.5rem;
+}
+
+.stitch-home-section h2,
+.stitch-home-close h2 {
+  text-align: center;
+}
+
+.stitch-home-lead,
+.stitch-home-note {
+  max-width: 44rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.stitch-home-note {
+  margin-top: 1rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+}
+
+.stitch-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stitch-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+}
+
+.stitch-steps__index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.stitch-compare-wrap {
+  width: max-content;
+  max-width: 100%;
+  margin: 1.5rem auto 0;
+  overflow-x: auto;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  background: var(--ifm-background-surface-color);
+}
+
+.stitch-compare {
+  display: table;
+  width: max-content;
+  min-width: 36rem;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.stitch-compare th,
+.stitch-compare td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.stitch-compare th:not(:first-child),
+.stitch-compare td:not(:first-child) {
+  text-align: center;
+}
+
+.stitch-compare thead th {
+  font-size: 0.95rem;
+}
+
+.stitch-compare tbody th {
+  font-weight: 600;
+}
+
+.stitch-compare tr:last-child th,
+.stitch-compare tr:last-child td {
+  border-bottom: 0;
+}
+
+.stitch-compare .is-stitch {
+  background: rgba(30, 58, 95, 0.08);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .stitch-compare .is-stitch {
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.stitch-soon {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(244, 114, 22, 0.16);
+  color: #c2410c;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .stitch-soon {
+  color: #fdba74;
+}
+
+.stitch-faq {
+  max-width: 44rem;
+  margin: 1.25rem auto 0;
+}
+
+.stitch-faq details {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.85rem 0;
+}
+
+.stitch-faq summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.stitch-faq p {
+  margin: 0.6rem 0 0.2rem;
+}
+
+.stitch-home-close {
+  margin: 1rem 0 2rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #e2e8f0;
+  background: var(--stitch-hero-gradient);
+}
+
+.stitch-home-close h2,
+.stitch-home-close p {
+  color: #f8fafc;
+}
+
+.stitch-home-close p {
+  margin-bottom: 1.25rem;
+}
+
+.stitch-security-band {
+  margin: 1.5rem 0;
+  padding: 3.5rem 0;
+  color: #e2e8f0;
+  background: var(--stitch-hero-gradient);
+}
+
+.stitch-security-band h2,
+.stitch-security-band .stitch-home-lead {
+  color: #f8fafc;
+  text-align: center;
+}
+
+.stitch-security-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0 0 0.85rem;
+  color: #93c5fd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stitch-security-kicker .stitch-card-icon {
+  width: 1.85rem;
+  height: 1.85rem;
+  margin: 0;
+  background: rgba(147, 197, 253, 0.16);
+  color: #bfdbfe;
+}
+
+.stitch-security {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stitch-security li {
+  margin: 0;
+  padding: 1.25rem 1.35rem 1.35rem;
+  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid rgba(248, 250, 252, 0.16);
+  border-radius: 16px;
+  box-shadow: inset 3px 0 0 #60a5fa;
+}
+
+.stitch-security__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.stitch-security__head .stitch-card-icon {
+  margin-bottom: 0;
+  background: rgba(96, 165, 250, 0.16);
+  color: #bfdbfe;
+}
+
+.stitch-security__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.16);
+  color: #6ee7b7;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.stitch-security strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.stitch-security-band .stitch-home-more a {
+  color: #bfdbfe;
+}
+
+.stitch-security-band .stitch-home-more a:hover {
+  color: #ffffff;
+}
+
+.stitch-home-more {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (max-width: 996px) {
+  .stitch-steps,
+  .stitch-security {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stitch-partners {
   border-top: 1px solid var(--ifm-color-emphasis-200);
   margin-top: 2rem;
@@ -229,7 +579,7 @@
 .stitch-cardpointe__light,
 .stitch-cardpointe__dark {
   display: block;
-  height: 3.75rem;
+  height: 2.6rem;
   width: auto;
 }
 

@@ -65,7 +65,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/stitch-logo.png',
+      image: 'img/stitch-social.png',
       colorMode: {
         defaultMode: 'light',
         respectPrefersColorScheme: true,
