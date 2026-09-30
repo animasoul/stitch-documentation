@@ -141,7 +141,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Plugin version <a href="/docs/changelog">${pluginVersion}</a> · Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a href="https://www.mindk.com/">MindK</a>.`,
+        copyright: `Plugin version <a href="/docs/changelog">${pluginVersion}</a> · Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a class="stitch-footer-mindk" href="https://www.mindk.com/"><img src="/img/mindk-logo-white.svg" alt="MindK" width="140" height="24" /></a>.`,
       },
       prism: {
         theme: prismThemes.github,

@@ -63,12 +63,50 @@ export default function HomepageFeatures() {
             <a href="https://www.stitchpayments.net/" target="_blank" rel="noopener noreferrer">
               Stitch Payments
             </a>{' '}
-            and CardPointe. Plugin development by{' '}
-            <a href="https://www.mindk.com/" target="_blank" rel="noopener noreferrer">
-              MindK
-            </a>
-            .
+            and CardPointe.
           </p>
+          <a
+            className="stitch-mindk"
+            href="https://www.mindk.com/"
+            target="_blank"
+            rel="noopener noreferrer">
+            <span>Plugin development by</span>
+            <img
+              className="stitch-mindk__light"
+              src="/img/mindk-logo.svg"
+              alt="MindK"
+              width="116"
+              height="20"
+            />
+            <img
+              className="stitch-mindk__dark"
+              src="/img/mindk-logo-white.svg"
+              alt="MindK"
+              width="140"
+              height="24"
+            />
+          </a>
+          <a
+            className="stitch-cardpointe"
+            href="https://www.cardpointe.com/"
+            target="_blank"
+            rel="noopener noreferrer">
+            <span>Stitch Payments partners with</span>
+            <img
+              className="stitch-cardpointe__light"
+              src="/img/cardpointe-logo.svg"
+              alt="CardPointe"
+              width="522"
+              height="165"
+            />
+            <img
+              className="stitch-cardpointe__dark"
+              src="/img/cardpointe-logo-white.svg"
+              alt="CardPointe"
+              width="700"
+              height="300"
+            />
+          </a>
         </div>
       </div>
     </section>

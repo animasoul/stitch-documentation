@@ -118,6 +118,64 @@
   margin-top: 0;
 }
 
+.stitch-accepted-cards {
+  margin: 0 0 1.75rem;
+}
+
+.stitch-accepted-cards__label {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stitch-accepted-cards ul,
+.markdown .stitch-accepted-cards ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.markdown .stitch-accepted-cards li {
+  margin: 0;
+}
+
+.stitch-accepted-cards img {
+  display: block;
+  height: 2.5rem;
+  width: auto;
+  border-radius: 6px;
+}
+
+.stitch-accepted-cards--prominent {
+  margin: 1.75rem 0 1.5rem;
+}
+
+.stitch-accepted-cards--prominent .stitch-accepted-cards__label {
+  color: rgba(248, 250, 252, 0.78);
+}
+
+.stitch-accepted-cards--prominent ul {
+  justify-content: center;
+}
+
+.stitch-accepted-cards--prominent img {
+  height: 3.25rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 576px) {
+  .stitch-accepted-cards--prominent img {
+    height: 2.35rem;
+  }
+}
+
 .stitch-partners {
   border-top: 1px solid var(--ifm-color-emphasis-200);
   margin-top: 2rem;
@@ -127,6 +185,77 @@
 
 .stitch-partners a {
   font-weight: 600;
+}
+
+.stitch-mindk,
+.stitch-cardpointe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  width: fit-content;
+  margin: 0.85rem auto 0;
+  color: var(--ifm-font-color-base);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stitch-mindk:hover,
+.stitch-cardpointe:hover {
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.stitch-mindk__light,
+.stitch-mindk__dark {
+  display: block;
+  height: 1.15rem;
+  width: auto;
+}
+
+.stitch-mindk__dark {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-mindk__light {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-mindk__dark {
+  display: block;
+}
+
+.stitch-cardpointe__light,
+.stitch-cardpointe__dark {
+  display: block;
+  height: 3.75rem;
+  width: auto;
+}
+
+.stitch-cardpointe__dark {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-cardpointe__light {
+  display: none;
+}
+
+[data-theme='dark'] .stitch-cardpointe__dark {
+  display: block;
+}
+
+.footer__copyright .stitch-footer-mindk {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 0 0.15rem;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.footer__copyright .stitch-footer-mindk img {
+  height: 0.95rem;
+  width: auto;
 }
 
 /* The wordmark is too wide once the navbar collapses. Show the heart mark. */
