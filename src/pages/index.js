@@ -13,6 +13,7 @@ import styles from './index.module.css';
 const pageDescription =
   'Accept Visa, Mastercard, American Express, and Discover in WooCommerce on WordPress with Stitch Payments. Hosted CardPointe fields, saved cards, and a lower processing commission. Bank transfer coming soon.';
 
+const pageTitle = 'Card payments for WooCommerce';
 const socialImage = 'https://docs.stitchpayments.net/img/stitch-social.png';
 
 function HomepageHeader() {
@@ -56,6 +57,21 @@ function HomepageHeader() {
 
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
+  const softwareLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Stitch Payments for WooCommerce',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'WordPress',
+    softwareVersion: siteConfig.customFields.pluginVersion,
+    url: 'https://docs.stitchpayments.net/',
+    description: pageDescription,
+    provider: {
+      '@type': 'Organization',
+      name: 'Stitch Payments',
+      url: 'https://www.stitchpayments.net/',
+    },
+  };
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -70,11 +86,12 @@ export default function Home() {
   };
 
   return (
-    <Layout title={siteConfig.title} description={pageDescription}>
+    <Layout title={pageTitle} description={pageDescription}>
       <Head>
         <meta property="og:image" content={socialImage} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content={socialImage} />
+        <script type="application/ld+json">{JSON.stringify(softwareLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       </Head>
       <HomepageHeader />

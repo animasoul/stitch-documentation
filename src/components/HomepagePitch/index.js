@@ -9,7 +9,12 @@ const steps = [
   {
     icon: 'user',
     title: 'Request an account',
-    text: 'Sign up with Stitch Payments. Your processing commission is quoted for your store, below typical gateway rates.',
+    text: (
+      <>
+        <Link href={signupUrl}>Sign up</Link> with <Brand name="Stitch Payments" />. Your processing
+        commission is quoted for your store, below typical gateway rates.
+      </>
+    ),
   },
   {
     icon: 'plugin',
@@ -131,9 +136,7 @@ export default function HomepagePitch() {
                   <HomeIcon name={step.icon} />
                 </span>
                 <strong>{step.title}</strong>
-                <span>
-                  <BrandText text={step.text} />
-                </span>
+                <span>{typeof step.text === 'string' ? <BrandText text={step.text} /> : step.text}</span>
               </li>
             ))}
           </ol>

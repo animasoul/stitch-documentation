@@ -1,9 +1,11 @@
 ---
 sidebar_position: 3
-title: Hooks reference
+title: WordPress hooks for Stitch Payments
+sidebar_label: Hooks reference
+description: Filters and actions to change Stitch Payments checkout, saved cards, styling, and the CardPointe tokenizer.
 ---
 
-# Hooks reference
+# WordPress hooks for Stitch Payments
 
 All Stitch-specific filters use the `woocommerce_stitch_*` prefix unless noted. Most filters receive the `Gateway` instance as the last parameter — remember to pass the argument count to `add_filter()` when you use it (for example `add_filter( '...', $callback, 10, 2 )`).
 
