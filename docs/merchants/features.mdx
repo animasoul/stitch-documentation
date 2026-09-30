@@ -15,7 +15,7 @@ title: Features
 | **Classic checkout** | Full payment form with validation and surcharge notices; guests can pay with a new card |
 | **Blocks checkout** | Native WooCommerce Blocks payment method integration; guests can pay with a new card |
 | **Authorize / capture** | Charge immediately (default), or authorize only and capture later from the order screen — see [Authorize and capture](/docs/merchants/authorize-and-capture) |
-| **Payment safety** | Charges, refunds, and profile saves are attempted exactly once — never blindly retried. Interrupted authorizations are looked up at the processor and recovered if approved |
+| **Payment safety** | Charges, refunds, and profile saves are attempted exactly once — never blindly retried. Interrupted authorizations are looked up at the processor and recovered if approved. If that lookup finds no approved transaction, the authorization is voided by order ID |
 | **Clear decline messages** | CardPointe declines (expired card, bank decline, call for authorization, and related responses) show a clear reason at checkout instead of a generic error |
 | **Level 2 / 3 data** | Tax, freight, PO number, and line items are sent with authorization and capture for commercial cards — see [Commercial card data](/docs/merchants/commercial-data) |
 | **Address and CVV checks** | Optional hold or void when CardPointe reports an AVS or CVV no-match — see [Address and CVV checks](/docs/merchants/card-checks) |
@@ -26,7 +26,9 @@ title: Features
 - Adding a card from My Account checks it with a $0 authorization. The CVV is used only for that check and is never stored
 - Saved cards appear as radio options on return visits
 - Saved methods are verified to belong to the paying customer before any charge
-- Subscription renewals can reuse stored tokens
+- Subscription renewals reuse stored tokens and are sent as recurring charges
+- Removing a saved card also deletes that card's account at CardPointe
+- When Card Account Updater is enabled on the merchant account, saved cards are refreshed daily (expiry and last four), or removed if the brand reports the card closed or invalid
 - Toggle **Enable Stored Payment Methods** in gateway settings
 
 ## Checkout display
@@ -43,12 +45,11 @@ Customize how the payment form looks without code:
 
 ## Surcharge disclosure
 
-When enabled, customers see processing-fee information before they pay. The surcharge is **disclosure-only** in the current implementation — it informs customers but does not automatically add a WooCommerce fee line to the cart total.
+When enabled, customers see the processing fee beside the card fields before they pay. That amount is also added to the order as a **Credit card surcharge** fee line.
 
 Configure:
 
-- **Enable Surcharge** toggle
-- **Surcharge rate** (percentage, up to 4%)
+- **Enable Surcharge** toggle. The percentage is the rate boarded on the CardPointe merchant account. The plugin does not store its own rate.
 
 ## Subscriptions
 
@@ -65,7 +66,7 @@ Configure:
 ## Refunds and voids
 
 - Full and partial refunds from the order admin screen
-- Void support for unsettled transactions (settlement window notice shown on recent orders)
+- An unsettled charge can be voided for the full remaining amount. A partial refund waits until the transaction has settled. The refund button stays available; the order meta box warns while the order is still inside the settlement window.
 - [Authorize-only orders](/docs/merchants/authorize-and-capture): capture by moving the order to Processing or Completed; void the hold by cancelling
 - Refund reference tracking on orders
 

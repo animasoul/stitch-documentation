@@ -7,6 +7,39 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.6.0 — 2026-09-30
+
+Surcharge on the order, stricter saved-card behavior, and CardPointe profile maintenance.
+
+### Added
+
+- **Surcharge fee line** — after CardPointe returns a surcharge for the card, that amount is added to the WooCommerce order as a **Credit card surcharge** fee. The amount sent to CardPointe does not include the fee, because CardPointe applies it on top of the authorized amount. The fee is not added before that quote, and a response that only says bin information was not found does not add a fee. The settings screen no longer has a surcharge rate; the rate is the one boarded on the merchant account. See [Surcharge](/docs/merchants/surcharge).
+- **Save card only when checked** — a new card is stored only when the customer checks **Save card for future purchases**. An unchecked field on Blocks checkout no longer saves the card. Subscription checkout still stores the card, because the renewal needs it.
+- **Card Account Updater** — saved profiles are enrolled when the merchant account has the service. Once a day the plugin reads profile updates and refreshes the saved card's expiry and last four, or removes a card the brand reports as closed or invalid. See [Stored payment methods](/docs/merchants/stored-payments).
+- **Void by order ID** — if an authorization times out and an order inquiry does not find an approved transaction, the plugin voids that authorization by order ID. An approved transaction is kept, including one whose amount does not match.
+- **Delete the stored card at CardPointe** — removing a saved card in WooCommerce deletes that profile account at CardPointe. Other cards on the same profile stay stored.
+
+### Changed
+
+- **Recurring renewals** — a scheduled subscription renewal is sent as a recurring charge. A pre-order release charge stays a one-time merchant-initiated charge on the saved profile.
+
+### Fixed
+
+- **Unsettled refunds** — a refund CardPointe declines because the transaction has not settled tells the merchant to wait. A partial refund is refused until settlement. The full remaining amount of an unsettled charge is still voided, so the WooCommerce refund button stays available. See [Features](/docs/merchants/features#refunds-and-voids).
+- **Surcharge order note** — payment details say the surcharge is included in the order total and is not sent again in the charge.
+- **Rate limits** — CardPointe HTTP 429 responses on inquire, profile, funding, and settlement-status calls are not retried.
+
+### Security
+
+- **Card merchant ID** — the merchant ID saved for card payments must be numeric. An ACH processor ID is rejected in settings and on card API calls. ACH is not a payment method in this release.
+
+### Compatibility
+
+- Tested with **WordPress 7.1.2** and **WooCommerce 11.1.2**
+- Plugin headers stay `Tested up to: 7.1` and `WC tested up to: 11.1`
+
+---
+
 ## 0.5.5 — 2026-09-24
 
 Compatibility refresh and a clearer layout of the payment code.

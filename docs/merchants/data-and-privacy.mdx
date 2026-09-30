@@ -73,7 +73,7 @@ For refunds, voids, subscription renewals, and merchant accounting, the plugin k
 | `_stitch_profile_id` | CardPointe profile ID (when a saved profile was used) |
 | `_stitch_acct_id` | CardPointe account ID within the profile |
 | `_stitch_refund_retrefs` | Comma-separated refund transaction references |
-| `_stitch_surcharge_amount` | Disclosed surcharge amount (when enabled) |
+| `_stitch_surcharge_amount` | Surcharge amount returned by CardPointe. The same amount is the Credit card surcharge fee on the order |
 | `_stitch_capture_status` | Authorize-only lifecycle: `authorized`, `captured`, or `voided` (since 0.5.0) |
 
 These records are **intentionally kept** even if you enable plugin data removal on uninstall, so you retain payment history for accounting and chargebacks.
@@ -93,7 +93,7 @@ When [stored payment methods](/docs/merchants/stored-payments) are enabled and t
 
 The token’s internal reference is a combination of profile and account IDs — **not** a full card number. CardPointe holds the vaulted payment credentials; your site stores opaque IDs plus display metadata.
 
-Customers can delete saved cards from **My Account → Payment methods**. That removes the WooCommerce token; profile cleanup on the CardPointe side may require additional merchant configuration.
+Customers can delete saved cards from **My Account → Payment methods**. That removes the WooCommerce token and deletes that card's account on the CardPointe profile. Other cards stored on the same profile are left in place.
 
 ### Customer profile identifier
 

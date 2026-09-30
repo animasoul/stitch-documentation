@@ -7,7 +7,7 @@ title: Commercial card data
 
 _Since 0.5.4._ Authorization and capture can include the extra fields corporate and purchasing cards need for Level 2 and Level 3 interchange.
 
-The amount charged is still the WooCommerce order total. This data describes the order. It does not add a surcharge or any other fee.
+The amount sent to CardPointe is the WooCommerce order total, minus a **Credit card surcharge** fee when that fee is on the order. CardPointe adds that surcharge itself. These commercial fields describe the order. They do not add a surcharge or any other fee.
 
 ## Turn it on
 

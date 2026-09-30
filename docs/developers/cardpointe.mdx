@@ -1,0 +1,53 @@
+---
+sidebar_position: 6
+title: CardPointe references
+---
+
+# CardPointe references
+
+These are the public CardPointe documents the plugin is built against. Sandbox usernames, passwords, and merchant IDs are kept in a local file on the development machine (`.local/stitch-uat.env` inside the plugin). They are not published here.
+
+## UAT host used for this integration
+
+The sandbox API is:
+
+`https://fts-uat.cardconnect.com/cardconnect/rest/`
+
+In **WooCommerce → Settings → Payments → Stitch**, set **Test Base URL** to the hostname only:
+
+`fts-uat.cardconnect.com`
+
+That host is already allowed. Overrides must be a subdomain of `cardconnect.com` or `cardpointe.com`. Anything else is ignored and the client uses the default UAT or production URL.
+
+The reporting site (`https://cardpointe-uat.cardconnect.com`) is only for checking transactions in the CardPointe dashboard. It is not the API base URL.
+
+The hosted tokenizer for this sandbox is `https://fts-uat.cardconnect.com/itoke/ajax-tokenizer.html`. The plugin builds that URL from the API host.
+
+Stitch issued two test merchant IDs: one for standard card payments and one boarded for surcharge. The plugin keeps a single test merchant ID, so switch it when you need to exercise the surcharge disclosure. The surcharge lookup is informational. CardPointe applies the fee. The plugin adds that amount as an order fee and leaves it out of the authorization amount.
+
+## Documentation
+
+| Topic | Link |
+| --- | --- |
+| Developer guides | [Getting started](https://developer.cardpointe.com/guides/home) |
+| UAT and production URL pattern | [API connectivity](https://developer.cardpointe.com/guides/api-connectivity) |
+| Postman collection, card-not-present testing, void, refund, funding, and ACH | [CardPointe Gateway developer guides](https://developer.cardpointe.com/guides/cardpointe-gateway) |
+| Authorization, capture, void, refund, profiles, and surcharge | [CardPointe Gateway API](https://developer.cardpointe.com/cardconnect-api) |
+| Hosted iFrame Tokenizer | [Tokenizer guide](https://developer.cardpointe.com/hosted-iframe-tokenizer) |
+| Card Account Updater | [CAU integration guide](https://developer.cardpointe.com/guides/cau-integration-guide-v2) |
+
+The Postman collection is the download on the Gateway developer guide. For this sandbox, set the Postman `site` variable to `fts-uat`.
+
+## Current coverage
+
+The API client already sends authorization, zero-amount verification, capture, void, refund, inquire, profile create/get/delete, and the surcharge inquiry. Checkout uses the hosted iframe at `https://fts-uat.cardconnect.com/itoke/ajax-tokenizer.html`. That page returns the card field for the local shop (`http://stitch-plugin.local`); the tokenizer does not reject that parent domain. Renewals and pre-order release charges reuse the saved profile. Deleting a saved card deletes that profile account. A scheduled renewal is sent as a recurring charge (`ecomind` `R`).
+
+If an authorization times out and an order inquiry does not find an approved transaction, the plugin voids that authorization by order ID. A void that already has a retrieval reference still uses the retrieval reference.
+
+Saved profiles are enrolled for Card Account Updater (`auoptout` N) when the merchant account has that service. Once a day the plugin reads profile-linked updates and refreshes the saved card's expiry and last four, or removes a card the brand reports as closed or invalid. It does not submit cards with the updater PUT, because those accounts are already stored as profiles.
+
+Not in the plugin yet:
+
+- ACH. The Funding API processor ID is not a card merchant ID, and card checkout does not send ACH account types
+
+In the test environment, inquire, profile, funding, and settlement-status calls are limited to 20 per minute per IP. The plugin does not retry those when CardPointe returns HTTP 429, and it tells the merchant how long to wait. A full refund of a transaction that is still authorized or queued for capture is sent as a void. A refund CardPointe rejects as unsettled waits until settlement.

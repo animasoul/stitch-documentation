@@ -12,8 +12,9 @@ Stitch Payments can inform customers about credit card processing fees before th
 Under **Other settings** in gateway configuration:
 
 1. Enable **Enable Surcharge**.
-2. Set **Surcharge Rate (%)** — for example `3.00` for 3%.
-3. Save changes.
+2. Save changes.
+
+The fee percentage is the rate boarded on the merchant account at CardPointe. The plugin uses the amount CardPointe returns. It does not have its own rate setting.
 
 ## What customers see
 
@@ -23,22 +24,22 @@ When a valid card is entered (or a saved card is selected), the checkout form ca
 - A notice with the estimated processing fee, or
 - A message that no fee applies to the card used
 
-On classic checkout, a disclosure may also appear near the order totals. On Blocks checkout, a note appears under the order summary totals on desktop and on mobile (including the collapsible top summary and the summary near Place order).
+After CardPointe returns a surcharge for the card, that amount is added to the WooCommerce order as a **Credit card surcharge** fee line. The plugin does not calculate that amount from its own rate, and it is not carried over from an earlier checkout. Checkout shows the notice beside the card fields. The order total shows the fee line.
 
 Fee lookups for saved cards only work for the logged-in customer's own saved methods — the lookup endpoint rejects profile identifiers that don't belong to the current customer.
 
-## Important: disclosure vs. cart total
+## Order total and the amount sent to CardPointe
 
-The surcharge feature is **disclosure-focused**. The displayed fee informs the customer; it is **not automatically added** as a WooCommerce cart fee in the order total shown at checkout. Confirm your legal and pricing requirements with [Stitch Payments](https://www.stitchpayments.net/) and your compliance team.
+CardPointe applies the surcharge on top of the authorized purchase amount. The plugin adds that fee to the WooCommerce order so the order total matches what the customer pays, and leaves the fee out of the amount sent to CardPointe so it is not charged twice.
 
 ## Order records
 
-When applicable, surcharge amounts can be stored on the order for reference in admin, emails, and order details.
+The fee line is the surcharge on the order. The plugin also stores the amount in order meta for the payment log.
 
 The disclosed fee is only ever recorded on orders **paid with Stitch**. If the customer calculates a fee and then switches to another payment method (for example a different card gateway or cash on delivery), the pending fee is cleared and the other gateway's order is unaffected.
 
 ## Testing
 
-1. Enable surcharge and set a test rate.
+1. Enable surcharge and use the merchant account that is boarded for the fee.
 2. Complete checkout with a test card in **Test Mode**.
 3. Verify the notice appears and updates when switching between saved and new cards.

@@ -31,6 +31,7 @@ const sidebars = {
         'developers/hooks',
         'developers/elementor',
         'developers/styling',
+        'developers/cardpointe',
       ],
     },
     'changelog',

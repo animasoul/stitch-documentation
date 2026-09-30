@@ -30,14 +30,14 @@ Checkout authorizes and captures in one request. The order is marked paid and ty
 
 When a customer pays:
 
-1. CardPointe **holds** the amount on the card (the card is not settled yet).
+1. CardPointe **holds** the purchase amount on the card (the card is not settled yet). A **Credit card surcharge** fee on the order is not part of that hold, because CardPointe adds the surcharge itself.
 2. The WooCommerce order moves to **On hold**.
 3. Stock is reserved.
 4. An order note records the transaction reference and reminds you to capture or cancel.
 
 ### Capture the payment
 
-Open the order and change the status to **Processing** or **Completed**. Stitch sends a capture request for the order total.
+Open the order and change the status to **Processing** or **Completed**. Stitch captures the same amount that was authorized. A **Credit card surcharge** fee is not included in that capture.
 
 - **Success** — the order is marked paid, `_stitch_capture_status` becomes `captured`, and an order note records the amount and reference.
 - **Failure** — the order returns to **On hold** with the processor error in the note. Check the transaction in CardPointe, then change the status again to retry.

@@ -14,7 +14,7 @@ In **WooCommerce → Settings → Payments → Stitch**, under **Other settings*
 1. Enable **Enable Stored Payment Methods**.
 2. Save changes.
 
-Customers will see a **Save card for future purchases** checkbox when paying with a new card **while logged in**. Guests can still pay with a new card; they will not see saved methods or the save checkbox.
+Customers will see a **Save card for future purchases** checkbox when paying with a new card **while logged in**. The card is saved only when that box is checked. Guests can still pay with a new card; they will not see saved methods or the save checkbox.
 
 ## Customer experience
 
@@ -33,7 +33,7 @@ Customers manage saved methods under **My Account → Payment methods**:
 
 - View saved cards
 - Add a new payment method
-- Remove cards they no longer need
+- Remove cards they no longer need. Removing a Stitch card also deletes that card's account at CardPointe. Other cards on the same profile stay stored.
 
 **Add payment method** does not place an order. Stitch checks the new card with a $0 authorization, then saves the CardPointe profile on the customer's account. The security code is sent only with that check and is not stored. The customer must be logged in, and **Enable Stored Payment Methods** must be on. A declined card is not saved.
 
@@ -50,14 +50,16 @@ One shopper-experience note: running two card processors at once means customers
 
 ## Subscriptions
 
-WooCommerce Subscriptions renewal orders require a reusable payment method. When subscriptions are enabled, saved tokens are used for scheduled renewals.
+WooCommerce Subscriptions renewal orders require a reusable payment method. When subscriptions are enabled, saved tokens are used for scheduled renewals. Those renewals are sent to CardPointe as recurring charges. A pay-upon-release pre-order is still a one-time charge on the saved profile.
+
+When the merchant account has Card Account Updater, saved profiles are enrolled. Once a day the plugin reads those updates and refreshes the expiry and last four on the saved card, or removes a card the brand reports as closed or invalid.
 
 ## Pre-Orders
 
 _Since 0.5.4._ With [WooCommerce Pre-Orders](https://woocommerce.com/products/woocommerce-pre-orders/) active:
 
 - **Charge upfront** — checkout charges the order total, the same as any other Stitch payment.
-- **Pay upon release** — checkout does not charge the order total. A logged-in customer verifies a new card with a $0 authorization, or selects a card already saved on their account. When you release the pre-order, Stitch charges that saved profile for the order total, the same way a subscription renewal is charged.
+- **Pay upon release** — checkout does not charge the order total. A logged-in customer verifies a new card with a $0 authorization, or selects a card already saved on their account. When you release the pre-order, Stitch charges that saved profile for the order total. That release is a one-time charge. A subscription renewal is sent as a recurring charge.
 
 Guests cannot complete a pay-upon-release pre-order; they are asked to log in. A release with no saved card, or a decline from CardPointe, marks the order failed and adds an order note. Address and CVV no-match actions apply to the $0 check at checkout. They do not apply to the release charge.
 
