@@ -19,6 +19,7 @@ const sidebars = {
         'merchants/card-checks',
         'merchants/data-and-privacy',
         'merchants/surcharge',
+        'merchants/ach',
       ],
     },
     {

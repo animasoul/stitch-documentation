@@ -47,6 +47,13 @@
   color: #f8fafc;
 }
 
+@media (max-width: 576px) {
+  .hero--stitch .hero__title {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+    line-height: 1.2;
+  }
+}
+
 .hero--stitch .hero__subtitle {
   opacity: 0.92;
 }
@@ -120,4 +127,20 @@
 
 .stitch-partners a {
   font-weight: 600;
+}
+
+/* The wordmark is too wide once the navbar collapses. Show the heart mark. */
+@media (max-width: 996px) {
+  .navbar__logo {
+    flex: 0 0 2rem;
+    width: 2rem;
+    height: 2rem;
+    background: url('/img/logo-stitch-payments-icon.png') center / contain no-repeat;
+  }
+
+  .navbar__logo img {
+    width: 2rem;
+    height: 2rem;
+    opacity: 0;
+  }
 }

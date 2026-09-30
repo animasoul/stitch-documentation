@@ -48,6 +48,6 @@ Saved profiles are enrolled for Card Account Updater (`auoptout` N) when the mer
 
 Not in the plugin yet:
 
-- ACH. The Funding API processor ID is not a card merchant ID, and card checkout does not send ACH account types
+- Bank account checkout (`stitch_ach`) sends the ACH processor ID as `merchid`. Card checkout does not accept that ID or ACH account types
 
 In the test environment, inquire, profile, funding, and settlement-status calls are limited to 20 per minute per IP. The plugin does not retry those when CardPointe returns HTTP 429, and it tells the merchant how long to wait. A full refund of a transaction that is still authorized or queued for capture is sent as a void. A refund CardPointe rejects as unsettled waits until settlement.

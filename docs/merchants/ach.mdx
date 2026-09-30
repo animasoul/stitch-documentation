@@ -1,0 +1,28 @@
+---
+title: Bank account payments
+sidebar_label: Bank account
+---
+
+# Bank account payments
+
+Bank account is an optional checkout method. Customers pay from a US checking or savings account. The payment is an eCheck. It can take a few business days to clear, and the bank can return it. There is no card surcharge on a bank payment.
+
+Enable it under **WooCommerce → Settings → Payments → Stitch bank account**. The API username, password, and host come from the **Stitch** card gateway. Enter a separate ACH merchant ID for the active environment.
+
+The ACH merchant ID is the processor ID Stitch issued for eCheck. It is not the card merchant ID. On the UAT account, that processor ID is the `merchid` sent on the authorization.
+
+## Test a payment
+
+Put the Stitch ACH processor ID in **Test ACH merchant ID** while Stitch is in test mode. A UAT authorization with that ID was approved (`resptext` Approved, `respproc` BPAY).
+
+An approved bank payment stays **On hold**. It is not ready to ship. Twice a day the plugin reads the CardPointe funding report for the ACH merchant ID. When the transaction appears there without a bank return code, the order moves to **Processing**. A return code cancels the order. The check looks back 14 funding dates.
+
+At checkout, choose **Bank account** and use:
+
+- Routing number `036001808` or `011401533`
+- Any account number
+- Checking or Savings
+
+An invalid routing number is declined. The account number is sent to CardSecure for a token, then the token is authorized. The store does not keep the routing number or the full account number. The order stores the transaction reference and the last four digits.
+
+Saved bank accounts, subscription renewals, and return reporting are not part of this method. A full refund of a payment that has not settled is a void. A refund after settlement uses the normal refund request.
