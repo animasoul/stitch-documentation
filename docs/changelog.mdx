@@ -7,6 +7,25 @@ title: Changelog
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.6.1 — 2026-09-30
+
+A short explanation under the save-card checkbox.
+
+### Added
+
+- **Save card note** — logged-in customers see a note under **Save card for future purchases**. It says Stitch Payments stores the card in a secure vault, the store keeps only the last four digits, the expiry, and a reference, and the security code is never saved. Edit it under **Other settings → Save card note** while **Enable Stored Payment Methods** is on. Allowed HTML is `strong`, `em`, `b`, `i`, and `br`. Clear the field to keep the checkbox without the note. See [Stored payment methods](/docs/merchants/stored-payments).
+
+### Fixed
+
+- **Authorize-only capture** — capturing a held payment sends the same amount as the original authorization. A credit card surcharge fee on the order is not sent again.
+
+### Compatibility
+
+- Tested with **WordPress 7.1.2** and **WooCommerce 11.1.2**
+- Plugin headers stay `Tested up to: 7.1` and `WC tested up to: 11.1`
+
+---
+
 ## 0.6.0 — 2026-09-30
 
 Surcharge on the order, stricter saved-card behavior, and CardPointe profile maintenance.

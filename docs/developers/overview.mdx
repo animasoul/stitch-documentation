@@ -64,6 +64,13 @@ Behavior changes to be aware of when integrating:
 - **Authorize-only payments** — `Gateway::$capture_mode` is `sale` or `authorize`. Checkout auth sends `capture: Y` or `N`. Capture and void run from order-status hooks in `Gateway_Loader` (Processing/Completed capture; Cancelled voids). Use `$gateway->payment_processor()` to reach `capture_authorized_payment()` / `void_authorized_payment()`. Subscription renewals always send `capture: Y`.
 :::
 
+:::note Since 0.5.4
+- **Level 2 / 3 fields** are appended in `Level_Data` when `enable_level3` is `yes`. The amount sent is the order total, minus a Credit card surcharge fee when that fee is on the order.
+- **Pre-order release** is `Payment_Processor::process_pre_order_release()`, hooked by `Pre_Order_Support` on `wc_pre_orders_process_pre_order_completion_payment_stitch`.
+- **AVS / CVV policy** is decided by `Verification_Policy`. Only response code `N` is a mismatch. Renewals and pre-order release charges skip it.
+- **Add payment method** is `Saved_Card_Store::add_payment_method()`: a $0 verification, then profile save. Posted profile IDs are ignored.
+:::
+
 :::note Since 0.5.5
 Payment classes are grouped into `Checkout`, `Processing`, `Admin`, and `Surcharge` under `includes/Payments/`. The namespace is still `StitchPayments\WooCommerce\Payments`.
 :::
@@ -76,11 +83,8 @@ Payment classes are grouped into `Checkout`, `Processing`, `Admin`, and `Surchar
 - **Unconfirmed authorizations** that time out with no approved inquiry are voided with `voidByOrderId`.
 :::
 
-:::note Since 0.5.4
-- **Level 2 / 3 fields** are appended in `Level_Data` when `enable_level3` is `yes`. The amount sent is the order total, minus a Credit card surcharge fee when that fee is on the order.
-- **Pre-order release** is `Payment_Processor::process_pre_order_release()`, hooked by `Pre_Order_Support` on `wc_pre_orders_process_pre_order_completion_payment_stitch`.
-- **AVS / CVV policy** is decided by `Verification_Policy`. Only response code `N` is a mismatch. Renewals and pre-order release charges skip it.
-- **Add payment method** is `Saved_Card_Store::add_payment_method()`: a $0 verification, then profile save. Posted profile IDs are ignored.
+:::note Since 0.6.1
+- **Save card note** is `Checkout_Display::get_save_card_note()`. Allowed tags are `strong`, `em`, `b`, `i`, and `br`.
 :::
 
 ## Getting the gateway instance
