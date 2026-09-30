@@ -464,11 +464,26 @@ h2 .stitch-brand__mark {
 
 .stitch-security li {
   margin: 0;
+}
+
+.stitch-security__card {
+  display: block;
+  height: 100%;
   padding: 1.25rem 1.35rem 1.35rem;
+  color: inherit;
   background: rgba(15, 23, 42, 0.42);
   border: 1px solid rgba(248, 250, 252, 0.16);
   border-radius: 16px;
   box-shadow: inset 3px 0 0 #60a5fa;
+  text-decoration: none;
+}
+
+.stitch-security__card:hover,
+.stitch-security__card:focus-visible {
+  color: inherit;
+  background: rgba(15, 23, 42, 0.62);
+  border-color: rgba(191, 219, 254, 0.55);
+  text-decoration: none;
 }
 
 .stitch-security__head {

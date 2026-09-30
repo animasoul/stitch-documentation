@@ -33,41 +33,49 @@ const securityControls = [
     icon: 'card',
     title: 'Hosted card fields',
     text: 'The card number is typed in a CardPointe iframe. WordPress receives a token, not the full card number.',
+    to: '/docs/merchants/data-and-privacy#how-card-tokenization-works',
   },
   {
     icon: 'databaseOff',
     title: 'Security code is never stored',
     text: 'The CVV is held in memory only for that authorization request, then discarded. It is never written to the database.',
+    to: '/docs/merchants/data-and-privacy#during-checkout--temporary-data',
   },
   {
     icon: 'lock',
     title: 'Tokenizer messages stay locked',
     text: 'Checkout talks to the card field only at the CardPointe origin, so other scripts on the page cannot intercept it.',
+    to: '/docs/merchants/data-and-privacy#how-card-tokenization-works',
   },
   {
     icon: 'key',
     title: 'Credentials go to CardPointe only',
     text: 'API calls use HTTPS, and the plugin accepts only cardconnect.com and cardpointe.com hosts. A mistyped address is ignored.',
+    to: '/docs/merchants/getting-started#api-credentials',
   },
   {
     icon: 'fileOff',
     title: 'Sensitive fields are redacted in logs',
     text: 'Tokens, account numbers, CVVs, and passwords are stripped before anything is written to WooCommerce logs.',
+    to: '/docs/merchants/data-and-privacy#logging',
   },
   {
     icon: 'vault',
     title: 'Saved cards are vault references',
     text: 'The store keeps the last four digits, brand, expiry, and a CardPointe profile reference. The card itself stays in the CardPointe vault.',
+    to: '/docs/merchants/data-and-privacy#saved-payment-methods',
   },
   {
     icon: 'check',
     title: 'AVS and CVV checks',
     text: 'When the bank reports an address or security-code mismatch, the store can accept, hold, or void the payment.',
+    to: '/docs/merchants/card-checks',
   },
   {
     icon: 'once',
     title: 'Charges and refunds are sent once',
     text: 'Authorizations and refunds are not retried after a timeout, so a slow response cannot create a second charge.',
+    to: '/docs/merchants/features#payment-processing',
   },
 ];
 
@@ -196,14 +204,16 @@ export default function HomepagePitch() {
           <ul className="stitch-security">
             {securityControls.map((item) => (
               <li key={item.title}>
-                <div className="stitch-security__head">
-                  <HomeIcon name={item.icon} />
-                  <span className="stitch-security__badge">In place</span>
-                </div>
-                <strong>{item.title}</strong>
-                <span>
-                  <BrandText text={item.text} />
-                </span>
+                <Link className="stitch-security__card" to={item.to}>
+                  <div className="stitch-security__head">
+                    <HomeIcon name={item.icon} />
+                    <span className="stitch-security__badge">In place</span>
+                  </div>
+                  <strong>{item.title}</strong>
+                  <span>
+                    <BrandText text={item.text} />
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
