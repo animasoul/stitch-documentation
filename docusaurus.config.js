@@ -116,7 +116,7 @@ const config = {
             href: 'https://www.stitchpayments.net/signup/',
             label: 'Sign up',
             position: 'right',
-            className: 'button button--primary button--sm navbar-signup',
+            className: 'navbar-signup',
           },
         ],
       },

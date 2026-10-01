@@ -37,8 +37,38 @@
   color: #dbeafe;
 }
 
-.navbar-signup {
-  margin-left: 0.75rem;
+.navbar__link.navbar-signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.85rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  background: #1e3a5f;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.navbar__link.navbar-signup:hover {
+  background: #2563eb;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+[data-theme='dark'] .navbar__link.navbar-signup {
+  background: #93c5fd;
+  color: #0f172a;
+}
+
+[data-theme='dark'] .navbar__link.navbar-signup:hover {
+  background: #dbeafe;
+  color: #0f172a;
+}
+
+.navbar__link.navbar-signup svg {
+  display: none;
 }
 
 .stitch-docs-cta {
