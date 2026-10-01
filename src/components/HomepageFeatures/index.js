@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
 import HomeIcon from '@site/src/components/HomeIcon';
-import BrandText from '@site/src/components/BrandText';
 import styles from './styles.module.css';
 
 const FeatureList = [
@@ -37,12 +36,8 @@ function Feature({icon, title, description, link, linkLabel}) {
     <div className={clsx('col col--4')}>
       <div className={clsx('stitch-feature-card', styles.featureCard)}>
         <HomeIcon name={icon} />
-        <Heading as="h3">
-          <BrandText text={title} />
-        </Heading>
-        <p>
-          <BrandText text={description} />
-        </p>
+        <Heading as="h3">{title}</Heading>
+        <p>{description}</p>
         <Link to={link}>{linkLabel}</Link>
       </div>
     </div>
@@ -51,7 +46,7 @@ function Feature({icon, title, description, link, linkLabel}) {
 
 export default function HomepageFeatures() {
   return (
-    <section className={styles.features}>
+    <section className={clsx(styles.features, 'stitch-home-band')}>
       <div className="container">
         <div className="row">
           {FeatureList.map((props, idx) => (

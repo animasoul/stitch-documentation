@@ -6,7 +6,6 @@ import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import HomepagePitch, {homepageFaqs} from '@site/src/components/HomepagePitch';
 import AcceptedCards from '@site/src/components/AcceptedCards';
-import BrandText from '@site/src/components/BrandText';
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
 
@@ -29,7 +28,7 @@ function HomepageHeader() {
           className="stitch-hero-logo"
         />
         <Heading as="h1" className="hero__title">
-          <BrandText text={siteConfig.title} />
+          {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">
           Accept Visa, Mastercard, American Express, and Discover in WooCommerce on WordPress. Card

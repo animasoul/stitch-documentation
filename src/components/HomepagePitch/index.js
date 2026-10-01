@@ -1,28 +1,24 @@
 import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import HomeIcon from '@site/src/components/HomeIcon';
-import BrandText, {Brand} from '@site/src/components/BrandText';
 
 const signupUrl = 'https://www.stitchpayments.net/signup/';
 
 const steps = [
   {
-    icon: 'user',
     title: 'Request an account',
     text: (
       <>
-        <Link href={signupUrl}>Sign up</Link> with <Brand name="Stitch Payments" />. Your processing
-        commission is quoted for your store, below typical gateway rates.
+        <Link href={signupUrl}>Sign up</Link> with Stitch Payments. Your processing commission is
+        quoted for your store, below typical gateway rates.
       </>
     ),
   },
   {
-    icon: 'plugin',
     title: 'Install the plugin',
     text: 'Add Stitch Payments for WooCommerce and connect the test or live merchant ID from Stitch Payments.',
   },
   {
-    icon: 'card',
     title: 'Accept cards',
     text: 'Visa, Mastercard, American Express, and Discover run through CardPointe hosted fields.',
   },
@@ -221,18 +217,15 @@ function Cell({value}) {
 export default function HomepagePitch() {
   return (
     <>
-      <section className="stitch-home-section">
+      <section className="stitch-home-section stitch-home-band">
         <div className="container">
           <Heading as="h2">Start accepting cards in three steps</Heading>
           <ol className="stitch-steps">
             {steps.map((step, index) => (
               <li key={step.title}>
-                <span className="stitch-card-head">
-                  <span className="stitch-steps__index">{index + 1}</span>
-                  <HomeIcon name={step.icon} />
-                </span>
+                <span className="stitch-steps__index">{index + 1}</span>
                 <strong>{step.title}</strong>
-                <span>{typeof step.text === 'string' ? <BrandText text={step.text} /> : step.text}</span>
+                <span>{step.text}</span>
               </li>
             ))}
           </ol>
@@ -243,7 +236,9 @@ export default function HomepagePitch() {
         <div className="container">
           <Heading as="h2">Same checkout features. Lower processing commission.</Heading>
           <p className="stitch-home-lead">
-            <BrandText text="Stitch Payments is compared here with WooPayments, Stripe, and PayPal, the payment plugins US WooCommerce stores use most. The same checkout features are included with Stitch, at a lower processing commission. Bank transfer is on the way." />
+            Stitch Payments is compared here with WooPayments, Stripe, and PayPal, the payment plugins
+            US WooCommerce stores use most. The same checkout features are included with Stitch, at a
+            lower processing commission. Bank transfer is on the way.
           </p>
           <div className="stitch-compare-wrap">
             <table className="stitch-compare">
@@ -278,6 +273,10 @@ export default function HomepagePitch() {
             </table>
           </div>
           <p className="stitch-home-note">
+            WooPayments, Stripe, and PayPal prices were checked on October 1, 2026. PayPal last updated
+            its US fee schedule on September 1, 2026.
+          </p>
+          <p className="stitch-home-note">
             Your commission is quoted for your volume when you{' '}
             <a href={signupUrl} target="_blank" rel="noopener noreferrer">
               sign up
@@ -295,7 +294,8 @@ export default function HomepagePitch() {
             <a href="https://www.paypal.com/us/business/paypal-business-fees" target="_blank" rel="noopener noreferrer">
               PayPal
             </a>
-            . PayPal Checkout and Venmo are 3.49% + $0.49            . Stripe bank debit is 0.8% with a $5 cap. Subscription products use{' '}
+            . PayPal Checkout and Venmo are 3.49% + $0.49. Stripe bank debit is 0.8% with a $5 cap.
+            Subscription products use{' '}
             <a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank" rel="noopener noreferrer">
               WooCommerce Subscriptions
             </a>
@@ -314,7 +314,8 @@ export default function HomepagePitch() {
           </p>
           <Heading as="h2">Security is built into every charge</Heading>
           <p className="stitch-home-lead">
-            <BrandText text="The store never holds a full card number or a security code. Each control below is already in Stitch Payments. Together they reduce PCI scope. They are not a PCI certification." />
+            The store never holds a full card number or a security code. Each control below is already
+            in Stitch Payments. Together they reduce PCI scope. They are not a PCI certification.
           </p>
           <ul className="stitch-security">
             {securityControls.map((item) => (
@@ -325,9 +326,7 @@ export default function HomepagePitch() {
                     <span className="stitch-security__badge">In place</span>
                   </div>
                   <strong>{item.title}</strong>
-                  <span>
-                    <BrandText text={item.text} />
-                  </span>
+                  <span>{item.text}</span>
                 </Link>
               </li>
             ))}
@@ -344,12 +343,8 @@ export default function HomepagePitch() {
           <div className="stitch-faq">
             {homepageFaqs.map((item) => (
               <details key={item.question}>
-                <summary>
-                  <BrandText text={item.question} />
-                </summary>
-                <p>
-                  <BrandText text={item.answer} />
-                </p>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
               </details>
             ))}
           </div>
@@ -358,33 +353,16 @@ export default function HomepagePitch() {
 
       <section className="stitch-home-close">
         <div className="container">
-          <Heading as="h2">
-            <BrandText text="Ready to accept cards in WooCommerce on WordPress?" />
-          </Heading>
-          <p>
-            <BrandText text="Get a Stitch Payments account, then follow the merchant setup guide." />
-          </p>
-          <div className="stitch-home-cta">
-            <Link className="button button--secondary button--lg" href={signupUrl}>
-              Get started
-            </Link>
-            <Link className="button button--outline button--secondary button--lg" to="/docs/merchants/getting-started">
-              For merchants
-            </Link>
-          </div>
+          <Heading as="h2">Ready to accept cards in WooCommerce on WordPress?</Heading>
+          <Link className="button button--primary button--lg stitch-signup" href={signupUrl}>
+            Get started
+          </Link>
         </div>
       </section>
 
       <section className="stitch-home-section">
         <div className="container">
           <div className="stitch-partners">
-            <p>
-              <Brand name="Stitch Payments" /> for WooCommerce connects your <Brand name="WordPress" /> store to{' '}
-              <a href="https://www.stitchpayments.net/" target="_blank" rel="noopener noreferrer">
-                <Brand name="Stitch Payments" />
-              </a>{' '}
-              and <Brand name="CardPointe" />.
-            </p>
             <a
               className="stitch-mindk"
               href="https://www.mindk.com/"

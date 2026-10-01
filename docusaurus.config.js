@@ -71,7 +71,6 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'Stitch Payments',
         logo: {
           alt: 'Stitch Payments',
           src: 'img/stitch-logo.png',
@@ -103,20 +102,10 @@ const config = {
             activeBaseRegex: '^/docs/changelog/?$',
           },
           {
-            href: 'https://www.stitchpayments.net/',
-            label: 'Stitch Payments',
-            position: 'right',
-          },
-          {
-            href: 'https://www.mindk.com/',
-            label: 'Built by MindK',
-            position: 'right',
-          },
-          {
             href: 'https://www.stitchpayments.net/signup/',
             label: 'Sign up',
             position: 'right',
-            className: 'navbar-signup',
+            className: 'stitch-signup navbar-signup',
           },
         ],
       },

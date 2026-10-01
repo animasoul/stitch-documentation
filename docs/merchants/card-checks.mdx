@@ -5,7 +5,11 @@ sidebar_label: Address and CVV checks
 description: An address check (AVS) compares the billing address with the card. Choose accept, hold, or void when it does not match.
 ---
 
+import MerchantSignup from '@site/src/components/MerchantSignup';
+
 # Address checks (AVS) and CVV
+
+<MerchantSignup />
 
 _Since 0.5.4._ CardPointe returns an address check (AVS) and a card security code (CVV) result with an authorization. An address check compares the billing address the customer entered with the address on the card. You can accept those payments as usual, or hold or void them when the bank reports a no-match.
 
