@@ -1,53 +1,19 @@
 ---
-sidebar_position: 1
-title: Benefits
+sidebar_position: 10
+title: Why use Stitch Payments
+sidebar_label: Benefits
+description: Hosted CardPointe fields, saved cards, refunds, and a lower processing commission for WooCommerce, without custom theme code.
 ---
 
-# Why use Stitch Payments?
+import DocsCta from '@site/src/components/DocsCta';
 
-Stitch Payments for WooCommerce brings enterprise-grade card processing to your WooCommerce store without custom theme code.
+# Why use Stitch Payments
 
-## Secure checkout
+Stitch Payments for WooCommerce accepts Visa, Mastercard, American Express, and Discover through CardPointe hosted fields. Card numbers stay off your WordPress server. The plugin is a standalone extension, so it works with your theme and with WooCommerce Blocks.
 
-- **Hosted card fields** — The card number is entered in a CardPointe tokenizer iframe. Full card numbers and CVV are not stored on your WordPress site.
-- **Tokenized payments** — Each charge uses a secure token from CardPointe, reducing PCI scope for your store.
-- **Saved-card ownership checks** — Stored payment methods are verified to belong to the paying customer before any charge is attempted.
-- **Double-charge protection** — Charges and refunds are never blindly retried after a timeout. An interrupted authorization is looked up at the processor and recovered if it was approved. If that lookup finds no approved transaction, the authorization is voided by order ID.
-- **Transparent data handling** — Order cleanup removes sensitive checkout fields after every payment attempt; see [Data and privacy](/docs/merchants/data-and-privacy).
-- **Test mode** — Validate your integration in a UAT environment before going live.
+- **Checkout** — classic and Blocks checkout, guests paying with a new card, and saved cards for logged-in customers. See [Features](/docs/merchants/features).
+- **Security** — a token instead of the card number, and no stored security code. See [Data and privacy](/docs/merchants/data-and-privacy).
+- **Payments** — charge now or [authorize and capture later](/docs/merchants/authorize-and-capture), plus refunds, voids, subscription renewals, and pre-orders.
+- **Your rate** — the processing commission is quoted for your store when you sign up. Stitch does not publish a single flat rate.
 
-## Better customer experience
-
-- Clean, mobile-friendly payment form on classic and Blocks checkout
-- **Guest checkout** — pay with a new card without creating an account
-- Optional animated **card preview** while customers enter details
-- **Saved cards** for logged-in customers and faster repeat purchases
-- Automatic field advance when card number, expiry, and CVV are valid
-- Accepted card brand icons (Visa, Mastercard, American Express, Discover)
-
-## Merchant control
-
-Configure branding and behavior from **WooCommerce → Settings → Payments → Stitch**:
-
-- Payment title and description
-- Logo, card icons, and in-form description toggles
-- Custom logo URL and field label overrides
-- Stored payment methods, surcharge disclosure, and [authorize / capture later](/docs/merchants/authorize-and-capture)
-- [Level 2 / 3 commercial card data](/docs/merchants/commercial-data) and optional [address and CVV checks](/docs/merchants/card-checks)
-- Live **checkout preview** in admin — see changes before you save
-
-## Operations and reporting
-
-- Transaction references on orders for support and reconciliation
-- Refund, void, and authorize-only capture handling from the WooCommerce order screen
-- WooCommerce Subscriptions renewal support
-- WooCommerce Pre-Orders, including pay-upon-release from the card saved at checkout
-- HPOS (custom order tables) compatible
-
-## Built for WooCommerce
-
-Unlike theme-embedded solutions, this plugin is a **standalone extension**. It works across themes, supports WooCommerce Blocks, and can be updated independently of your theme.
-
----
-
-Ready to configure? Continue to [Features](/docs/merchants/features) or [Getting started](/docs/merchants/getting-started).
+<DocsCta nextTo="/docs/merchants/getting-started" nextLabel="Getting started" />

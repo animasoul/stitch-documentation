@@ -67,7 +67,7 @@ const securityControls = [
   },
   {
     icon: 'check',
-    title: 'AVS and CVV checks',
+    title: 'Address check (AVS) and CVV',
     text: 'When the bank reports an address or security-code mismatch, the store can accept, hold, or void the payment.',
     to: '/docs/merchants/card-checks',
   },
@@ -151,7 +151,7 @@ const rows = [
     paypal: 'missing',
   },
   {
-    feature: 'AVS and CVV no-match action',
+    feature: 'Address check (AVS) and CVV no-match',
     stitch: 'included',
     woo: 'missing',
     stripe: 'missing',

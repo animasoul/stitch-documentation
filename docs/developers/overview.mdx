@@ -1,11 +1,29 @@
 ---
-sidebar_position: 1
-title: Overview
+sidebar_position: 2
+title: Extend Stitch Payments
+sidebar_label: Overview
+description: Filters, checkout styling, and the service classes behind the Stitch Payments WooCommerce gateway.
 ---
 
-# Developer overview
+# Extend Stitch Payments
 
 This guide covers extending **Stitch Payments for WooCommerce** in themes, child themes, and companion plugins.
+
+## Start with the lightest change
+
+| Goal | Approach |
+|------|----------|
+| Restyle the form | CSS on `#wc-stitch-form`, `.stitch-payment-header`, etc. |
+| Change labels or copy | Admin settings or `woocommerce_stitch_checkout_field_labels` / `woocommerce_stitch_payment_form_i18n` |
+| Change logo or branding | Admin settings or `woocommerce_stitch_checkout_display_settings` |
+| Inject HTML (classic) | Action hooks in the payment template |
+| Replace classic markup | Theme template override |
+| Change Blocks data | `woocommerce_stitch_blocks_payment_method_data` |
+| Style card-number iframe | `woocommerce_stitch_iframe_css` |
+| Customize decline messages | `woocommerce_stitch_customer_decline_message` |
+| Custom checkout page | `woocommerce_stitch_is_checkout_context` |
+
+Use these [filters](/docs/developers/hooks) instead of calling gateway methods. Filters keep classic and Blocks checkout aligned and survive internal refactors. The copy-paste steps for a template override are on [Customization](/docs/developers/customization).
 
 ## Gateway ID
 
@@ -162,3 +180,4 @@ For most customizations you should prefer the [filters](/docs/developers/hooks) 
 - [Hooks reference](/docs/developers/hooks)
 - [Elementor & page builders](/docs/developers/elementor)
 - [Styling reference](/docs/developers/styling)
+- [CardPointe references](/docs/developers/cardpointe)

@@ -37,6 +37,17 @@
   color: #dbeafe;
 }
 
+.navbar-signup {
+  margin-left: 0.75rem;
+}
+
+.stitch-docs-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
 .hero--stitch {
   background: var(--stitch-hero-gradient);
   color: #e2e8f0;

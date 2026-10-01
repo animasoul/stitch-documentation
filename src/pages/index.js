@@ -46,7 +46,7 @@ function HomepageHeader() {
           </Link>
         </div>
         <p className="stitch-hero-links">
-          <Link to="/docs/developers/overview">For developers</Link>
+          <Link to="/docs/developers/customization">For developers</Link>
           <Link to="/docs/intro">Documentation</Link>
           <Link to="/docs/changelog">Version {pluginVersion}</Link>
         </p>
