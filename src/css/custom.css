@@ -326,8 +326,7 @@ h2 .stitch-brand__mark {
 }
 
 .stitch-compare-wrap {
-  width: max-content;
-  max-width: 100%;
+  width: 100%;
   margin: 1.5rem auto 0;
   overflow-x: auto;
   border: 1px solid var(--ifm-color-emphasis-200);
@@ -337,18 +336,24 @@ h2 .stitch-brand__mark {
 
 .stitch-compare {
   display: table;
-  width: max-content;
-  min-width: 58rem;
+  width: 100%;
+  table-layout: fixed;
   margin: 0;
   border-collapse: collapse;
 }
 
+.stitch-compare th:first-child,
+.stitch-compare td:first-child {
+  width: 22%;
+}
+
 .stitch-compare th,
 .stitch-compare td {
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 0.65rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
   text-align: left;
-  vertical-align: middle;
+  vertical-align: top;
+  overflow-wrap: anywhere;
 }
 
 .stitch-compare th:not(:first-child),
@@ -383,7 +388,7 @@ h2 .stitch-brand__mark {
   flex-direction: column;
   align-items: center;
   gap: 0.2rem;
-  max-width: 12.5rem;
+  max-width: 100%;
 }
 
 .stitch-status__label {
@@ -393,7 +398,6 @@ h2 .stitch-brand__mark {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  white-space: nowrap;
 }
 
 .stitch-status__label.is-included {
@@ -601,6 +605,17 @@ h2 .stitch-brand__mark {
   .stitch-steps,
   .stitch-security {
     grid-template-columns: 1fr;
+  }
+
+  .stitch-compare {
+    width: max-content;
+    min-width: 52rem;
+    table-layout: auto;
+  }
+
+  .stitch-compare th:first-child,
+  .stitch-compare td:first-child {
+    width: auto;
   }
 }
 
