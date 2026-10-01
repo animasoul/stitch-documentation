@@ -80,16 +80,90 @@ const securityControls = [
 ];
 
 const rows = [
-  ['Card brands', 'Visa, Mastercard, Amex, Discover', 'Usually the same four'],
-  ['Hosted card fields', 'Yes', 'Yes'],
-  ['Classic and Blocks checkout', 'Yes', 'Yes'],
-  ['Saved cards', 'Yes', 'Yes'],
-  ['Subscriptions and pre-orders', 'Yes', 'Yes'],
-  ['Authorize, refund, and void', 'Yes', 'Yes'],
-  ['Surcharge disclosure', 'Yes', 'Often limited'],
-  ['Level 2/3 and AVS/CVV checks', 'Yes', 'Often limited'],
-  ['Bank transfer', 'soon', 'Varies'],
-  ['Processing commission', 'lower', 'Higher published rates'],
+  {
+    feature: 'US online card rate',
+    stitch: 'lower',
+    woo: '2.9% + $0.30',
+    stripe: '2.9% + $0.30',
+    paypal: '2.99% + $0.49',
+  },
+  {
+    feature: 'Card brands',
+    stitch: 'Visa, Mastercard, Amex, Discover',
+    woo: 'Same four',
+    stripe: 'Same four',
+    paypal: 'Same four, plus PayPal and Venmo',
+  },
+  {
+    feature: 'Hosted card fields',
+    stitch: 'included',
+    woo: 'included',
+    stripe: 'included',
+    paypal: {kind: 'extra', detail: 'Advanced Card Processing'},
+  },
+  {
+    feature: 'Classic and Blocks checkout',
+    stitch: 'included',
+    woo: 'included',
+    stripe: 'included',
+    paypal: 'included',
+  },
+  {
+    feature: 'Saved cards',
+    stitch: 'included',
+    woo: 'included',
+    stripe: 'included',
+    paypal: {kind: 'extra', detail: 'Account approval'},
+  },
+  {
+    feature: 'Subscriptions',
+    stitch: {kind: 'included', detail: 'Renewals in the plugin'},
+    woo: {kind: 'extra', detail: 'Subscriptions extension, $279/year'},
+    stripe: {kind: 'extra', detail: 'Subscriptions extension, $279/year'},
+    paypal: {kind: 'extra', detail: 'Paid extension, plus approval'},
+  },
+  {
+    feature: 'Pre-orders',
+    stitch: {kind: 'included', detail: 'Release charge in the plugin'},
+    woo: {kind: 'extra', detail: 'Pre-Orders extension'},
+    stripe: {kind: 'extra', detail: 'Pre-Orders extension'},
+    paypal: {kind: 'extra', detail: 'Paid extension, plus approval'},
+  },
+  {
+    feature: 'Authorize, refund, and void',
+    stitch: 'included',
+    woo: 'included',
+    stripe: 'included',
+    paypal: 'included',
+  },
+  {
+    feature: 'Card surcharge disclosure',
+    stitch: 'included',
+    woo: 'missing',
+    stripe: 'missing',
+    paypal: 'missing',
+  },
+  {
+    feature: 'Level 2/3 commercial data',
+    stitch: 'included',
+    woo: 'missing',
+    stripe: {kind: 'limited', detail: 'Virtual goods, Visa and Mastercard'},
+    paypal: 'missing',
+  },
+  {
+    feature: 'AVS and CVV no-match action',
+    stitch: 'included',
+    woo: 'missing',
+    stripe: 'missing',
+    paypal: 'missing',
+  },
+  {
+    feature: 'Bank transfer',
+    stitch: 'soon',
+    woo: 'missing',
+    stripe: {kind: 'included', detail: '0.8%, $5 cap'},
+    paypal: 'missing',
+  },
 ];
 
 export const homepageFaqs = [
@@ -106,7 +180,7 @@ export const homepageFaqs = [
   {
     question: 'How does the processing commission compare?',
     answer:
-      'Stitch Payments includes the same core WooCommerce checkout features as typical card gateways, at a lower processing commission. The rate is quoted when you sign up.',
+      'Stitch Payments includes hosted card fields, saved cards, surcharge disclosure, and Level 2/3 data at a lower processing commission. WooPayments and Stripe publish 2.9% + $0.30 for US online cards. PayPal publishes 2.99% + $0.49 for cards. Stitch quotes the rate when you sign up.',
   },
   {
     question: 'Can customers pay by bank transfer?',
@@ -120,12 +194,26 @@ export const homepageFaqs = [
   },
 ];
 
+const statusLabels = {
+  included: 'Included',
+  extra: 'Extra',
+  missing: 'Not included',
+  limited: 'Limited',
+  soon: 'Coming soon',
+};
+
 function Cell({value}) {
-  if (value === 'soon') {
-    return <span className="stitch-soon">Coming soon</span>;
-  }
   if (value === 'lower') {
     return <strong>Lower commission</strong>;
+  }
+  const status = typeof value === 'string' ? {kind: value} : value;
+  if (status && statusLabels[status.kind]) {
+    return (
+      <span className="stitch-status">
+        <span className={`stitch-status__label is-${status.kind}`}>{statusLabels[status.kind]}</span>
+        {status.detail ? <span className="stitch-status__detail">{status.detail}</span> : null}
+      </span>
+    );
   }
   return value;
 }
@@ -155,7 +243,7 @@ export default function HomepagePitch() {
         <div className="container">
           <Heading as="h2">Same checkout features. Lower processing commission.</Heading>
           <p className="stitch-home-lead">
-            <BrandText text="Stitch Payments covers the WooCommerce features merchants expect from gateways such as Stripe, PayPal, and WooPayments, with a lower processing commission. Bank transfer is on the way." />
+            <BrandText text="Stitch Payments is compared here with WooPayments, Stripe, and PayPal, the payment plugins US WooCommerce stores use most. The same checkout features are included with Stitch, at a lower processing commission. Bank transfer is on the way." />
           </p>
           <div className="stitch-compare-wrap">
             <table className="stitch-compare">
@@ -163,18 +251,26 @@ export default function HomepagePitch() {
                 <tr>
                   <th scope="col">Feature</th>
                   <th scope="col">Stitch Payments</th>
-                  <th scope="col">Other WooCommerce gateways</th>
+                  <th scope="col">WooPayments</th>
+                  <th scope="col">Stripe</th>
+                  <th scope="col">PayPal</th>
                 </tr>
               </thead>
               <tbody>
-                {rows.map(([feature, stitch, other]) => (
-                  <tr key={feature}>
-                    <th scope="row">{feature}</th>
+                {rows.map((row) => (
+                  <tr key={row.feature}>
+                    <th scope="row">{row.feature}</th>
                     <td className="is-stitch">
-                      <Cell value={stitch} />
+                      <Cell value={row.stitch} />
                     </td>
                     <td>
-                      <Cell value={other} />
+                      <Cell value={row.woo} />
+                    </td>
+                    <td>
+                      <Cell value={row.stripe} />
+                    </td>
+                    <td>
+                      <Cell value={row.paypal} />
                     </td>
                   </tr>
                 ))}
@@ -186,7 +282,26 @@ export default function HomepagePitch() {
             <a href={signupUrl} target="_blank" rel="noopener noreferrer">
               sign up
             </a>
-            . Stitch does not publish a single flat rate.
+            . Stitch does not publish a single flat rate. The other rates are the published US domestic
+            online card prices:{' '}
+            <a href="https://woocommerce.com/document/woopayments/fees/" target="_blank" rel="noopener noreferrer">
+              WooPayments
+            </a>
+            ,{' '}
+            <a href="https://stripe.com/pricing" target="_blank" rel="noopener noreferrer">
+              Stripe
+            </a>
+            , and{' '}
+            <a href="https://www.paypal.com/us/business/paypal-business-fees" target="_blank" rel="noopener noreferrer">
+              PayPal
+            </a>
+            . PayPal Checkout and Venmo are 3.49% + $0.49            . Stripe bank debit is 0.8% with a $5 cap. Subscription products use{' '}
+            <a href="https://woocommerce.com/products/woocommerce-subscriptions/" target="_blank" rel="noopener noreferrer">
+              WooCommerce Subscriptions
+            </a>
+            , listed at $279 a year, including with Stitch. Stitch runs the renewal and pre-order release
+            charge in the plugin. WooPayments no longer includes its own subscription billing. PayPal card
+            fields, saved cards, and flexible renewals need PayPal approval.
           </p>
         </div>
       </section>

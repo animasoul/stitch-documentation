@@ -327,7 +327,7 @@ h2 .stitch-brand__mark {
 .stitch-compare {
   display: table;
   width: max-content;
-  min-width: 36rem;
+  min-width: 58rem;
   margin: 0;
   border-collapse: collapse;
 }
@@ -365,6 +365,58 @@ h2 .stitch-brand__mark {
 
 [data-theme='dark'] .stitch-compare .is-stitch {
   background: rgba(96, 165, 250, 0.12);
+}
+
+.stitch-status {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  max-width: 12.5rem;
+}
+
+.stitch-status__label {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.stitch-status__label.is-included {
+  background: rgba(16, 185, 129, 0.16);
+  color: #047857;
+}
+
+.stitch-status__label.is-extra,
+.stitch-status__label.is-limited,
+.stitch-status__label.is-soon {
+  background: rgba(244, 114, 22, 0.16);
+  color: #c2410c;
+}
+
+.stitch-status__label.is-missing {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-700);
+}
+
+.stitch-status__detail {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+[data-theme='dark'] .stitch-status__label.is-included {
+  color: #6ee7b7;
+}
+
+[data-theme='dark'] .stitch-status__label.is-extra,
+[data-theme='dark'] .stitch-status__label.is-limited,
+[data-theme='dark'] .stitch-status__label.is-soon {
+  color: #fdba74;
 }
 
 .stitch-soon {
