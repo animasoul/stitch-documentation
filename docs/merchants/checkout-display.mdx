@@ -13,6 +13,12 @@ import MerchantSignup from '@site/src/components/MerchantSignup';
 
 The **Checkout display** section controls branding on the payment form for both classic and Blocks checkout.
 
+On Blocks checkout the form looks like this. The card number is typed in a CardPointe hosted field, so that box is blank in the picture. The name and expiry update the card graphic.
+
+![Blocks checkout with the Stitch card form, accepted card icons, and the save-card note.](/img/docs/checkout-blocks.png)
+
+![The card graphic updates as the cardholder name and expiry are entered.](/img/docs/card-preview.gif)
+
 ## Checkout style
 
 _Since 0.4.0._ The **Checkout style** dropdown switches the payment form between built-in visual presets — no code or CSS required:
@@ -25,6 +31,13 @@ _Since 0.4.0._ The **Checkout style** dropdown switches the payment form between
 | **Dark** | The whole form becomes a dark panel with light text and the white Stitch logo — readable on light and dark themes alike |
 
 The preset applies to classic and Blocks checkout, and the card-number field (which is served securely from CardPointe) follows it automatically so the whole form stays consistent.
+
+Dark and Minimal in the settings preview. Both pictures include a sample saved card and a sample surcharge line so the layout is visible before you save. Those amounts are not your live rate, and the Visa ending 4242 is not a real card on file.
+
+<div className="stitch-doc-pair">
+  <img src="/img/docs/checkout-style-dark.png" alt="Dark checkout style in the settings preview, including a sample surcharge note." />
+  <img src="/img/docs/checkout-style-minimal.png" alt="Minimal checkout style in the settings preview, with no header panel behind the logo." />
+</div>
 
 ### Accent color
 

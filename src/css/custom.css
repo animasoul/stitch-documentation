@@ -789,3 +789,27 @@ h2 .stitch-brand__mark {
     opacity: 0;
   }
 }
+
+.theme-doc-markdown img {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+}
+
+.theme-doc-markdown .stitch-accepted-cards img {
+  border: 0;
+  border-radius: 0;
+}
+
+.stitch-doc-pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1.25rem 0 1.5rem;
+}
+
+.stitch-doc-pair img {
+  width: min(100%, 22rem);
+  height: auto;
+  margin: 0;
+}

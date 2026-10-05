@@ -53,6 +53,10 @@ Customize how the payment form looks without code:
 - **Live admin preview** updates as you change settings (sticky panel on desktop)
 - **Auto-advance** between card fields when each value validates (card number → expiry → CVV → name)
 
+The Dark preset in that preview. The $1.50 surcharge line and the Visa ending 4242 are samples in the preview, not a live rate or a real saved card.
+
+![Dark checkout style in the settings preview.](/img/docs/checkout-style-dark.png)
+
 ## Surcharge disclosure
 
 When enabled, customers see the processing fee beside the card fields before they pay. That amount is also added to the order as a **Credit card surcharge** fee line.
@@ -60,6 +64,10 @@ When enabled, customers see the processing fee beside the card fields before the
 Configure:
 
 - **Enable Surcharge** toggle. The percentage is the rate boarded on the CardPointe merchant account. The plugin does not store its own rate.
+
+On the order, the fee is listed in **Stitch Payment Details**. CardPointe adds it on top of the authorized amount, so the plugin does not send it again in the charge.
+
+![A test order's Stitch Payment Details box, showing a $0.60 credit card surcharge.](/img/docs/order-surcharge.png)
 
 ## Subscriptions
 

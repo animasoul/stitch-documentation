@@ -38,6 +38,8 @@ The API host must be a CardPointe hostname. See [CardPointe references](/docs/de
 
 Go to **WooCommerce → Settings → Payments → Stitch**.
 
+![Stitch gateway settings. The gateway is enabled and Test Mode is on. The checkout preview sits on the right.](/img/docs/admin-settings.png)
+
 ### Enable the gateway
 
 1. Check **Enable Stitch Payment Gateway**.
@@ -54,6 +56,8 @@ The gateway processes payments in **USD**. If your store currency is set to anyt
 3. Enable **Test Mode** while testing — the active tab should match the environment you are using.
 4. Save changes. Credential validation runs on save.
 
+![API credentials with Test Mode on. The merchant ID and username are hidden here. A saved password is not shown again, so that field stays blank.](/img/docs/admin-credentials.png)
+
 :::note Saved passwords
 For security, saved API passwords are not shown or pre-filled when you revisit the settings page. **Leave a password field blank to keep the current password** — only enter a value when you want to change it.
 :::
@@ -68,7 +72,11 @@ Use the **Checkout display** section and the live preview on the right to tune t
 
 ### Other settings
 
-Under **Other settings** you can enable stored payment methods, choose whether to **charge immediately or authorize only** (see [Authorize and capture](/docs/merchants/authorize-and-capture)), send [Level 2 / 3 commercial data](/docs/merchants/commercial-data), set [address check (AVS) and CVV no-match](/docs/merchants/card-checks) actions, enable surcharge disclosure, and turn on enhanced debug logging. Stored payments and surcharge are documented in their own guides. Enhanced debug logging adds customer details (email, name, postal code) to payment log entries — keep it off in production unless support asks for it.
+Under **Other settings** you can enable stored payment methods, choose whether to **charge immediately or authorize only** (see [Authorize and capture](/docs/merchants/authorize-and-capture)), send [Level 2 / 3 commercial data](/docs/merchants/commercial-data), set [address check (AVS) and CVV no-match](/docs/merchants/card-checks) actions, enable surcharge disclosure, and turn on enhanced debug logging.
+
+![Other settings for saved cards, charge or authorize-only, Level 2/3 data, address and CVV checks, and surcharge.](/img/docs/admin-other-settings.png)
+
+Stored payments and surcharge are documented in their own guides. Enhanced debug logging adds customer details (email, name, postal code) to payment log entries — keep it off in production unless support asks for it.
 
 ### Data retention
 
