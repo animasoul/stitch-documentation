@@ -232,8 +232,10 @@ export default function HomepagePitch() {
           <ol className="stitch-steps">
             {steps.map((step, index) => (
               <li key={step.title}>
-                <span className="stitch-steps__index">{index + 1}</span>
-                <strong>{step.title}</strong>
+                <span className="stitch-steps__title">
+                  <span className="stitch-steps__index">{index + 1}</span>
+                  <strong>{step.title}</strong>
+                </span>
                 <span>{step.text}</span>
               </li>
             ))}

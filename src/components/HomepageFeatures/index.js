@@ -35,8 +35,10 @@ function Feature({icon, title, description, link, linkLabel}) {
   return (
     <div className={clsx('col col--4')}>
       <div className={clsx('stitch-feature-card', styles.featureCard)}>
-        <HomeIcon name={icon} />
-        <Heading as="h3">{title}</Heading>
+        <div className="stitch-card-head">
+          <HomeIcon name={icon} />
+          <Heading as="h3">{title}</Heading>
+        </div>
         <p>{description}</p>
         <Link to={link}>{linkLabel}</Link>
       </div>
