@@ -17,38 +17,37 @@ const socialImage = 'https://docs.stitchpayments.net/img/stitch-social.png';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
-  const pluginVersion = siteConfig.customFields.pluginVersion;
 
   return (
     <header className={clsx('hero hero--stitch', styles.heroBanner)}>
-      <div className="container">
-        <img
-          src="/img/stitch-logo-white.png"
-          alt="Stitch Payments"
-          className="stitch-hero-logo"
-        />
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">
-          Accept Visa, Mastercard, American Express, and Discover in WooCommerce on WordPress. Card
-          numbers stay in CardPointe hosted fields, at a lower processing commission than typical
-          gateways.
-        </p>
-        <AcceptedCards prominent />
-        <div className={clsx(styles.buttons, 'stitch-home-cta')}>
-          <Link className="button button--secondary button--lg" href="https://www.stitchpayments.net/signup/">
-            Get started
-          </Link>
-          <Link className="button button--outline button--secondary button--lg" to="/docs/merchants/getting-started">
-            For merchants
-          </Link>
+      <div className="container stitch-hero">
+        <div className="stitch-hero__copy">
+          <Heading as="h1" className="hero__title">
+            {siteConfig.title}
+          </Heading>
+          <p className="hero__subtitle">
+            Card payments for WooCommerce stores, at a lower processing commission. Card numbers stay
+            off your server.
+          </p>
+          <AcceptedCards prominent />
+          <div className={clsx(styles.buttons, 'stitch-home-cta')}>
+            <Link className="button button--secondary button--lg" href="https://www.stitchpayments.net/signup/">
+              Get started
+            </Link>
+            <Link className="button button--outline button--secondary button--lg" to="/docs/merchants/getting-started">
+              For merchants
+            </Link>
+          </div>
         </div>
-        <p className="stitch-hero-links">
-          <Link to="/docs/developers/customization">For developers</Link>
-          <Link to="/docs/intro">Documentation</Link>
-          <Link to="/docs/changelog">Version {pluginVersion}</Link>
-        </p>
+        <figure className="stitch-hero__shot">
+          <img
+            src="/img/docs/checkout-blocks.png"
+            alt="WooCommerce Blocks checkout with the Stitch card form, accepted card icons, and the save-card note."
+            width="810"
+            height="815"
+          />
+          <figcaption>The card form on WooCommerce Blocks checkout. The card number is typed in a CardPointe hosted field.</figcaption>
+        </figure>
       </div>
     </header>
   );

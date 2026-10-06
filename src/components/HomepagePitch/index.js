@@ -27,12 +27,14 @@ const steps = [
 const securityControls = [
   {
     icon: 'card',
+    lead: true,
     title: 'Hosted card fields',
     text: 'The card number is typed in a CardPointe iframe. WordPress receives a token, not the full card number.',
     to: '/docs/merchants/data-and-privacy#how-card-tokenization-works',
   },
   {
     icon: 'databaseOff',
+    lead: true,
     title: 'Security code is never stored',
     text: 'The CVV is held in memory only for that authorization request, then discarded. It is never written to the database.',
     to: '/docs/merchants/data-and-privacy#during-checkout--temporary-data',
@@ -57,6 +59,7 @@ const securityControls = [
   },
   {
     icon: 'vault',
+    lead: true,
     title: 'Saved cards are vault references',
     text: 'The store keeps the last four digits, brand, expiry, and a CardPointe profile reference. The card itself stays in the CardPointe vault.',
     to: '/docs/merchants/data-and-privacy#saved-payment-methods',
@@ -134,6 +137,7 @@ const rows = [
   },
   {
     feature: 'Card surcharge disclosure',
+    emphasis: true,
     stitch: 'included',
     woo: 'missing',
     stripe: 'missing',
@@ -141,6 +145,7 @@ const rows = [
   },
   {
     feature: 'Level 2/3 commercial data',
+    emphasis: true,
     stitch: 'included',
     woo: 'missing',
     stripe: {kind: 'limited', detail: 'Virtual goods, Visa and Mastercard'},
@@ -148,6 +153,7 @@ const rows = [
   },
   {
     feature: 'Address check (AVS) and CVV no-match',
+    emphasis: true,
     stitch: 'included',
     woo: 'missing',
     stripe: 'missing',
@@ -214,6 +220,9 @@ function Cell({value}) {
   return value;
 }
 
+const leadSecurity = securityControls.filter((item) => item.lead);
+const otherSecurity = securityControls.filter((item) => !item.lead);
+
 export default function HomepagePitch() {
   return (
     <>
@@ -238,14 +247,15 @@ export default function HomepagePitch() {
           <p className="stitch-home-lead">
             Stitch Payments is compared here with WooPayments, Stripe, and PayPal, the payment plugins
             US WooCommerce stores use most. The same checkout features are included with Stitch, at a
-            lower processing commission. Bank transfer is on the way.
+            lower processing commission. Bank transfer is on the way. The marked rows are included
+            with Stitch and missing from the other plugins.
           </p>
           <div className="stitch-compare-wrap">
             <table className="stitch-compare">
               <thead>
                 <tr>
                   <th scope="col">Feature</th>
-                  <th scope="col">Stitch Payments</th>
+                  <th scope="col" className="is-stitch">Stitch Payments</th>
                   <th scope="col">WooPayments</th>
                   <th scope="col">Stripe</th>
                   <th scope="col">PayPal</th>
@@ -253,7 +263,7 @@ export default function HomepagePitch() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.feature}>
+                  <tr key={row.feature} className={row.emphasis ? 'is-diff' : undefined}>
                     <th scope="row">{row.feature}</th>
                     <td className="is-stitch">
                       <Cell value={row.stitch} />
@@ -317,14 +327,24 @@ export default function HomepagePitch() {
             The store never holds a full card number or a security code. Each control below is already
             in Stitch Payments. Together they reduce PCI scope. They are not a PCI certification.
           </p>
-          <ul className="stitch-security">
-            {securityControls.map((item) => (
+          <ul className="stitch-security stitch-security--lead">
+            {leadSecurity.map((item) => (
               <li key={item.title}>
                 <Link className="stitch-security__card" to={item.to}>
                   <div className="stitch-security__head">
                     <HomeIcon name={item.icon} />
                     <span className="stitch-security__badge">In place</span>
                   </div>
+                  <strong>{item.title}</strong>
+                  <span>{item.text}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="stitch-security-quiet">
+            {otherSecurity.map((item) => (
+              <li key={item.title}>
+                <Link to={item.to}>
                   <strong>{item.title}</strong>
                   <span>{item.text}</span>
                 </Link>
@@ -353,14 +373,14 @@ export default function HomepagePitch() {
 
       <section className="stitch-home-close">
         <div className="container">
-          <Heading as="h2">Ready to accept cards in WooCommerce on WordPress?</Heading>
+          <Heading as="h2">Ready to accept cards?</Heading>
           <Link className="button button--primary button--lg stitch-signup" href={signupUrl}>
             Get started
           </Link>
         </div>
       </section>
 
-      <section className="stitch-home-section">
+      <section className="stitch-partner-strip">
         <div className="container">
           <div className="stitch-partners">
             <a

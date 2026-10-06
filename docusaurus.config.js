@@ -78,12 +78,6 @@ const config = {
         },
         items: [
           {
-            to: '/docs/intro',
-            label: 'Documentation',
-            position: 'left',
-            activeBaseRegex: '^/docs/intro/?$',
-          },
-          {
             to: '/docs/merchants/getting-started',
             label: 'Merchants',
             position: 'left',
@@ -94,12 +88,6 @@ const config = {
             label: 'Developers',
             position: 'left',
             activeBaseRegex: '^/docs/developers/',
-          },
-          {
-            to: '/docs/changelog',
-            label: 'Changelog',
-            position: 'left',
-            activeBaseRegex: '^/docs/changelog/?$',
           },
           {
             href: 'https://www.stitchpayments.net/signup/',
