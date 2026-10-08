@@ -13,7 +13,9 @@ const pageDescription =
   'Accept Visa, Mastercard, American Express, and Discover in WooCommerce on WordPress with Stitch Payments. Hosted CardPointe fields, saved cards, and a lower processing commission. Bank transfer coming soon.';
 
 const pageTitle = 'Card payments for WooCommerce';
-const socialImage = 'https://docs.stitchpayments.net/img/stitch-social.png';
+const docsUrl = 'https://stitch-documentation.vercel.app';
+const demoUrl = 'https://stitch.ajpartnersltd.com/';
+const socialImage = `${docsUrl}/img/stitch-social.png`;
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -36,6 +38,9 @@ function HomepageHeader() {
             </Link>
             <Link className="button button--outline button--secondary button--lg" to="/docs/merchants/getting-started">
               For merchants
+            </Link>
+            <Link className="button button--outline button--secondary button--lg" href={demoUrl}>
+              View the demo
             </Link>
           </div>
         </div>
@@ -62,7 +67,7 @@ export default function Home() {
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'WordPress',
     softwareVersion: siteConfig.customFields.pluginVersion,
-    url: 'https://docs.stitchpayments.net/',
+    url: docsUrl,
     description: pageDescription,
     provider: {
       '@type': 'Organization',

@@ -3,7 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 // Current release of the Stitch Payments for WooCommerce plugin.
 // Shown on the homepage hero and in the footer; update on each release.
-const pluginVersion = '0.6.1';
+const pluginVersion = '0.7.0';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -19,7 +19,7 @@ const config = {
     v4: true,
   },
 
-  url: 'https://docs.stitchpayments.net',
+  url: 'https://stitch-documentation.vercel.app',
   baseUrl: '/',
 
   organizationName: 'stitch-payments',
@@ -90,6 +90,11 @@ const config = {
             activeBaseRegex: '^/docs/developers/',
           },
           {
+            href: 'https://stitch.ajpartnersltd.com/',
+            label: 'Demo',
+            position: 'right',
+          },
+          {
             href: 'https://www.stitchpayments.net/signup/',
             label: 'Sign up',
             position: 'right',
@@ -114,6 +119,7 @@ const config = {
             items: [
               { label: 'Website', href: 'https://www.stitchpayments.net/' },
               { label: 'About Stitch', href: 'https://www.stitchpayments.net/about/' },
+              { label: 'Demo shop', href: 'https://stitch.ajpartnersltd.com/' },
             ],
           },
           {
@@ -124,7 +130,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Plugin version <a href="/docs/changelog">${pluginVersion}</a> · Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a class="stitch-footer-mindk" href="https://www.mindk.com/"><img src="/img/mindk-logo-white.svg" alt="MindK" width="140" height="24" /></a>.`,
+        copyright: `Plugin version <a href="/docs/changelog">${pluginVersion}</a> · Copyright © ${new Date().getFullYear()} Stitch Payments. Documentation built by <a class="stitch-footer-mindk" href="https://www.mindk.com/" target="_blank" rel="noopener noreferrer"><img src="/img/mindk-logo-white.svg" alt="MindK" width="140" height="24" /></a>.`,
       },
       prism: {
         theme: prismThemes.github,

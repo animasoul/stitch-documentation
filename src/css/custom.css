@@ -241,12 +241,24 @@ a.stitch-signup:hover {
   padding-top: 0.25rem;
 }
 
+.stitch-home-band .col {
+  display: flex;
+}
+
 .stitch-feature-card {
+  display: flex;
+  flex-direction: column;
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 16px;
+  width: 100%;
   height: 100%;
   padding: 1.5rem;
+}
+
+.stitch-feature-card > a {
+  margin-top: auto;
+  padding-top: 0.85rem;
 }
 
 .stitch-feature-card h3 {
@@ -916,6 +928,18 @@ h2 .stitch-brand__mark {
   width: auto;
 }
 
+a[target="_blank"]:not(:has(svg))::after {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.28em;
+  vertical-align: -0.08em;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 /* The wordmark is too wide once the navbar collapses. Show the heart mark. */
 @media (max-width: 996px) {
   .navbar__logo {
@@ -954,4 +978,34 @@ h2 .stitch-brand__mark {
   width: min(100%, 22rem);
   height: auto;
   margin: 0;
+}
+
+.stitch-test-cards {
+  margin: 0 0 1.75rem;
+  padding: 1.25rem 1.35rem 0.35rem;
+  border: 2px solid #1e3a5f;
+  border-radius: 12px;
+  background: #f4f7fb;
+  scroll-margin-top: 5.5rem;
+}
+
+.stitch-test-cards h3 {
+  margin-top: 0;
+  font-size: 1.35rem;
+}
+
+.stitch-test-cards code {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.stitch-test-cards table {
+  display: table;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .stitch-test-cards {
+  border-color: #93c5fd;
+  background: #0f2744;
 }

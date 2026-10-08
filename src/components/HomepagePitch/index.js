@@ -3,6 +3,7 @@ import Heading from '@theme/Heading';
 import HomeIcon from '@site/src/components/HomeIcon';
 
 const signupUrl = 'https://www.stitchpayments.net/signup/';
+const demoUrl = 'https://stitch.ajpartnersltd.com/';
 
 const steps = [
   {
@@ -379,6 +380,9 @@ export default function HomepagePitch() {
           <Link className="button button--primary button--lg stitch-signup" href={signupUrl}>
             Get started
           </Link>
+          <p className="stitch-home-note">
+            <Link href={demoUrl}>View the demo shop</Link>
+          </p>
         </div>
       </section>
 

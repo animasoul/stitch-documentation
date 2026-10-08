@@ -84,17 +84,49 @@ Scroll to **Data Retention** to review what the plugin stores and optionally ena
 
 ## 4. Test checkout
 
+<div className="stitch-test-cards" id="test-cards">
+  <h3>Test card numbers</h3>
+  <p>
+    Use these while <strong>Test Mode</strong> is on. <strong>Any future expiry</strong> is accepted, such as <code>12/28</code>. <strong>Any security code</strong> is accepted: 3 digits, or 4 digits for American Express.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Brand</th>
+        <th>Card number</th>
+        <th>Expiry</th>
+        <th>Security code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Visa</td>
+        <td><code>4788250000121443</code></td>
+        <td>Any future date, such as <code>12/28</code></td>
+        <td>Any 3 digits, such as <code>123</code></td>
+      </tr>
+      <tr>
+        <td>Mastercard</td>
+        <td><code>5454545454545454</code></td>
+        <td>Any future date, such as <code>12/28</code></td>
+        <td>Any 3 digits, such as <code>123</code></td>
+      </tr>
+      <tr>
+        <td>American Express</td>
+        <td><code>371449635398431</code></td>
+        <td>Any future date, such as <code>12/28</code></td>
+        <td>Any 4 digits, such as <code>1234</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    A 16-digit Visa number that passes the Luhn check, such as <code>4111111111111111</code>, is also approved in UAT. These numbers are from the <a href="https://developer.cardpointe.com/guides/cardpointe-gateway" target="_blank" rel="noopener noreferrer">CardPointe UAT guide</a>. Test numbers are declined in production.
+  </p>
+</div>
+
 1. Keep **Test Mode** enabled.
 2. Place a test order on classic checkout and, if used, Blocks checkout.
-3. Use a CardPointe UAT test card. Any future expiry and any 3-digit security code (4 digits for American Express) are accepted. These approval numbers are from the [CardPointe UAT guide](https://developer.cardpointe.com/guides/cardpointe-gateway):
-
-   | Brand | Test number |
-   | --- | --- |
-   | Visa | 4788250000121443 |
-   | Mastercard | 5454545454545454 |
-   | American Express | 371449635398431 |
-
-   A 16-digit Visa number that passes the Luhn check, such as 4111111111111111, is also approved in UAT. Test numbers are declined in production.
+3. Pay with a card number from the table above.
 4. A successful charge moves the order to **Processing**. The order note reads **Stitch payment successful**, followed by the transaction reference and auth code. The Stitch box on the order shows the same transaction reference.
 5. Test a **guest** checkout with a new card, and a logged-in checkout with a saved card if **Enable Stored Payment Methods** is on.
 6. If **Transaction type** is Authorize only, the order stays **On hold** and the note says the payment is authorized and not yet captured. Move one order to Processing or Completed to capture it, and cancel another to void the hold.
