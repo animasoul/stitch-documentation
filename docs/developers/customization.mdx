@@ -12,14 +12,14 @@ Choose the lightest approach that fits your goal.
 | Goal | Approach |
 |------|----------|
 | Restyle the form | CSS on `#wc-stitch-form`, `.stitch-payment-header`, etc. |
-| Change labels or copy | Admin settings or `woocommerce_stitch_checkout_field_labels` / `woocommerce_stitch_payment_form_i18n` |
-| Change logo or branding | Admin settings or `woocommerce_stitch_checkout_display_settings` |
+| Change labels or copy | Admin settings or `stitch_payments_checkout_field_labels` / `stitch_payments_payment_form_i18n` |
+| Change logo or branding | Admin settings or `stitch_payments_checkout_display_settings` |
 | Inject HTML (classic) | Action hooks in the payment template |
 | Replace classic markup | Theme template override |
-| Change Blocks data | `woocommerce_stitch_blocks_payment_method_data` |
-| Style card-number iframe | `woocommerce_stitch_iframe_css` |
-| Customize decline messages | `woocommerce_stitch_customer_decline_message` |
-| Custom checkout page | `woocommerce_stitch_is_checkout_context` |
+| Change Blocks data | `stitch_payments_blocks_payment_method_data` |
+| Style card-number iframe | `stitch_payments_iframe_css` |
+| Customize decline messages | `stitch_payments_customer_decline_message` |
+| Custom checkout page | `stitch_payments_is_checkout_context` |
 
 ## Classic template override
 
@@ -41,12 +41,12 @@ wp-content/themes/your-theme/woocommerce/stitch/payment-form.php
 | `$saved_methods` | Saved cards keyed by account ID |
 | `$default_acct_id` | Pre-selected saved card |
 
-Filter template args with `woocommerce_stitch_payment_form_template_args`.
+Filter template args with `stitch_payments_payment_form_template_args`.
 
 ### Example: filter template args
 
 ```php
-add_filter( 'woocommerce_stitch_payment_form_template_args', function ( $args, $gateway ) {
+add_filter( 'stitch_payments_payment_form_template_args', function ( $args, $gateway ) {
 	$args['i18n']['save_card'] = 'Store this card securely';
 	return $args;
 }, 10, 2 );
@@ -56,8 +56,8 @@ add_filter( 'woocommerce_stitch_payment_form_template_args', function ( $args, $
 
 Blocks checkout does **not** use the PHP template. Use:
 
-- `woocommerce_stitch_blocks_payment_method_data` for script data
-- `woocommerce_stitch_payment_form_i18n` for shared strings
+- `stitch_payments_blocks_payment_method_data` for script data
+- `stitch_payments_payment_form_i18n` for shared strings
 
 ## Companion plugin bootstrap
 
@@ -68,12 +68,12 @@ Blocks checkout does **not** use the PHP template. Use:
  */
 
 add_action( 'stitch_payments_loaded', function () {
-	add_filter( 'woocommerce_stitch_payment_form_i18n', function ( $strings, $gateway ) {
+	add_filter( 'stitch_payments_payment_form_i18n', function ( $strings, $gateway ) {
 		$strings['save_card'] = 'Securely store this card';
 		return $strings;
 	}, 10, 2 );
 
-	add_action( 'woocommerce_stitch_before_payment_form', function ( $gateway, $saved_methods ) {
+	add_action( 'stitch_payments_before_payment_form', function ( $gateway, $saved_methods ) {
 		echo '<p class="my-stitch-notice">We accept Visa and Mastercard.</p>';
 	}, 10, 2 );
 } );
@@ -81,6 +81,6 @@ add_action( 'stitch_payments_loaded', function () {
 
 ### Payment header HTML
 
-If you filter `woocommerce_stitch_payment_header_html`, return markup you trust. Output is sanitized with `Card_Icons::kses_payment_header_html()` so inline SVG card icons are preserved (unlike `wp_kses_post()`).
+If you filter `stitch_payments_payment_header_html`, return markup you trust. Output is sanitized with `Card_Icons::kses_payment_header_html()` so inline SVG card icons are preserved (unlike `wp_kses_post()`).
 
 See the full [Hooks reference](/docs/developers/hooks).

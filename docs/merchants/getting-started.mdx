@@ -62,8 +62,20 @@ The gateway processes payments in **USD**. If your store currency is set to anyt
 For security, saved API passwords are not shown or pre-filled when you revisit the settings page. **Leave a password field blank to keep the current password** — only enter a value when you want to change it.
 :::
 
+:::tip Keep credentials out of the database
+Since 0.8.0 any credential can be defined in `wp-config.php` instead of the settings screen. A constant always wins over the saved value, so the API password never has to be stored in the database.
+
+```php
+define( 'STITCH_PROD_MERCHANT_ID', 'your-merchant-id' );
+define( 'STITCH_PROD_API_USERNAME', 'your-api-username' );
+define( 'STITCH_PROD_API_PASSWORD', 'your-api-password' );
+```
+
+The name is `STITCH_` plus the setting key in capitals: `TEST_MERCHANT_ID`, `TEST_API_USERNAME`, `TEST_API_PASSWORD`, `TEST_BASE_URL`, and the same four with `PROD_`, plus `TEST_ACH_MERCHANT_ID` and `PROD_ACH_MERCHANT_ID` for [bank account payments](/docs/merchants/ach). A field supplied by a constant is disabled on the settings screen and shows which constant sets it.
+:::
+
 :::note Base URL overrides
-The optional test/production base URL fields only accept CardPointe hosts (`cardconnect.com` / `cardpointe.com`), entered as a bare hostname such as `fts-uat.cardconnect.com`. Anything else is ignored and the default endpoint is used, so your API credentials can never be sent to the wrong host by a typo. White-label hosts can be allowed by a developer via the [`woocommerce_stitch_allowed_api_hosts`](/docs/developers/hooks#woocommerce_stitch_allowed_api_hosts) filter.
+The optional test/production base URL fields only accept CardPointe hosts (`cardconnect.com` / `cardpointe.com`), entered as a bare hostname such as `fts-uat.cardconnect.com`. Anything else is ignored and the default endpoint is used, so your API credentials can never be sent to the wrong host by a typo. White-label hosts can be allowed by a developer via the [`stitch_payments_allowed_api_hosts`](/docs/developers/hooks#stitch_payments_allowed_api_hosts) filter.
 :::
 
 ### Checkout display (optional)
@@ -72,7 +84,7 @@ Use the **Checkout display** section and the live preview on the right to tune t
 
 ### Other settings
 
-Under **Other settings** you can enable stored payment methods, choose whether to **charge immediately or authorize only** (see [Authorize and capture](/docs/merchants/authorize-and-capture)), send [Level 2 / 3 commercial data](/docs/merchants/commercial-data), set [address check (AVS) and CVV no-match](/docs/merchants/card-checks) actions, enable surcharge disclosure, and turn on enhanced debug logging.
+Under **Other settings** you can enable stored payment methods, choose whether to **charge immediately or authorize only** (see [Authorize and capture](/docs/merchants/authorize-and-capture)), send [Level 2 / 3 commercial data](/docs/merchants/commercial-data), set [address check (AVS) and CVV no-match](/docs/merchants/card-checks) actions, enable surcharge disclosure, and turn on **Debug log** (successful API calls; failures are always logged) or enhanced debug logging.
 
 ![Other settings for saved cards, charge or authorize-only, Level 2/3 data, address and CVV checks, and surcharge.](/img/docs/admin-other-settings.png)
 

@@ -36,7 +36,7 @@ The card number field is not a normal HTML input on your site. It is loaded insi
 2. CardPointe returns a **single-use token** string to the checkout form.
 3. Only that token (not the full card number) is posted to WordPress with the order.
 
-Expiry, CVV, and cardholder name are collected in standard checkout fields on your site. They are required to complete the authorization. The **CVV is never written to the database** — it is held in memory only for the authorization request. Expiry and cardholder name may be attached to the order briefly during Blocks checkout and are removed in the cleanup step (see below).
+Expiry, CVV, and cardholder name are collected in standard checkout fields on your site. They are required to complete the authorization. Since 0.8.0 none of them is written to the order: the token, expiry, name, and **CVV** are read from the checkout request, or held in memory for the rest of that request on Blocks checkout, and discarded after the authorization. The **CVV is never written to the database.** The CVV does pass through your server for that one request, because it is typed into a field on your page rather than inside the CardPointe iframe.
 
 ```mermaid
 flowchart LR
@@ -56,7 +56,9 @@ This design reduces PCI scope for your WordPress installation because sensitive 
 
 ## During checkout — temporary data
 
-While an order is being paid, the plugin may briefly attach some checkout fields to the order as metadata (for example during Blocks checkout). These keys are **removed in a cleanup step after every payment attempt**, whether the payment succeeds or fails:
+Since 0.8.0 the plugin does not attach checkout fields to the order while it takes payment. On Blocks checkout the token, expiry, cardholder name, CVV, and the save-card choice are held in a request-scoped in-memory store for the duration of the authorization request and discarded immediately afterward. Bank account fields (routing and account number) are held the same way.
+
+Versions before 0.8.0 briefly stored some of these fields as order meta during Blocks checkout. If an older order still has any of these keys, they are **removed in a cleanup step after every payment attempt**:
 
 | Order meta key | Contents |
 |----------------|----------|
@@ -65,7 +67,7 @@ While an order is being paid, the plugin may briefly attach some checkout fields
 | `_stitch_card_name` | Cardholder name |
 | `_stitch_save_payment_method` | Whether the customer chose to save the card |
 
-The **CVV is deliberately excluded from order metadata**. During Blocks checkout it is held in a request-scoped in-memory store for the duration of the authorization request and discarded immediately afterward, so it is never written to the database. Full card numbers never reach your server at all.
+The **CVV is deliberately excluded from order metadata** in every version, so it is never written to the database. Full card numbers never reach your server at all.
 
 ## After payment — what stays on orders
 
@@ -81,6 +83,11 @@ For refunds, voids, subscription renewals, and merchant accounting, the plugin k
 | `_stitch_refund_retrefs` | Comma-separated refund transaction references |
 | `_stitch_surcharge_amount` | Surcharge amount returned by CardPointe. The same amount is the Credit card surcharge fee on the order |
 | `_stitch_capture_status` | Authorize-only lifecycle: `authorized`, `captured`, or `voided` (since 0.5.0) |
+| `_stitch_auth_attempt`, `_stitch_processor_order_id` | Which authorization attempt this is and the order ID sent to CardPointe for it. The first attempt sends the plain order ID; a retry sends a suffix such as `123-2` (since 0.8.0) |
+| `_stitch_surcharge_unconfirmed` | `yes` when the order was paid without CardPointe confirming its card fee (since 0.8.0). See [Surcharge](/docs/merchants/surcharge#when-the-fee-cannot-be-confirmed) |
+| `_stitch_avs_response`, `_stitch_cvv_response`, `_stitch_verification_hold`, `_stitch_verification_void` | Address and security code results and any hold or void they caused. See [Address and CVV checks](/docs/merchants/card-checks) |
+| `_stitch_ach_account_type`, `_stitch_ach_last4`, `_stitch_ach_funding_status`, `_stitch_ach_return_code` | Bank payment details: account type, last four digits, funding state, and any bank return code |
+| `_stitch_ach_authorization` | The debit authorization the customer accepted: the text, the amount, when they accepted it, and their IP address (since 0.8.0) |
 
 These records are **intentionally kept** even if you enable plugin data removal on uninstall, so you retain payment history for accounting and chargebacks.
 
@@ -96,6 +103,10 @@ When [stored payment methods](/docs/merchants/stored-payments) are enabled and t
 | `card_type` | Card brand label (e.g. Visa) |
 | `expiry` | Expiry month/year |
 | `name` | Cardholder name |
+| `environment` | `test` or `live` — where the card was saved (since 0.8.0) |
+| `merchant_id` | The card merchant ID the profile belongs to (since 0.8.0) |
+
+A CardPointe profile only exists in the environment and merchant account that created it, so a card saved in Test Mode is never offered or charged in live mode, and a card saved under one merchant ID is not charged under another. Cards saved before 0.8.0 carry neither value and are treated as matching.
 
 The token’s internal reference is a combination of profile and account IDs — **not** a full card number. CardPointe holds the vaulted payment credentials; your site stores opaque IDs plus display metadata.
 
@@ -103,7 +114,9 @@ Customers can delete saved cards from **My Account → Payment methods**. That r
 
 ### Customer profile identifier
 
-Logged-in customers who save a card may also have user meta `_stitch_profile_id`, linking their WordPress account to a CardPointe profile for future saved cards.
+Logged-in customers who save a card also have user meta `_stitch_profile_ids`, linking their WordPress account to a CardPointe profile for future saved cards. It holds one profile per environment and merchant, for example `live:496160873888`. Each customer keeps a single profile per environment and merchant, so new cards are added to it instead of creating another.
+
+Customers who saved a card before 0.8.0 only have the older single value `_stitch_profile_id`. The plugin keeps reusing that profile, as long as none of the customer's saved cards say it belongs to a different environment or merchant, and copies it into `_stitch_profile_ids` the first time it is needed.
 
 ## Data sent to Stitch / CardPointe
 
@@ -127,7 +140,9 @@ The plugin can write to **WooCommerce logs** (`wp-content/uploads/wc-logs/`):
 | `wc-stitch-api` | API request/response diagnostics |
 | `wc-stitch-surcharge` | Surcharge-related API calls |
 
-API logging **redacts** sensitive fields such as `token`, `account`, `cvv` / `cvv2`, and passwords before writing log lines.
+API logging **redacts** sensitive fields before writing log lines: `token`, `account`, `cvv` / `cvv2`, passwords, and, since 0.8.0, customer personal data such as name, address, city, region, postal code, phone, email, and expiry.
+
+Failed API calls are always logged. Successful calls are logged only while **Debug log** (under **Other settings**) is on, so leave it off except when troubleshooting.
 
 Payment-complete log entries record only order and transaction references by default. **Enhanced debug logging** (under **Other settings**) adds customer details (user ID, email, billing name, postal code) to those entries for troubleshooting. Keep it **disabled in production** unless support asks you to enable it temporarily, so personal data stays out of your logs.
 
@@ -136,9 +151,12 @@ Payment-complete log entries record only order and transaction references by def
 | Storage | Contents |
 |---------|----------|
 | `woocommerce_stitch_settings` | Gateway title, credentials, checkout display toggles, surcharge settings, capture mode, debug logging, uninstall cleanup preference (not autoloaded) |
+| `woocommerce_stitch_ach_settings` | Bank account gateway settings, including the ACH merchant IDs (not autoloaded) |
+| `stitch_payments_surcharge_unconfirmed` | Timestamps of orders paid without a confirmed card fee, kept for 7 days to drive the admin warning (since 0.8.0) |
 | Validation transients | Short-lived admin notices after credential checks |
 | WooCommerce payment token tables | Saved Stitch tokens when customers opt in |
-| User meta `_stitch_profile_id` | CardPointe profile link per customer |
+| User meta `_stitch_profile_ids` | CardPointe profile link per customer, per environment and merchant (since 0.8.0) |
+| User meta `_stitch_profile_id` | The single profile link written before 0.8.0, still read |
 
 ## Deactivation and uninstall
 

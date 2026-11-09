@@ -9,6 +9,43 @@ description: What changed in each release of Stitch Payments for WooCommerce.
 
 All notable changes to **Stitch Payments for WooCommerce** are documented here.
 
+## 0.8.0 — 2026-11-09
+
+A larger release: renamed hooks, tighter surcharge and saved-card handling, bank account authorization, and less payment data in the database.
+
+:::warning Before you update
+- Hook and filter names changed (see **Changed**). Old names still work and log a deprecation notice, so move custom code to the new names at your own pace.
+- A subscription renewal or pre-order release now charges only the card assigned to it. It no longer falls back to the customer's default saved card.
+:::
+
+### New
+
+- **`wp-config.php` credentials.** Define constants such as `STITCH_PROD_API_PASSWORD` to keep secrets out of the database. A constant overrides the saved value and the settings field is locked. See [Getting started](/docs/merchants/getting-started).
+- **Action Scheduler.** The daily Card Account Updater sync and the twice-daily bank funding check run on Action Scheduler instead of WP-Cron.
+- **One order ID per attempt.** Each authorization attempt sends its own order ID to CardPointe (`123`, then `123-2`), so a retry cannot collide with the first attempt. The new `stitch_payments_max_charge_amount` filter caps a single charge (default 100,000).
+- **Surcharge checked at payment.** The fee is checked again with the real card when the customer pays. A changed fee sends the customer back to review the new total before anything is charged. See [Surcharge](/docs/merchants/surcharge).
+- **Unconfirmed surcharge flag.** If CardPointe cannot confirm the fee at that final check, the payment goes ahead without a fee change, the order is noted and flagged, the failure is logged to `wc-stitch-surcharge`, and shop managers see a warning after 3 such orders in 24 hours.
+- **Better surcharge quotes.** The fee is quoted on items, tax, shipping, and shipping tax after discounts, is quoted again when the cart changes, refreshes on Blocks checkout, and the lookup is rate limited per shopper.
+- **Subscription payment method change.** My Account **Change payment** verifies the new card with a $0 authorization and takes no payment. Store managers can edit the profile and account IDs on the subscription screen.
+- **Bank account authorization.** Customers accept a debit authorization that is stored on the order. Bank payments are USD only, need HTTPS in live mode, recover timeouts by looking the debit up instead of resending it, and a return up to 60 days after clearing puts the order on hold and emails the admin. See [Bank account payments](/docs/merchants/ach).
+- **`stitch_payments_saved_card_closed` action** fires when Card Account Updater removes a closed card.
+
+### Changed
+
+- **Hooks renamed.** Every filter and action is now `stitch_payments_*` instead of `woocommerce_stitch_*`. See [Hooks and filters](/docs/developers/hooks).
+- **Saved cards are scoped.** Each card records the environment and merchant ID it was saved under and is only offered and charged there. Cards saved earlier carry neither value and keep working.
+- **One profile per customer.** Each customer has one CardPointe profile per environment and merchant. Profiles from earlier versions keep being reused, so customers do not get a second profile.
+- **No default-card fallback for renewals and pre-orders.** They charge only the card assigned to them.
+- **Less data in the database.** On Blocks checkout the card token, expiry, name, CVV, and bank details are held in memory for the request and no longer written to order meta. The CVV is still never stored. The card number stays in the CardPointe iframe, and expiry and CVV are typed on the store page. See [Data and privacy](/docs/merchants/data-and-privacy).
+- **Logs.** Entries redact customer name, address, phone, email, and expiry. Successful API calls are logged only while **Debug log** is on.
+- **Uninstall cleanup** covers every site on a multisite network.
+
+### Fixed
+
+- The release package no longer includes `.fuse_hidden*` files.
+
+---
+
 ## 0.7.0 — 2026-10-08
 
 Compatibility update for the current WordPress and WooCommerce releases.
@@ -130,7 +167,7 @@ Clearer decline messages at checkout, and a fix for CardPointe tokenizer iframe 
 
 ### Fixed
 
-- **Meaningful decline messages** — when CardPointe declines a card (expired, do not honor, call for authorization, PIN tries exceeded, and related responses), customers see a clear explanation on classic and Blocks checkout instead of WooCommerce Blocks' generic "Something went wrong" fallback. Processor `resptext` still goes to the payment logs. Developers can override the copy with [`woocommerce_stitch_customer_decline_message`](/docs/developers/hooks#woocommerce_stitch_customer_decline_message).
+- **Meaningful decline messages** — when CardPointe declines a card (expired, do not honor, call for authorization, PIN tries exceeded, and related responses), customers see a clear explanation on classic and Blocks checkout instead of WooCommerce Blocks' generic "Something went wrong" fallback. Processor `resptext` still goes to the payment logs. Developers can override the copy with [`woocommerce_stitch_customer_decline_message`](/docs/developers/hooks#stitch_payments_customer_decline_message).
 - **Tokenizer iframe CSS** — the card-number field inside the CardPointe iframe now receives height, padding, border, and color from the active style preset. CardPointe rejects the entire `css` URL parameter when it contains double quotes (for example around `"Segoe UI"`); font names are now unquoted so the stylesheet injects correctly.
 
 ---
@@ -172,15 +209,15 @@ Checkout styling system: presets, accent color, custom CSS, and a live-restyling
 
 ### Added
 
-- **Checkout style presets** — a new **Checkout style** setting in the Checkout display section switches the payment form between **Default**, **Minimal**, **Compact**, and **Dark** looks on both classic and Blocks checkout. The form stylesheet is now built on `--stitch-*` CSS variables, so a theme can restyle the form by overriding variables instead of fighting selectors, and developers can register their own presets with the new [`woocommerce_stitch_style_presets`](/docs/developers/hooks#woocommerce_stitch_style_presets) filter. The card-number field rendered inside the CardPointe iframe follows the active preset automatically.
-- **Accent color and custom CSS** — an **Accent color** picker overrides the preset accent (field focus outlines, the selected saved-card highlight, and the form's radio/checkbox controls), and an advanced **Custom checkout CSS** box appends merchant CSS after the preset on both checkout types. Custom CSS is sanitized so it cannot inject markup, and the setting links to the [full variable reference](/docs/developers/hooks#woocommerce_stitch_style_presets).
+- **Checkout style presets** — a new **Checkout style** setting in the Checkout display section switches the payment form between **Default**, **Minimal**, **Compact**, and **Dark** looks on both classic and Blocks checkout. The form stylesheet is now built on `--stitch-*` CSS variables, so a theme can restyle the form by overriding variables instead of fighting selectors, and developers can register their own presets with the new [`woocommerce_stitch_style_presets`](/docs/developers/hooks#stitch_payments_style_presets) filter. The card-number field rendered inside the CardPointe iframe follows the active preset automatically.
+- **Accent color and custom CSS** — an **Accent color** picker overrides the preset accent (field focus outlines, the selected saved-card highlight, and the form's radio/checkbox controls), and an advanced **Custom checkout CSS** box appends merchant CSS after the preset on both checkout types. Custom CSS is sanitized so it cannot inject markup, and the setting links to the [full variable reference](/docs/developers/hooks#stitch_payments_style_presets).
 - **Live style preview** — the settings-screen checkout preview now restyles instantly as you change the style preset, accent color, or custom CSS, before saving.
 - **Inline card brand icon** — a Visa/Mastercard/Amex/Discover icon now appears inside the card number field as soon as the card is recognized, on classic and Blocks checkout. Previously a brand icon only appeared in the optional animated card preview.
 - **Brand fallback for saved cards** — when a CardPointe response omits the card brand, saved cards now derive it from the format-preserving token (its second digit is the first digit of the real card number), so the correct logo still shows at checkout and in My Account.
 
 ### Security
 
-- **API host allowlist** — the test/production base URL overrides now only accept CardPointe domains (`cardconnect.com` / `cardpointe.com`), so API credentials can never be sent to an arbitrary host through a mistyped setting. White-label hosts can be allowed via the new [`woocommerce_stitch_allowed_api_hosts`](/docs/developers/hooks#woocommerce_stitch_allowed_api_hosts) filter; rejected overrides fall back to the default endpoint and log a warning.
+- **API host allowlist** — the test/production base URL overrides now only accept CardPointe domains (`cardconnect.com` / `cardpointe.com`), so API credentials can never be sent to an arbitrary host through a mistyped setting. White-label hosts can be allowed via the new [`woocommerce_stitch_allowed_api_hosts`](/docs/developers/hooks#stitch_payments_allowed_api_hosts) filter; rejected overrides fall back to the default endpoint and log a warning.
 - **Log redaction for raw bodies** — unparseable (non-JSON) API responses are now redacted before they reach the logs, matching the redaction already applied to structured responses.
 
 ### Fixed
@@ -226,7 +263,7 @@ Security and payment-safety hardening, privacy-conscious logging, and a compatib
 
 ### Fixed
 
-- **Saved cards bypassing the surcharge disclosure on Blocks checkout** — WooCommerce Blocks rendered saved Stitch cards as separate top-level payment options above the payment method list. Paying through that native option skipped the Stitch payment form entirely, so the customer was never shown the processing-fee disclosure. Saved Stitch cards are now always selected inside the Stitch payment method, which runs the fee lookup. A new [`woocommerce_stitch_hide_native_saved_methods`](/docs/developers/hooks#woocommerce_stitch_hide_native_saved_methods) filter can restore the native options. My Account → Payment methods is unaffected.
+- **Saved cards bypassing the surcharge disclosure on Blocks checkout** — WooCommerce Blocks rendered saved Stitch cards as separate top-level payment options above the payment method list. Paying through that native option skipped the Stitch payment form entirely, so the customer was never shown the processing-fee disclosure. Saved Stitch cards are now always selected inside the Stitch payment method, which runs the fee lookup. A new [`woocommerce_stitch_hide_native_saved_methods`](/docs/developers/hooks#stitch_payments_hide_native_saved_methods) filter can restore the native options. My Account → Payment methods is unaffected.
 - **Surcharge notice for preselected saved cards** — the processing-fee notice now stays visible when a customer's default saved card is preselected at checkout. Previously the checkout refresh that renders the order-total disclosure also wiped the in-form notice (and could drop the fee recorded for the order), so a customer who simply kept the default card and paid was never shown the surcharge.
 
 ### Changed

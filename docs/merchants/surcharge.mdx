@@ -44,6 +44,27 @@ Fee lookups for saved cards only work for the logged-in customer's own saved met
 
 CardPointe applies the surcharge on top of the authorized purchase amount. The plugin adds that fee to the WooCommerce order so the order total matches what the customer pays, and leaves the fee out of the amount sent to CardPointe so it is not charged twice.
 
+The fee is quoted on everything CardPointe will authorize: the items after discounts, item tax, shipping, and shipping tax. If the cart changes after a quote (an item, a coupon, or the shipping method), the fee is dropped and quoted again for the new amount.
+
+## Checked again when the customer pays
+
+The fee shown while the customer typed their card is a preview. When they press **Place order**, the plugin asks CardPointe for the fee again, using the card actually being charged and the exact authorization amount.
+
+- **The fee matches the order:** the payment goes ahead.
+- **The fee is different** (for example the customer switched from a debit card to a credit card after the preview): the payment is stopped, the order total is updated, and the customer is asked to review it and place the order again. Nothing is charged until they do.
+
+Each shopper can make a limited number of fee checks (20 every 10 minutes by default), because every check tells the caller whether a card is credit or debit. A developer can change that with [`stitch_payments_surcharge_rate_limit`](/docs/developers/hooks#stitch_payments_surcharge_rate_limit).
+
+## When the fee cannot be confirmed
+
+If CardPointe cannot be reached for that final check, the payment **still goes ahead** so the sale is not lost, and the order is left as it is. The plugin keeps a trail so you can see if it keeps happening:
+
+- The order gets a note saying the fee could not be confirmed, and the order meta `_stitch_surcharge_unconfirmed` is set to `yes`.
+- The failure is written to the `wc-stitch-surcharge` log (**WooCommerce → Status → Logs**).
+- Once **3 orders in 24 hours** were paid this way, a warning appears for shop managers on WooCommerce screens. It clears by itself when the failures stop. A developer can change the number with [`stitch_payments_surcharge_unconfirmed_alert_threshold`](/docs/developers/hooks#stitch_payments_surcharge_unconfirmed_alert_threshold), or react to each one with the [`stitch_payments_surcharge_unconfirmed`](/docs/developers/hooks#stitch_payments_surcharge_unconfirmed) action.
+
+When you see the warning, check your API credentials and CardPointe's status, then compare the fee on each flagged order with the CardPointe transaction.
+
 ## Order records
 
 The fee line is the surcharge on the order. The plugin also stores the amount in order meta for the payment log. After a test payment, **Stitch Payment Details** on the order shows the fee and states that CardPointe adds it on top of the authorized amount. The merchant ID is hidden in this picture.

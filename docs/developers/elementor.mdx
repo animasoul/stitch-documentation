@@ -42,7 +42,7 @@ When detected, Stitch enqueues `stitch-payments-gateway` CSS and JS on that page
 If checkout lives on a page that is not auto-detected:
 
 ```php
-add_filter( 'woocommerce_stitch_is_checkout_context', function ( $is_context, $gateway ) {
+add_filter( 'stitch_payments_is_checkout_context', function ( $is_context, $gateway ) {
 	return $is_context || is_page( 'elementor-checkout' );
 }, 10, 2 );
 ```

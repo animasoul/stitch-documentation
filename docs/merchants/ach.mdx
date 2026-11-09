@@ -19,12 +19,25 @@ Put the Stitch ACH processor ID in **Test ACH merchant ID** while Stitch is in t
 
 An approved bank payment stays **On hold**. It is not ready to ship. Twice a day the plugin reads the CardPointe funding report for the ACH merchant ID. When the transaction appears there without a bank return code, the order moves to **Processing**. A return code cancels the order. The check looks back 14 funding dates.
 
+A bank can also return a debit **after** it cleared. The plugin keeps checking cleared bank payments for 60 days, because an unauthorized-debit return can arrive that late. If one is returned, an order in **Processing** goes back to **On hold** so it is not shipped, an order that is already **Completed** keeps its status, and the store admin gets an email either way. The order note gives the return code and reason. Developers can react with the [`stitch_payments_ach_payment_returned`](/docs/developers/hooks#stitch_payments_ach_payment_returned) action.
+
+## Rules at checkout
+
+- **Authorization.** The customer must tick a box authorizing a one-time debit of the order total before they can pay. The text is editable with [`stitch_payments_ach_authorization_text`](/docs/developers/hooks#stitch_payments_ach_authorization_text). The accepted text, the amount, the time, and the customer's IP address are stored on the order as the authorization record.
+- **US dollars only.** An order in any other currency is refused.
+- **HTTPS.** In live mode the customer must be on a secure connection.
+- **No automatic resend.** A debit is never sent twice. If the request times out, the plugin asks CardPointe whether the debit was approved and recovers it if so.
+- **Plain messages.** A declined debit shows the customer a general message. CardPointe's response text goes to the log, not the checkout.
+
+## Test a checkout
+
 At checkout, choose **Bank account** and use:
 
 - Routing number `036001808` or `011401533`
 - Any account number
 - Checking or Savings
+- Tick the authorization box
 
 An invalid routing number is declined. The account number is sent to CardSecure for a token, then the token is authorized. The store does not keep the routing number or the full account number. The order stores the transaction reference and the last four digits.
 
-Saved bank accounts, subscription renewals, and return reporting are not part of this method. A full refund of a payment that has not settled is a void. A refund after settlement uses the normal refund request.
+Saved bank accounts and subscription renewals are not part of this method. A full refund of a payment that has not settled is a void. A refund after settlement uses the normal refund request.
