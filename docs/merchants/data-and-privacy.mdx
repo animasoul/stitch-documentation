@@ -93,20 +93,21 @@ These records are **intentionally kept** even if you enable plugin data removal 
 
 ## Saved payment methods
 
-When [stored payment methods](/docs/merchants/stored-payments) are enabled and the customer opts in, cards are saved as WooCommerce payment tokens (`WC_Payment_Token_Stitch`). Each token stores:
+When [stored payment methods](/docs/merchants/stored-payments) are enabled and the customer opts in, cards are saved as standard WooCommerce credit card tokens (type `CC`, gateway `stitch`), the same kind other card gateways use, so WooCommerce, Checkout Blocks, My Account, and Subscriptions show them natively. Each token stores:
 
 | Field | Description |
 |-------|-------------|
-| `profile_id` | CardPointe customer profile identifier |
-| `acct_id` | CardPointe account identifier within that profile |
-| `last_four` | Last four digits for display |
-| `card_type` | Card brand label (e.g. Visa) |
-| `expiry` | Expiry month/year |
-| `name` | Cardholder name |
-| `environment` | `test` or `live` — where the card was saved (since 0.8.0) |
-| `merchant_id` | The card merchant ID the profile belongs to (since 0.8.0) |
+| Card type | Card brand (Visa, Mastercard, American Express, Discover) |
+| Last four | Last four digits for display |
+| Expiry month and year | For display and for the Card Account Updater |
+| `stitch_profile_id` | CardPointe customer profile identifier (token meta) |
+| `stitch_acct_id` | CardPointe account identifier within that profile (token meta) |
+| `stitch_environment` | `test` or `live` — where the card was saved (token meta, since 0.8.0) |
+| `stitch_merchant_id` | The card merchant ID the profile belongs to (token meta, since 0.8.0) |
 
-A CardPointe profile only exists in the environment and merchant account that created it, so a card saved in Test Mode is never offered or charged in live mode, and a card saved under one merchant ID is not charged under another. Cards saved before 0.8.0 carry neither value and are treated as matching.
+The cardholder name is not stored on the token. A card is saved only when CardPointe returns a card type, last four, and expiry for it.
+
+A CardPointe profile only exists in the environment and merchant account that created it, so a card saved in Test Mode is never offered or charged in live mode, and a card saved under one merchant ID is not charged under another. A card with no recorded environment or merchant is never offered.
 
 The token’s internal reference is a combination of profile and account IDs — **not** a full card number. CardPointe holds the vaulted payment credentials; your site stores opaque IDs plus display metadata.
 
@@ -154,7 +155,7 @@ Payment-complete log entries record only order and transaction references by def
 | `woocommerce_stitch_ach_settings` | Bank account gateway settings, including the ACH merchant IDs (not autoloaded) |
 | `stitch_payments_surcharge_unconfirmed` | Timestamps of orders paid without a confirmed card fee, kept for 7 days to drive the admin warning (since 0.8.0) |
 | Validation transients | Short-lived admin notices after credential checks |
-| WooCommerce payment token tables | Saved Stitch tokens when customers opt in |
+| WooCommerce payment token tables | Saved Stitch cards (`CC` tokens with gateway `stitch`) when customers opt in |
 | User meta `_stitch_profile_ids` | CardPointe profile link per customer, per environment and merchant (since 0.8.0) |
 | User meta `_stitch_profile_id` | The single profile link written before 0.8.0, still read |
 
@@ -164,7 +165,7 @@ Payment-complete log entries record only order and transaction references by def
 |--------|--------|
 | **Deactivate plugin** | No data is deleted |
 | **Delete plugin** (default) | Settings, tokens, profile IDs, transients, and plugin log files **remain** |
-| **Delete plugin** with **Remove plugin data when the plugin is deleted** enabled | Removes gateway settings, Stitch payment tokens, customer profile identifiers, transients, and plugin log files — **order and subscription payment metadata listed above is still retained** |
+| **Delete plugin** with **Remove plugin data when the plugin is deleted** enabled | Removes gateway settings, saved Stitch cards, customer profile identifiers, transients, and plugin log files — **order and subscription payment metadata listed above is still retained** |
 
 Review these options under **WooCommerce → Settings → Payments → Stitch → Data Retention**. The settings screen includes a **Data retention reference** summary you can copy into your site privacy policy.
 

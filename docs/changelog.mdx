@@ -33,7 +33,9 @@ A larger release: renamed hooks, tighter surcharge and saved-card handling, bank
 ### Changed
 
 - **Hooks renamed.** Every filter and action is now `stitch_payments_*` instead of `woocommerce_stitch_*`. See [Hooks and filters](/docs/developers/hooks).
-- **Saved cards are scoped.** Each card records the environment and merchant ID it was saved under and is only offered and charged there. Cards saved earlier carry neither value and keep working.
+- **Saved cards are standard WooCommerce card tokens.** They are `WC_Payment_Token_CC` tokens for gateway `stitch` instead of a custom `stitch` token type, so checkout, Checkout Blocks, My Account, and Subscriptions show them natively. The CardPointe profile and account IDs are token meta, and the cardholder name is no longer stored. A card is saved only when CardPointe returns a card type, last four, and expiry for it.
+- **Saved cards are scoped.** Each card records the environment and merchant ID it was saved under and is only offered and charged there. A card with no recorded scope is not offered.
+- **Internal code split.** `Payment_Processor` and the API client are split into focused classes, and the Checkout Blocks scripts are built with `@wordpress/scripts` from `src/blocks/` into `assets/dist/`. Public methods and filters are unchanged. See the [developer overview](/docs/developers/overview).
 - **One profile per customer.** Each customer has one CardPointe profile per environment and merchant. Profiles from earlier versions keep being reused, so customers do not get a second profile.
 - **No default-card fallback for renewals and pre-orders.** They charge only the card assigned to them.
 - **Less data in the database.** On Blocks checkout the card token, expiry, name, CVV, and bank details are held in memory for the request and no longer written to order meta. The CVV is still never stored. The card number stays in the CardPointe iframe, and expiry and CVV are typed on the store page. See [Data and privacy](/docs/merchants/data-and-privacy).

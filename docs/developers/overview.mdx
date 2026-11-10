@@ -37,9 +37,18 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 |-----------|----------|
 | Gateway | `includes/Payments/class-gateway.php` |
 | Checkout presentation (labels, branding, saved methods, i18n, iframe CSS) | `includes/Payments/Checkout/class-checkout-display.php` |
-| Payment processing (auth, capture, renewals, pre-order release) | `includes/Payments/Processing/class-payment-processor.php` |
+| Payment processing entry point (delegates to the classes below) | `includes/Payments/Processing/class-payment-processor.php` |
+| Posted card details and saved-card ownership checks | `includes/Payments/Processing/class-checkout-payment-data.php` |
+| Authorization payload (amount, Level 2 / 3) | `includes/Payments/Processing/class-auth-payload-builder.php` |
+| Sending authorizations, timeout recovery, per-attempt order ID | `includes/Payments/Processing/class-authorization-attempts.php` |
+| Writing an approved payment to the order | `includes/Payments/Processing/class-order-payment-recorder.php` |
+| AVS / CVV hold or void | `includes/Payments/Processing/class-verification-handler.php` |
+| Capture or void of authorize-only orders | `includes/Payments/Processing/class-deferred-capture.php` |
+| Renewals and pre-order release on a stored profile | `includes/Payments/Processing/class-stored-card-payments.php` |
+| Saving a card with a $0 check (card change, pre-order) | `includes/Payments/Processing/class-card-enrollment.php` |
 | Refunds and voids | `includes/Payments/Processing/class-refund-processor.php` |
 | Saved cards and My Account add-card | `includes/Payments/Processing/class-saved-card-store.php` |
+| Saved card as a WooCommerce card token (profile, account, scope) | `includes/Payments/Processing/class-card-token.php` |
 | Card Account Updater | `includes/Payments/Processing/class-card-account-updater.php` |
 | Level 2 / 3 commercial fields | `includes/Payments/Processing/class-level-data.php` |
 | AVS / CVV no-match policy | `includes/Payments/Processing/class-verification-policy.php` |
@@ -53,6 +62,9 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 | Surcharge calculation and persistence | `includes/Payments/Surcharge/class-surcharge-service.php` |
 | Surcharge disclosure markup | `includes/Payments/Surcharge/class-surcharge-disclosure.php` |
 | Blocks checkout payment fields | `includes/Payments/Checkout/class-store-api-payment-data.php` |
+| CardPointe API endpoints | `includes/API/class-client.php` |
+| HTTP, retries, and error mapping | `includes/API/class-http-transport.php` |
+| API call logging | `includes/API/class-api-logger.php` |
 | API log redaction | `includes/API/class-log-redactor.php` |
 | Order transaction meta box | `includes/Payments/Admin/class-order-meta-box.php` |
 | Blocks integration | `includes/Payments/Checkout/class-blocks-integration.php` |
@@ -61,8 +73,16 @@ The gateway is composed of focused service classes. The `Gateway` object owns cr
 | Classic JS | `assets/js/stitch-gateway.js` |
 | Checkout field validation | `assets/js/stitch-validation.js` |
 | Surcharge checkout script | `assets/js/stitch-surcharge.js` |
-| Blocks JS | `assets/js/stitch-blocks.js` |
+| Blocks JS (built, card) | `assets/dist/stitch-blocks.js`, source in `src/blocks/card/` |
+| Blocks JS (built, bank account) | `assets/dist/stitch-ach-blocks.js`, source in `src/blocks/ach/` |
+| Blocks script registration | `includes/Payments/Checkout/class-blocks-script.php` |
 | Styles | `assets/css/stitch-gateway.css` |
+
+:::note Since 0.8.0
+`Payment_Processor` and `API\Client` were split into the focused classes above. The public methods on `Payment_Processor` (`process_payment()`, `process_refund()`, `process_subscription_payment()`, `process_pre_order_release()`, `capture_authorized_payment()`, `void_authorized_payment()`) and the gateway's `payment_processor()` accessor are unchanged.
+
+The Blocks scripts are built with `@wordpress/scripts` from `src/blocks/` into `assets/dist/`, and the built files are committed. The release zip contains `assets/dist/` but not `src/`, `node_modules/`, or the build config, so installing the plugin needs no Node. To change them, run `npm ci` and `npm run build` (Node 22 or newer, see `.nvmrc`) and commit the rebuilt `assets/dist/` with the source. CI fails if `assets/dist/` does not match `src/`.
+:::
 
 :::note Since 0.3.0
 The gateway was refactored from a single large class into the service classes above. Behavior is unchanged, but some public helper methods moved off `Gateway` — see [Public gateway helpers](#public-gateway-helpers) below.
@@ -96,6 +116,7 @@ Payment classes are grouped into `Checkout`, `Processing`, `Admin`, and `Surchar
 :::note Since 0.6.0
 - **Surcharge** is an order fee after a CardPointe quote. `Payment_Processor` leaves that fee out of the authorization amount.
 - **Renewals** send `ecomind` `R`. Pre-order release stays `ecomind` `E`.
+- **Saved cards** (from 0.8.0) are standard WooCommerce credit card tokens: type `CC`, gateway `stitch`. Card type, last four, and expiry are the token's own properties. The CardPointe profile and account IDs and the saved-under environment and merchant are token meta, read and written through `Card_Token` (`stitch_profile_id`, `stitch_acct_id`, `stitch_environment`, `stitch_merchant_id`). The cardholder name is not stored. A card needs a card type, last four, and expiry to be saved.
 - **Token deletion** calls `Saved_Card_Store::delete_remote_profile()` on `woocommerce_payment_token_deleted`, which deletes that profile account only.
 - **Card Account Updater** runs on the daily `stitch_sync_card_account_updates` hook. It reads profile updates. It does not write accounts into the updater.
 - **Unconfirmed authorizations** that time out with no approved inquiry are voided with `voidByOrderId`.

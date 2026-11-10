@@ -85,7 +85,7 @@ Guests cannot complete a pay-upon-release pre-order; they are asked to log in. A
 
 ## Data and privacy
 
-Saved cards use WooCommerce payment tokens with CardPointe profile and account identifiers — not full card numbers. CVV is never stored.
+Saved cards are standard WooCommerce credit card tokens with CardPointe profile and account identifiers — not full card numbers. CVV is never stored, and neither is the cardholder name.
 
 Each saved card records its brand (Visa, Mastercard, Amex, Discover), last four digits, and expiry for display. The brand comes from CardPointe's response when the card is saved; if the response omits it, the plugin derives it from the secure token (since 0.4.0), so the correct card logo appears at checkout and in My Account.
 
@@ -100,5 +100,6 @@ See [Data and privacy](/docs/merchants/data-and-privacy) for tokenization, order
 | Issue | Check |
 |-------|-------|
 | Save checkbox missing | **Enable Stored Payment Methods** is on and the customer is logged in (guests never see the checkbox) |
-| Saved cards not listed | Customer has tokens for gateway `stitch`; profile/acct IDs must be present |
+| Saved cards not listed | Customer has card tokens for gateway `stitch` saved in the current environment (Test or Live) and under the current merchant ID, with profile and account IDs present |
+| A new card was not saved | A card is saved only when CardPointe returns a card type, last four, and expiry for it |
 | Guest cannot use a saved card | Expected — guests pay with a new card only. Saving and reusing cards requires an account |

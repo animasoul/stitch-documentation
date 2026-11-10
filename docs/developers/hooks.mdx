@@ -378,7 +378,7 @@ add_filter( 'stitch_payments_gateway_script_params', function ( $params ) {
 
 ### `stitch_payments_blocks_payment_method_data`
 
-Filter all data passed to `stitch-blocks.js` — labels, feature flags, icons, and display settings for the Blocks checkout UI.
+Filter all data passed to the Blocks script (`assets/dist/stitch-blocks.js`) — labels, feature flags, icons, and display settings for the Blocks checkout UI.
 
 **Parameters:** `$data` (array), `$gateway` (`Gateway`)
 
@@ -604,7 +604,7 @@ add_action( 'stitch_payments_ach_payment_returned', function ( $order, $code ) {
 
 _Since 0.8.0._ Fires just before the daily Card Account Updater removes a saved card the issuer reports as closed or invalid. Use it to email the customer or to flag subscriptions that use the card.
 
-**Parameters:** `$token` (`WC_Payment_Token_Stitch`), `$status` (string — `CLOSED` or `NOGOOD`)
+**Parameters:** `$token` (`WC_Payment_Token_CC`, gateway `stitch`), `$status` (string — `CLOSED` or `NOGOOD`)
 
 ```php
 add_action( 'stitch_payments_saved_card_closed', function ( $token, $status ) {
